@@ -1,0 +1,8 @@
+**/.DS_Store
+**/messages.log
+**/errors.log
+**/*.bf
+**/*.pyc
+**/*.fit
+**/*.nwk
+data/*.json
