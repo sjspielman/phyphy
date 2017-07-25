@@ -25,7 +25,7 @@ All implemented analyses are **only available** through the `v2.3-dev` branch in
 
 ## Example script
 
-```{python}
+```python
 	from hyphyhelper import *
 	
 	
