@@ -13,12 +13,14 @@ All implemented analyses are **only available** through the `v2.3-dev` branch in
 + RELAX
 + BUSTED
 + aBSREL
-+ SLAC*
 + FEL
 + MEME
 + RelativeProteinRates
++ RelativeNucleotideRates
 
-*SLAC.bf is currently experiencing bugs so please don't try use SLAC in v2.3-dev yet.
+> + SLAC*
+> 
+> SLAC.bf is currently experiencing bugs so please don't try use SLAC in v2.3-dev yet.
 
 
 ## Example script
@@ -40,10 +42,9 @@ All implemented analyses are **only available** through the `v2.3-dev` branch in
 	tree = "path/to/my/tree.tre"
 	data = "path/to/file/with/both/alignment/and/tree/inside.dat" 
 	json = "path/to/where/id/rather/save/the/json"
-	## Create an analysis of your choice instance.
-	### NOTE: for all analyses, you will need either alignment and tree, OR data (file with both)
+	## Create an analysis of your choice instance. The following runs a one-rate FEL
 	f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json) ## Use help() to see available arguments    
-	## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
+	## NOTE: This line could be used instead (data rather than alignment and tree):   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
     
     
     ## Run the analysis

@@ -124,7 +124,8 @@ class Analysis(object):
         self.shared_branch_choices = ("All", "Internal", "Leaves")
         
         self.available_protein_models = ("JC", "WAG", "LG", "JTT")
-        
+        self.available_nucleotide_models = ("GTR", "HKY85")
+
     
     def _format_yesno(self, argument):
         """
@@ -538,8 +539,8 @@ class RelativeProteinRates(Analysis):
         self.batchfile = "relative_prot_rates.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
         
-        self.aa_model = kwargs.get("model", "JC")
-        assert(self.aa_model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
+        self.model = kwargs.get("model", "JC")
+        assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
         
         self.plus_f = kwargs.get("plusF", "False")
         self.plus_f = self._format_yesno(self.plus_f)
@@ -554,11 +555,45 @@ class RelativeProteinRates(Analysis):
         self.analysis_command = " ".join([ self.batchfile_with_path , 
                                            self.hyphy_alignment ,
                                            self.hyphy_tree,
-                                           self.aa_model,
+                                           self.model,
                                            self.plus_f
                                          ])
    
 
+
+class RelativeNucleotideRates(Analysis):
+
+    def __init__(self, **kwargs):
+        """
+            Required arguments:
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+
+            Optional keyword arguments:
+                1. **hyphy**, your HyPhy instance
+                2. **model**, the nucleotide model to use to fit relative rates. Default: GTR.
+         """                
+        super(RelativeNucleotideRates, self).__init__(**kwargs)
+        
+        self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
+        self.batchfile = "relative_nucleotide_rates.bf"
+        self.default_json_path = self.hyphy_alignment + ".site-rates.json"
+        
+        self.model = kwargs.get("model", "GTR")
+        assert(self.model in self.available_nucleotide_models), "\n [ERROR] Provided protein model is unavailable."
+
+
+    def _build_analysis_command(self):
+        """
+            Construct the relative_prot_rates command with all arguments to provide to the executable. 
+        """
+        self.batchfile_with_path = self.analysis_path + self.batchfile
+        
+        self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                           self.hyphy_alignment ,
+                                           self.hyphy_tree,
+                                           self.model,
+                                         ])
+  
 
     
 
@@ -591,10 +626,6 @@ def main():
     ### SLAC ###   ###### NOTE: CURRENT V2.3-DEV SLAC IMPLEMENTATION IS BROKEN. THIS WILL NOT RUN.
     #f = SLAC(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)     
     #f.run_analysis()
-    
-    ### RelativeProteinRates ###
-    #f = RelativeProteinRates(hyphy = hyphy, alignment = alignment, tree = tree, model = "JC", plusF = True)
-    #f.run_analysis()
 
     #### ABSREL ####
     #f = ABSREL(hyphy = hyphy, data = data, branches = "Internal", output = json)
@@ -607,7 +638,14 @@ def main():
     #### BUSTED ####
     #f = BUSTED(hyphy = hyphy, data = data, output = json, foreground = ["Node1", "Node2", "t3"])
     #f.run_analysis()        
-        
+
+    ### RelativeProteinRates ###
+    #f = RelativeProteinRates(hyphy = hyphy, alignment = aa_alignment, tree = tree, model = "JC", plusF = True)
+    #f.run_analysis()
+    
+    ### RelativeNucleotideRates ###
+    f = RelativeNucleotideRates(hyphy = hyphy, alignment = codon_alignment, tree = tree, model = "GTR")
+    f.run_analysis()        
 main()
         
     
