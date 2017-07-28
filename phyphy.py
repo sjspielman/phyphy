@@ -16,6 +16,7 @@ import os
 import shutil
 import re
 import json
+from dendropy import Tree ## Just for checking if we have a nexus
 from copy import deepcopy
 
 _DEFAULT_PATH = "/usr/local/lib/hyphy/"
@@ -154,7 +155,13 @@ class Analysis(object):
         else:
             assert(os.path.exists(self.data)), "\nPath to data not found."
             self.hyphy_alignment = os.path.abspath(self.data)
-            self.hyphy_tree = "Y" # Use the tree found in the file
+            ### It is nexus? ###
+            try:
+                x = Tree.get(path = self.hyphy_alignment, schema="nexus")
+                self.hyphy_tree = ""
+            except: 
+                self.hyphy_tree = "Y" # Use the tree found in the file
+
     
     def _build_command(self):
         print("Parent method. Not run.")
@@ -273,6 +280,7 @@ class FEL(Analysis):
             Construct the FEL command with all arguments to provide to the executable. 
         """
         self.batchfile_with_path = self.analysis_path + self.batchfile
+        
         
         self.analysis_command = " ".join([ self.batchfile_with_path , 
                                            self.genetic_code ,
@@ -613,7 +621,8 @@ def main():
     hyphy = HyPhy(path = "/Users/sjspielman/hyphys/myfork/hyphy", quiet=False)
     
     
-    
+    f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
+    f.run_analysis()    
 
     ### FEL ###
     #f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
