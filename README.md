@@ -50,6 +50,28 @@ All implemented analyses are **only available** through the `v2.3-dev` branch in
     ## Run the analysis
     f.run_analysis()
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+    SJS
+    phyphy provides a convenient python library for executing HyPhy analyses. 
+    
+    Implemented so far:
+        1) Run analyses FEL, SLAC, MEME, ABSREL, BUSTED, RELAX
+        
+    Forthcoming:
+        1) Run more analyses as they are ported to libv3
+        2) Run rate4site
+        3) Parse and provide meaningful output for JSONs
 	
 	
 	

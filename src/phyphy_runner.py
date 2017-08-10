@@ -1,21 +1,11 @@
 """
-    SJS
-    hyphyhelper provides a convenient python library for executing HyPhy analyses. 
-    
-    Implemented so far:
-        1) Run analyses FEL, SLAC, MEME, ABSREL, BUSTED, RELAX
-        
-    Forthcoming:
-        1) Run more analyses as they are ported to libv3
-        2) Run rate4site
-        3) Parse and provide meaningful output for JSONs
+    Run a HyPhy analysis
 """
     
 import subprocess
 import os
 import shutil
 import re
-import json
 from dendropy import Tree ## Just for checking if we have a nexus
 from copy import deepcopy
 
@@ -43,10 +33,6 @@ _GENETIC_CODE = {
                 }
 
 
-######## REMEMBER:######################################
-#        with open (jsonfile, "rU") as f:
-#            self.parsed_json = json.load(f)
-#####################################################
 class HyPhy():
 
     def __init__(self, **kwargs):
@@ -103,7 +89,6 @@ class Analysis(object):
         if self.hyphy is None:
             self.hyphy = HyPhy()
         
-        self.default_json_path = None
         
         self.alignment = kwargs.get("alignment", None) ### alignment only
         self.tree      = kwargs.get("tree", None)    ### tree only
@@ -112,6 +97,7 @@ class Analysis(object):
 
         self.alpha          = str( kwargs.get("alpha", 0.1) )   ### significance
         self.user_json_path = kwargs.get("output", None)
+        
         
         ### Unused in AA analyses 
         self.genetic_code = kwargs.get("genetic_code", "Universal")
@@ -241,7 +227,15 @@ class Analysis(object):
         
         ### Move JSON to final resting place
         if self.user_json_path is not None:
+            self.json_path = self.default_json_path
+        else:
+            self.json_path = self.user_json_path
             shutil.move(self.default_json_path, self.user_json_path)
+
+
+
+ 
+
 
 
 class FEL(Analysis):
@@ -289,6 +283,16 @@ class FEL(Analysis):
                                            self.branches , 
                                            self.tworate , 
                                            self.alpha ])
+    
+       
+        
+        
+        
+        
+        
+        
+        
+        
        
 
 class MEME(Analysis):
@@ -395,9 +399,7 @@ class ABSREL(Analysis):
                 
         super(ABSREL, self).__init__(**kwargs)
         
-        ## TODO: KEEP TABS ON THE FORTHCOMING LIBV3 IMPLEMENTATION ##
         self.batchfile = "BranchSiteREL.bf"
-        self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
         self.default_json_path = self.hyphy_alignment + ".json"
         
         self.adaptive_version = "Yes" ## Always b/c absrel class
@@ -607,54 +609,56 @@ class RelativeNucleotideRates(Analysis):
 
 def main():
     
-    ## Check out these sweet relative paths!!!! 
-    ### when providing the data, give either alignment and tree OR data. 
-    aa_alignment = "data/aa.fasta"  ### file with AA alignment
-    codon_alignment = "data/seqs.fasta" ### file with codon alignment
-    tree      = "data/test.tre"  ### file with just tree
-    data      = "data/seqs.dat"    ### file with codon sequences *and* tree
+    if __name__ == "__main__":
     
-    ### output file, hyphyhelper will move the output json to here for you
-    json = "out.json"
+        ## Check out these sweet relative paths!!!! 
+        ### when providing the data, give either alignment and tree OR data. 
+        aa_alignment = "data/aa.fasta"  ### file with AA alignment
+        codon_alignment = "data/seqs.fasta" ### file with codon alignment
+        tree      = "data/test.tre"  ### file with just tree
+        data      = "data/seqs.dat"    ### file with codon sequences *and* tree
     
-    ## FIRST, Create a HyPhy instance if you want to use a local (aka not installed into /usr/local) hyphy and/or specify other things. See __init__ docstring for the things.
-    hyphy = HyPhy(path = "/Users/sjspielman/hyphys/myfork/hyphy", quiet=False)
+        ### output file, hyphyhelper will move the output json to here for you
+        json = "out.json"
+    
+        ## FIRST, Create a HyPhy instance if you want to use a local (aka not installed into /usr/local) hyphy and/or specify other things. See __init__ docstring for the things.
+        hyphy = HyPhy(path = "/Users/sjspielman/hyphys/myfork/hyphy", quiet=False)
     
     
-    f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
-    f.run_analysis()    
+        f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
+        f.run_analysis()    
 
-    ### FEL ###
-    #f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
-    #f.run_analysis()
+        ### FEL ###
+        #f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
+        #f.run_analysis()
 
-    ### MEME ###
-    #f = MEME(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)
-    #f.run_analysis()
+        ### MEME ###
+        #f = MEME(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)
+        #f.run_analysis()
 
-    ### SLAC ###   ###### NOTE: CURRENT V2.3-DEV SLAC IMPLEMENTATION IS BROKEN. THIS WILL NOT RUN.
-    #f = SLAC(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)     
-    #f.run_analysis()
+        ### SLAC ###   ###### NOTE: CURRENT V2.3-DEV SLAC IMPLEMENTATION IS BROKEN. THIS WILL NOT RUN.
+        #f = SLAC(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)     
+        #f.run_analysis()
 
-    #### ABSREL ####
-    #f = ABSREL(hyphy = hyphy, data = data, branches = "Internal", output = json)
-    #f.run_analysis()
+        #### ABSREL ####
+        #f = ABSREL(hyphy = hyphy, data = data, branches = "Internal", output = json)
+        #f.run_analysis()
             
-    #### RELAX ####
-    #f = RELAX(hyphy = hyphy, data = data, test_label = "test", reference_label = "reference", analysis_type = "Minimal", output = json)
-    #f.run_analysis()
+        #### RELAX ####
+        #f = RELAX(hyphy = hyphy, data = data, test_label = "test", reference_label = "reference", analysis_type = "Minimal", output = json)
+        #f.run_analysis()
  
-    #### BUSTED ####
-    #f = BUSTED(hyphy = hyphy, data = data, output = json, foreground = ["Node1", "Node2", "t3"])
-    #f.run_analysis()        
+        #### BUSTED ####
+        #f = BUSTED(hyphy = hyphy, data = data, output = json, foreground = ["Node1", "Node2", "t3"])
+        #f.run_analysis()        
 
-    ### RelativeProteinRates ###
-    #f = RelativeProteinRates(hyphy = hyphy, alignment = aa_alignment, tree = tree, model = "JC", plusF = True)
-    #f.run_analysis()
+        ### RelativeProteinRates ###
+        #f = RelativeProteinRates(hyphy = hyphy, alignment = aa_alignment, tree = tree, model = "JC", plusF = True)
+        #f.run_analysis()
     
-    ### RelativeNucleotideRates ###
-    f = RelativeNucleotideRates(hyphy = hyphy, alignment = codon_alignment, tree = tree, model = "GTR")
-    f.run_analysis()        
+        ### RelativeNucleotideRates ###
+        f = RelativeNucleotideRates(hyphy = hyphy, alignment = codon_alignment, tree = tree, model = "GTR")
+        f.run_analysis()        
 main()
         
     
