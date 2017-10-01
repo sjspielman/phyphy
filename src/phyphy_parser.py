@@ -429,6 +429,8 @@ class HyPhyParser():
             If there are multiple partitions, default returns a list of mapped for all partitions. 
             If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
         """
+        assert(attribute_name != self.fields.rate_distributions), "\nERROR: Cannot map rate distributions onto a tree."
+                
         attr_dict = self.extract_branch_attribute(attribute_name)
         self.extract_input_tree()       ## Needed to grab input tree (grab all)
         ptree = deepcopy( self.input_tree )
