@@ -164,37 +164,50 @@ class HyPhyParser():
             Define self.npartitions
         """
         self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
-        
- 
-    def _extract_sitemethod_MLE_content(self, site_block):
+   
+
+
+    def _extract_slac_sitetable(self, raw, slac_by, slac_ancestral_type):
         """
-            Extract the CSV content component, RAW.
-        """        
-        raw_content = site_block[ self.fields.MLE_content]["0"]
-        if self.analysis == "SLAC":
-            raw_content = raw_content["by-site"]["AVERAGED"]
-        return raw_content
-        
-        
-                   
-    def _parse_sitemethod_to_csv(self, delim):
+            Extract the specific SLAC tables of interest
         """
-            Extract a CSV from a site-level method JSON, including FEL, SLAC, MEME
+        final = {}
+        for x in range(self.npartitions):
+            part = raw[str(x)]
+            subset = part[slac_by][slac_ancestral_type]
+            final[str(x)] = subset
+        return final          
+            
+        
+
+
+    def _parse_sitemethod_to_csv(self, delim, slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
+        """
+            Extract a CSV from a site-level method JSON, including FEL, SLAC, MEME, FUBAR.
         """
         site_block =  self.json[ self.fields.MLE ]
         raw_header = site_block[ self.fields.MLE_headers ]
-        raw_content = self._extract_sitemethod_MLE_content(site_block)
-
-        final_header = delim.join( [x[0].replace(" ","_") for x in raw_header] ) + "\n"
+        raw_content = site_block[ self.fields.MLE_content]
+        if self.analysis == "SLAC":
+            raw_content = self._extract_slac_sitetable(raw_content, slac_by, slac_ancestral_type)
+            
+        final_header = "site,"+delim.join( [x[0].replace(" ","_") for x in raw_header] ) + "\n"
+        if self.npartitions > 1:
+            final_header = "partition," + final_header
         
+        site_count = 1
         final_content = ""
-        for row in raw_content:
-            final_content += delim.join(str(x) for x in row) + "\n"
+        for part in raw_content:
+            for row in raw_content[part]:
+                row = str(site_count) + delim + delim.join(str(x) for x in row) + "\n"
+                if self.npartitions > 1:
+                    row = str(part) + delim + row
+                final_content += row
+                site_count += 1
         
         with open(self.csv, "w") as f:
             f.write(final_header + final_content)
         
-     
      
     def _reform_rate_phrase(self, phrase):
         """
@@ -466,7 +479,7 @@ class HyPhyParser():
            
     ############################################################################################################################
 
-    def extract_csv(self, csv, delim = ","):
+    def extract_csv(self, csv, delim = ",", slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
         """
             Extract results to a CSV.
             
@@ -474,70 +487,14 @@ class HyPhyParser():
         ###### TODO: THIS SHOULD ONLY BE ALLOWED FOR CERTAIN ANALYSES. #######
         ## assert(self.analysis in some_list_of_allowed_analyses) ##
         
-        self.csv = csv
         
-        if self.analysis in ["SLAC", "MEME", "FEL"]:
+        self.csv = csv
+
+        if self.analysis in ["SLAC", "MEME", "FEL", "FUBAR"]:
+            assert(slac_by in ["by-site", "by-branch"]), "\nERROR: Argument `slac_by` must be either 'by-site' or 'by-branch'."
+            assert(slac_ancestral_type in ["AVERAGED", "RESOLVED"]), "\nERROR: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
             self._parse_sitemethod_to_csv(delim)
             
-    
-    def detect_site_positive_selection(self, **kwargs):
-        """
-            Print out which sites are positively selected at given p-value (or posterior!) for a site method. 
-            Optional arguments:
-                **p** : The P-value threshold for identifying a site as positively selected (Default: 0.1).
-                **file** : File to save CSV results to (Default: do not write to file).
-                **screen** : Boolean indicating whether to print results to screen or not (Default: True).
-            
-        """
-        p = kwargs.get("p", 0.1)
-        file = kwargs.get("file", None)
-        screen = kwargs.get("screen", True)
-        
-        self.p_column = {"FEL": 4, "MEME": 6, "SLAC": 8}
-        self.FEL_columns = {"alpha": 0, "beta": 1}
-        
-        positive = {}
-        
-        content = self._extract_sitemethod_MLE_content( self.json[ self.fields.MLE ] )
-        
-        i = 0
-        for row in content:
-            i += 1
-            p_value = float( row[ self.p_column[self.analysis] ] )
-            # Don't assess FEL p-value if dS > dN
-            if self.analysis == "FEL" and content[self.FEL_columns["alpha"]] > content[self.FEL_columns["beta"]]:
-                continue
-            if p_value <= p:
-                positive[i] = p_value
-        
-        if screen:
-            if len(positive) == 0:
-                print ("\nNo sites were found to be under positive, diversifying selection by " +  self.analysis +  " at P <= " +  str(p))
-            else:
-                print("\nThe following sites were found to be under positive, diversifying selection by " +  self.analysis +  " at P <= " +  str(p) + " :")
-                for site in positive:
-                    print(str(site) + "   (P=" + str(positive[site]) + ")")
-        
-        if file is not None:
-            with open(file, "w") as f:
-                f.write("site,pvalue\n")
-                for site in positive:
-                    f.write(",".join([str(site),str(positive[site])]) + "\n")
+
                 
-
-
-
-
-
-# 
-#     def 
-#         """
-#             Keys: [u'MLE', u'branch attributes', u'analysis', u'tested', u'data partitions', u'timers', u'fits', u'input']
-#         """
-#         site_field = self.json["MLE"]
-#         
-#         
-#         
-#  
-# 
 

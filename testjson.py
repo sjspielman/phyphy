@@ -3,8 +3,8 @@ sys.path.append("src/")
 from phyphy_parser import *
 
 
-p = HyPhyParser("json/ABSREL_alltest.json")
-print( p.extract_model_tree("Rate Distributions", partition=0))
+p = HyPhyParser("json/SLAC_2partitions_alltest.json")
+print( p.extract_csv("hi.csv", slac_by = "by-branch"))
 
 # print()
 # 
