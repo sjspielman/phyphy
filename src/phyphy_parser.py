@@ -46,6 +46,7 @@ class JSONFields():
         self.branch_attributes   = "branch attributes"
         self.attributes          = "attributes"
         self.attribute_type      ="attribute type"
+        self.timers = "timers"
     
 
 
@@ -590,7 +591,22 @@ class HyPhyParser():
         
         
         
+      ############################################################################################################################
+      
+    def extract_timers(self):
+        """
+            Extract dictionary of timers, with display order removed
+        """
+        raw = self.json[self.fields.timers]
+        final = {}
+        for step in raw:
+            del raw[step]["order"]
+            for k,v in raw[step].items():
+                final[str(step)] = float(v)
+        return final
         
+        
+          
         
         
         
