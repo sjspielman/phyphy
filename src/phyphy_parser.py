@@ -27,7 +27,10 @@ class JSONFields():
         
         self.analysis_description      = "analysis"
         self.analysis_description_info = "info"
-
+        
+        self.relative_site_rates = "Relative site rate estimates"
+        self.UB                  = "UB"
+        self.LB                  = "LB"
 
         self.tested = "tested"
         self.MLE                       = "MLE"
@@ -126,9 +129,8 @@ class HyPhyParser():
         if self.analysis is None:
             self._determine_analysis_from_json()
             
-        ## Count partitions and get node names, which are generally useful to have
+        ## Count partitions, which is generally useful to have
         self._count_partitions()
-        self._get_nodes()
 
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
@@ -153,17 +155,16 @@ class HyPhyParser():
         
         assert(self.analysis is not None), "\nERROR: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted."
 
-    def _get_nodes(self):
-        """
-            List of all nodes
-        """
-        self.node_names = list( self.json[ self.fields.branch_attributes ]["0"].keys())   
+
 
     def _count_partitions(self):
         """
             Define self.npartitions
         """
-        self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
+        if self.analysis == "relative rates":
+            self.npartitions = 1
+        else:
+            self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
    
 
 
@@ -191,7 +192,7 @@ class HyPhyParser():
         if self.analysis == "SLAC":
             raw_content = self._extract_slac_sitetable(raw_content, slac_by, slac_ancestral_type)
             
-        final_header = "site,"+delim.join( [x[0].replace(" ","_") for x in raw_header] ) + "\n"
+        final_header = "site,"+delim.join( [x[0].replace(" ","_") for x in raw_header] )
         if self.npartitions > 1:
             final_header = "partition," + final_header
         
@@ -199,7 +200,7 @@ class HyPhyParser():
         final_content = ""
         for part in raw_content:
             for row in raw_content[part]:
-                row = str(site_count) + delim + delim.join(str(x) for x in row) + "\n"
+                row = "\n" + str(site_count) + delim + delim.join(str(x) for x in row)
                 if self.npartitions > 1:
                     row = str(part) + delim + row
                 final_content += row
@@ -207,7 +208,87 @@ class HyPhyParser():
         
         with open(self.csv, "w") as f:
             f.write(final_header + final_content)
+
+
+
+    def _parse_absrel_to_csv(self, delim):
+        """
+            Create CSV from aBSREL results:
+                Node name, Baseline MG94 omega, Number of inferred rate classes, Tested (bool), Proportion of selected sites, LRT, uncorrected P, bonferroni-holm P
+        """
         
+        header = delim.join( ["node", "baseline_omega", "number_rate_classes", "tested", "prop_sites_selected", "LRT", "uncorrected_P", "corrected_P"] )
+        attr = self.json[ self.fields.branch_attributes ]["0"] ## Only allowed single partition for ABSREL
+        node_names = list( self.json[ self.fields.branch_attributes ]["0"].keys())  
+        
+        full_rows = ""
+        for node in node_names:
+            
+            try:
+                d = attr[str(node)]
+            except:
+                raise KeyError("\nERROR: Unable to parse JSON.")
+            rates = d[self.fields.rate_distributions]
+            if len(rates) > 1:
+                for pair in rates:
+                    if pair[0] > 1.:
+                        prop = str(pair[1])
+                        break
+            else:
+                prop = "0"
+            
+            if d["LRT"] == 1 and d["Uncorrected P-value"] ==  1 and d["Corrected P-value"] == 1:
+                run = "0"
+            else:
+                run  = "1"
+                
+            row = "\n" + delim.join([node, 
+                                    str(d["Baseline MG94xREV omega ratio"]), 
+                                    str(d["Rate classes"]), 
+                                    run,
+                                    prop,
+                                    str(d["LRT"]), 
+                                    str(d["Uncorrected P-value"]), 
+                                    str(d["Corrected P-value"]) ])
+            full_rows += row
+        
+        with open(self.csv, "w") as f:
+            f.write(header + full_rows)
+
+
+
+
+    def _parse_relrates_to_csv(self, delim):
+        """
+            Parse AA or nucleotide relative rates to CSV:
+                site, rate, lower95, upper95
+        """
+        
+        header = delim.join( ["site", "rate", "lower_95_bound", "upper_95_bound"] )
+        attr = self.json[ self.fields.relative_site_rates ]
+        nsites = self.json[ self.fields.input ][ self.fields.input_sites ]
+        
+        full_rows = ""
+        for i in range(nsites):
+            
+            site = str(i+1)
+            row = "\n" + delim.join( [ site, str(attr[site][self.fields.MLE]), str(attr[site][self.fields.LB]), str(attr[site][self.fields.UB]) ])
+            full_rows += row
+         
+        with open(self.csv, "w") as f:
+            f.write(header + full_rows)
+       
+        
+        
+
+
+
+
+
+
+
+
+
      
     def _reform_rate_phrase(self, phrase):
         """
@@ -481,20 +562,38 @@ class HyPhyParser():
 
     def extract_csv(self, csv, delim = ",", slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
         """
-            Extract results to a CSV.
+            Extract results to a CSV. Currently only for SLAC, MEME, FEL, FUBAR, aBSREL, and relative rates. Other analyses do not lend well to CSV.
             
-        """
-        ###### TODO: THIS SHOULD ONLY BE ALLOWED FOR CERTAIN ANALYSES. #######
-        ## assert(self.analysis in some_list_of_allowed_analyses) ##
-        
+        """       
         
         self.csv = csv
 
+        ### Standard site output ###
         if self.analysis in ["SLAC", "MEME", "FEL", "FUBAR"]:
             assert(slac_by in ["by-site", "by-branch"]), "\nERROR: Argument `slac_by` must be either 'by-site' or 'by-branch'."
             assert(slac_ancestral_type in ["AVERAGED", "RESOLVED"]), "\nERROR: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
             self._parse_sitemethod_to_csv(delim)
             
 
+        ### aBSREL ###
+        elif self.analysis == "ABSREL":
+            self._parse_absrel_to_csv(delim)
+        
+
+        ## TODO: should be parsed out somehow ##
+        elif self.analysis == "relative rates":
+            self._parse_relrates_to_csv(delim)
+            
+        else:
+            print("\nContent from provided analysis is not convertable to CSV.")
+        
+        
+        
+        
+        
+        
+        
+        
+        
                 
 
