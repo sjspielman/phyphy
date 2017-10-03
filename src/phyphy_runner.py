@@ -6,8 +6,9 @@ import subprocess
 import os
 import shutil
 import re
-from dendropy import Tree ## Just for checking if we have a nexus
+from Bio import Phylo
 from copy import deepcopy
+from StringIO import StringIO
 
 _DEFAULT_PATH = "/usr/local/lib/hyphy/"
 _GENETIC_CODE = {
@@ -37,7 +38,9 @@ class HyPhy():
 
     def __init__(self, **kwargs):
         """
-            Initialize a HyPhy instance.
+            Initialize a HyPhy instance. Generally this is only a necessary step if either applies:
+                + You wish to use a local build of HyPhy (not an installed build)
+                + You wish to use a different HyPhy executable (default is HYPHYMP)
         
             Optional keyword arguments:
                 1) executable, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
@@ -47,16 +50,17 @@ class HyPhy():
         """
 
         self.executable = kwargs.get("executable", "HYPHYMP")
-        self.user_path  = kwargs.get("path", None)  ### only for local installs
+        self.user_path  = kwargs.get("path", None)  ### only for local or non-standard installs
         self.cpu        = kwargs.get("cpu", None)       
         self.quiet      = kwargs.get("quiet", False) ### run hyphy quietly
         
         
-        if self.user_path is not None: ## local install
-            assert(os.path.exists(self.user_path)), "[ERROR] HyPhy not detected in provided path."
+        ### Sanity checks for a local/non-standard install ###
+        if self.user_path is not None: 
+            assert(os.path.exists(self.user_path)), "\n[ERROR] HyPhy not detected in provided path."
             self.user_path = os.path.abspath(self.user_path) + "/" ## os.path.abspath will strip any trailing "/"
             self.libpath = self.user_path + "res/"
-            assert(os.path.exists(self.libpath)), "[ERROR]: User path does not contain a correctly built HyPhy."
+            assert(os.path.exists(self.libpath)), "\n[ERROR]: User path does not contain a correctly built HyPhy."
             self.executable = self.user_path + self.executable
             self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
         
@@ -65,11 +69,10 @@ class HyPhy():
             self.hyphy_call = deepcopy(self.executable)
             
         ## Ensure executable exists somewhere
-        with open("/dev/null", "w") as shh:
-            exit_code = subprocess.call(["which", self.executable], stdout = shh, stderr = shh)
+        with open("/dev/null", "w") as hushpuppies:
+            exit_code = subprocess.call(["which", self.executable], stdout = hushpuppies, stderr = hushpuppies) # If you're reading this, I hope you enjoy reading hushpuppies as much as I enjoyed writing it. --SJS
             if exit_code == 1:
-                print self.executable
-                raise AssertionError("\n[ERROR] HyPhy executable not found.")
+                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed or in your provided local install path.")
 
         if self.cpu is not None:
             self.hyphy_call += " CPU=" + str(self.cpu)
@@ -101,18 +104,26 @@ class Analysis(object):
         
         ### Unused in AA analyses 
         self.genetic_code = kwargs.get("genetic_code", "Universal")
-        assert(self.genetic_code in _GENETIC_CODE.values() or self.genetic_code in _GENETIC_CODE.keys()), "\nIncorrect genetic code specified."
+        assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified."
+        if self.genetic_code in list(_GENETIC_CODE.keys()):
+            for k,v in _GENETIC_CODE.items():
+                if v == self.genetic_code:
+                    self.genetic_code = str(k)
+                    break
+        self.genetic_code = self.genetic_code.replace(" ", "\ ") # Sigh.
+
         
-        ### Will be overriden for non-selection methods
+        
+        ### Will be overriden for SelectionAnalysis methods
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/SelectionAnalyses/"
 
-
-        ### NOTE: Overridden in absrel, which can also have "None"
-        self.shared_branch_choices = ("All", "Internal", "Leaves")
+        self.shared_branch_choices = ("All", "Internal", "Leaves", "Unlabeled branches")
         
-        self.available_protein_models = ("JC", "WAG", "LG", "JTT")
-        self.available_nucleotide_models = ("GTR", "HKY85")
-
+        self.available_protein_models = ("JC69", "WAG", "LG", "JTT")
+        self.available_nucleotide_models = ("GTR", "HKY85", "JC69")
+    
+    
+    
     
     def _format_yesno(self, argument):
         """
@@ -124,88 +135,77 @@ class Analysis(object):
         elif type(argument) is bool:
             argument = self.yesno_truefalse[argument]
         else:
-            raise TypeError("\n [ERROR]: Incorrect Yes/No argument.")
+            raise TypeError("\n[ERROR]: Incorrect Yes/No argument.")
         return argument            
     
     
     def _check_files(self):
         """
             Check provided paths for alignment+tree or data. Assign input hyphy variables accordingly.
+            Additionally extract the tree string
         """
         if self.alignment is not None:
-            assert(os.path.exists(self.alignment)), "\nAlignment does not exist."
-            assert(os.path.exists(self.tree)), "\nA tree must be provided."
+            assert(os.path.exists(self.alignment)), "\n[ERROR] Provided alignment not found, check path?"
+            assert(os.path.exists(self.tree)), "\n[ERROR] A tree must be provided. As needed, check path?"
             self.hyphy_alignment = os.path.abspath(self.alignment)
             self.hyphy_tree      = os.path.abspath(self.tree)
+            with open(self.hyphy_tree, "r") as f:
+                self.tree_string = f.read().strip()
             
         else:
-            assert(os.path.exists(self.data)), "\nPath to data not found."
+            assert(os.path.exists(self.data)), "\n[ERROR] Provided data not found, check path?"
             self.hyphy_alignment = os.path.abspath(self.data)
-            ### It is nexus? ###
             try:
-                x = Tree.get(path = self.hyphy_alignment, schema="nexus")
-                self.hyphy_tree = ""
+                t = Phylo.read(self.hyphy_alignment, "nexus") ## If no error, tree is there and there will be no prompt 
+                tree_handle = StringIO()
+                Phylo.write(t, tree_handle, "newick")
+                self.tree_string = tree_handle.getvalue().strip()
+                self.hyphy_tree = ""            
+            
             except: 
                 self.hyphy_tree = "Y" # Use the tree found in the file
-
-    
+                with open(self.hyphy_alignment, "r") as f:
+                    alnstring = f.read()
+                    find_tree = re.search(r"(\(.+\);)", alnstring)
+                    if find_tree:
+                        self.tree_string = find_tree.group(1)
+                    else:
+                        raise AssertionError("\n[ERROR] Malformed tree in input data.")
+            
     def _build_command(self):
         print("Parent method. Not run.")
-  
 
-    def _format_branch_selection(self, selected_branches, add_terminator = False):
+   
+    def _sanity_branch_selection(self):
         """
-            Sanity check and properly format the selected branches, which is either a list of branches or known branch set designation (string) 
-            Arguments:
-                * selected_branches (req) is the provided user selection (either string or list)
-                * add_terminator (opt) is a boolean for whether "" should be added to the end of a list of branch selections. Always True if a list provided, sometimes True if string.
+            Ensure appropriate value provided for branch selection.
         """
-        if type(selected_branches) is str:
-            selected_branches = selected_branches.capitalize()   
-        elif type(selected_branches) is list:
-            add_terminator = True
-        else:
-            raise TypeError("\n [ERROR Must provide a list of nodes/taxa OR one of the strings 'All'/'Internal'/'Leaves' for the branch selection.")
-        
-        if add_terminator:
-            if type(selected_branches) is str:
-                selected_branches = [selected_branches]
-            selected_branches.append('""')            # terminate branch selection with ""
-            selected_branches = " ".join( selected_branches )  
-        return selected_branches
-        
+        self._find_all_labels()
+        allowed = list(self.shared_branch_choices) + self._all_labels
+        assertion = "\n[ERROR]: Bad branch selection. Must be one of: " + ", ".join(["'"+str(x)+"'" for x in allowed]) + "."
+        assert(self.branches in allowed), assertion
+            
         
 
     def _find_all_labels(self):
         """
             Parse the tree string to find all the labels.
         """
-        ## extract tree string
-        if self.tree != "Y":
-            with open(self.tree, "rU") as f:
-                treestring = f.read()
-        else:
-            with open(self.alignment, "rU") as f:
-                alnstring = f.read()
-                find_tree = re.search(r"(\(.+\);)", alnstring)
-                if find_tree:
-                    treestring = find_tree.group(1)
-        
         ## since all characters accepted inside {}, march along the tree to grab each one
-        self._all_labels = set()
+        self._all_labels = []
         label = ""
         curly = False
-        for i in range(len(treestring)):
-            if treestring[i] == "{":
+        for i in range(len(self.tree_string)):
+            if self.tree_string[i] == "{":
                 curly = True
                 continue 
-            if treestring[i] == "}":
+            if self.tree_string[i] == "}":
                 curly = False
-                self._all_labels.add(label)
+                if label not in self._all_labels:
+                    self._all_labels.append(label)
                 label = ""
             if curly:
-                label += treestring[i]
-        self._all_labels = tuple(self._all_labels)
+                label += self.tree_string[i]
         
             
     def run_analysis(self):
@@ -215,7 +215,6 @@ class Analysis(object):
         """    
         self._build_analysis_command()
         full_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
-        print full_command
         
 
         if self.hyphy.quiet:
@@ -243,12 +242,12 @@ class FEL(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
                 2. **two_rate**, "Yes"/"No" or True/False accepted
-                3. **branches**, "All", "Internal", or "Leaves" accepted
+                3. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 4. **output**, New path and/or file for the JSON
                 5. **alpha**, The p-value threshold for selection
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -262,10 +261,8 @@ class FEL(Analysis):
         self.tworate = kwargs.get("two_rate", "Yes") ## They can provide T/F or Yes/No
         self.tworate = self._format_yesno(self.tworate)
 
-
-        ## TODO: Allow for more ..?
         self.branches = kwargs.get("branches", "All")
-        self.branches = self._format_branch_selection(self.branches)
+        self._sanity_branch_selection()
         
 
         
@@ -275,7 +272,6 @@ class FEL(Analysis):
         """
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
-        
         self.analysis_command = " ".join([ self.batchfile_with_path , 
                                            self.genetic_code ,
                                            self.hyphy_alignment ,
@@ -283,10 +279,7 @@ class FEL(Analysis):
                                            self.branches , 
                                            self.tworate , 
                                            self.alpha ])
-    
-       
-        
-        
+
         
         
         
@@ -300,11 +293,11 @@ class MEME(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", or "Leaves" accepted
+                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, New path and/or file for the JSON
                 4. **alpha**, The p-value threshold for selection
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -315,9 +308,8 @@ class MEME(Analysis):
         self.batchfile = "MEME.bf"
         self.default_json_path = self.hyphy_alignment + ".MEME.json"
 
-        ## TODO: Allow for more ..?
         self.branches = kwargs.get("branches", "All")
-        self.branches = self._format_branch_selection(self.branches)
+        self._sanity_branch_selection()
     
         
     def _build_analysis_command(self):
@@ -340,11 +332,11 @@ class SLAC(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", or "Leaves" accepted
+                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, New path and/or file for the JSON
                 4. **bootstrap_samples**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -355,9 +347,8 @@ class SLAC(Analysis):
         self.batchfile = "SLAC.bf"
         self.default_json_path = self.hyphy_alignment + ".SLAC.json"
 
-        ## TODO: Allow for more ..?
         self.branches = kwargs.get("branches", "All")
-        self.branches = self._format_branch_selection(self.branches)
+        self._sanity_branch_selection()
     
         self.bootstrap_samples = kwargs.get("bootstrap_samples", 100)
         self.range_bootstrap_samples = [0,100000]
@@ -388,28 +379,22 @@ class ABSREL(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
-                2. **foreground**, list of branches to test, or "All"/"Internal"/"Leaves". If a specific subset of nodes will be desired, you MUST USE a pre-labeled tree for this to be correct. Default: "All".
+                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, New path and/or file for the JSON
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
                 
         super(ABSREL, self).__init__(**kwargs)
         
-        self.batchfile = "BranchSiteREL.bf"
+        self.batchfile = "aBSREL.bf"
         self.default_json_path = self.hyphy_alignment + ".json"
-        
-        self.adaptive_version = "Yes" ## Always b/c absrel class
-        self.vary_ds          = kwargs.get("vary_ds", False)
-        self.vary_ds = self._format_yesno(self.vary_ds)
 
         self.branches = kwargs.get("branches", "All")
-        self.shared_branch_choices = ("All", "Internal", "Leaves", "None") ## None option is to just fit the model w/out testing
-        self.branches = self._format_branch_selection(self.branches, add_terminator = True)
-
+        self._sanity_branch_selection()
 
     def _build_analysis_command(self):
         """
@@ -419,12 +404,9 @@ class ABSREL(Analysis):
         
         self.analysis_command = " ".join([ self.batchfile_with_path , 
                                            self.genetic_code ,
-                                           self.adaptive_version,
-                                           self.vary_ds,
                                            self.hyphy_alignment ,
                                            self.hyphy_tree,
-                                           self.branches,
-                                           self.hyphy_alignment ## save output to (this is the prefix)
+                                           self.branches
                                          ])
 
 
@@ -434,11 +416,11 @@ class BUSTED(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
-                2. **foreground**, list of branches to test, or "All"/"Internal"/"Leaves". If a specific subset of nodes will be desired, you MUST USE a pre-labeled tree for this to be correct. Default: "All".
+                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, New path and/or file for the JSON
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
@@ -448,8 +430,8 @@ class BUSTED(Analysis):
         self.batchfile = "BUSTED.bf"
         self.default_json_path = self.hyphy_alignment + ".BUSTED.json"
 
-        self.FG = kwargs.get("foreground", "All")
-        self.FG_hyphy = self._format_branch_selection(self.FG, add_terminator = True)    
+        self.branches = kwargs.get("branches", "All")
+        self._sanity_branch_selection() 
 
 
     def _build_analysis_command(self):
@@ -462,7 +444,7 @@ class BUSTED(Analysis):
                                            self.genetic_code ,
                                            self.hyphy_alignment ,
                                            self.hyphy_tree,
-                                           self.FG_hyphy
+                                           self.branches
                                          ])
        
 
@@ -473,7 +455,7 @@ class RELAX(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
@@ -487,23 +469,25 @@ class RELAX(Analysis):
         
         self.batchfile = "RELAX.bf"
         self.default_json_path = self.hyphy_alignment + ".RELAX.json"
-        # Find all labels in the tree string
+
         self._find_all_labels()
+        if len(self._all_labels) == 0:
+            raise AssertionError("\n[ERROR] RELAX requires at least one label in the tree. Visit http://veg.github.io/phylotree.js/ for assistance labeling your tree.")
         
-        self.test_label = kwargs.get("test_label", None) ## label or "Unlabeled branches"
-        assert(self.test_label in self._all_labels), "\n [ERROR] You must provide a `test_label` arguement that corresponds to a label in your **labeled tree**. Visit http://veg.github.io/phylotree.js/# for assistance labeling your tree for input to RELAX. To select all unlabeled branches, provide the argument `Unlabeled branches`."
+        self.test_label = kwargs.get("test_label", None)
+        assert(self.test_label in self._all_labels), "\n [ERROR] You must provide a `test_label` arguement that corresponds to a label in your **labeled tree**. Visit http://veg.github.io/phylotree.js/ for assistance labeling your tree."
         
         self.reference_label = kwargs.get("reference_label", None)
         if len(self._all_labels) > 1:
             if self.reference_label is None:
                 print("WARNING: No branches were selected as 'reference' even though multiple labels exist in the tree. Defaulting to using all non-test branches.")
-                self.reference_label = "'Unlabeled branches'"
+                self.reference_label = self.shared_branch_choices[-1]
             else:
-                assert(self.reference_label in self._all_labels), "\n [ERROR] The value for `reference_label` must correspond to a label in your tree. To select all non-test branches as reference, do not provide an argument for `reference_label`."
+                assert(self.reference_label in self._all_labels), "\n [ERROR] The value for `reference_label` must correspond to a label in your tree. To simply use all non-test branches as reference, do not provide the argument `reference_label`."
 
-        self.analysis_type = kwargs.get("analysis_type", "All").capitalize()
         self.allowed_types = ("All", "Minimal")
-        assert(self.analysis_type in self.allowed_types), "\n [ERROR] Incorrect analysis type specified. Provide either `All` or `Minimal`."
+        self.analysis_type = kwargs.get("analysis_type", self.allowed_types[0]).capitalize()
+        assert(self.analysis_type in self.allowed_types), "\n[ERROR] Incorrect analysis type specified. Provide either `All` or `Minimal`."
 
 
     def _build_analysis_command(self):
@@ -536,7 +520,7 @@ class RelativeProteinRates(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
@@ -549,7 +533,7 @@ class RelativeProteinRates(Analysis):
         self.batchfile = "relative_prot_rates.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
         
-        self.model = kwargs.get("model", "JC")
+        self.model = kwargs.get("model", "JC69")
         assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
         
         self.plus_f = kwargs.get("plusF", "False")
@@ -576,11 +560,11 @@ class RelativeNucleotideRates(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (concatenated or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
                 1. **hyphy**, your HyPhy instance
-                2. **model**, the nucleotide model to use to fit relative rates. Default: GTR.
+                2. **model**, the nucleotide model to use to fit relative rates. Default: JC69.
          """                
         super(RelativeNucleotideRates, self).__init__(**kwargs)
         
@@ -588,8 +572,8 @@ class RelativeNucleotideRates(Analysis):
         self.batchfile = "relative_nucleotide_rates.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
         
-        self.model = kwargs.get("model", "GTR")
-        assert(self.model in self.available_nucleotide_models), "\n [ERROR] Provided protein model is unavailable."
+        self.model = kwargs.get("model", "JC69")
+        assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
 
 
     def _build_analysis_command(self):
@@ -613,20 +597,20 @@ def main():
     
         ## Check out these sweet relative paths!!!! 
         ### when providing the data, give either alignment and tree OR data. 
-        aa_alignment = "data/aa.fasta"  ### file with AA alignment
-        codon_alignment = "data/seqs.fasta" ### file with codon alignment
-        tree      = "data/test.tre"  ### file with just tree
-        data      = "data/seqs.dat"    ### file with codon sequences *and* tree
+        #aa_alignment = "data/aa.fasta"  ### file with AA alignment
+        #codon_alignment = "data/seqs.fasta" ### file with codon alignment
+        #tree      = "data/test.tre"  ### file with just tree
+        #data      = "data/seqs.dat"    ### file with codon sequences *and* tree
     
         ### output file, hyphyhelper will move the output json to here for you
-        json = "out.json"
+        #json = "out.json"
     
         ## FIRST, Create a HyPhy instance if you want to use a local (aka not installed into /usr/local) hyphy and/or specify other things. See __init__ docstring for the things.
-        hyphy = HyPhy(path = "/Users/sjspielman/hyphys/myfork/hyphy", quiet=False)
+        #hyphy = HyPhy(path = "/path/to/local/hyphy", quiet=False)
     
     
-        f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
-        f.run_analysis()    
+        #f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
+        #f.run_analysis()    
 
         ### FEL ###
         #f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)

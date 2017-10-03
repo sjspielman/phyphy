@@ -1,4 +1,5 @@
 """
+    phyphy
     Parse HyPhy JSON output
 """
 
@@ -42,74 +43,56 @@ class JSONFields():
         self.aicc           = "AIC-c"
         self.estimated_parameters = "estimated parameters"
         self.frequencies = "Equilibrium frequencies"
+        self.nucleotide_gtr = "Nucleotide GTR"    
+        self.generic_mg94xrev = "MG94xREV"      
+        self.per_branch_omega = "Per-branch omega"
+        self.omega       = "omega"
+        self.proportion =  "proportion"
+    
         
         self.branch_attributes   = "branch attributes"
         self.attributes          = "attributes"
         self.attribute_type      ="attribute type"
         self.timers = "timers"
+        self.order = "order"
+        self.display_order = "display order"
     
-
-
-"""
-        // For any json
-        json                  = "json";
-        analysis              = "analysis";
-        input                 = "input";
-        file                  = "file name";
-        sequences             = "number of sequences";
-        sites                 = "number of sites";
-        fits                  = "fits";
-        timers                = "timers";
-        trees                 = "trees";
-        MLE                   = "MLE";
-        parameters            = "estimated parameters";
-        PMID                  = "PMID";
- //       PMCID                 = "PMCID";
-        test_results          = "test results";
-        tree_string           = "tree";
-        tree_length           = "tree length";
-        rate_distribution     = "Rate Distributions";
-        log_likelihood        = "Log Likelihood";
-        AICc                  = "AIC-c";
-        global_mg94xrev       = "Global MG94xREV";
-        mg94xrev_sep_rates    = "MG94xREV with separate rates for branch sets";
-        nucleotide_gtr        = "Nucleotide GTR";
-        frequencies           = "Equilibrium frequencies";
-        model                 = "model"; // TODO: change string to "model name"
-       // global                = "Global model fit"; // Defined at the top of file
-        attribute             = "attributes";
-        display_order         = "display order";
-        attribute_type        = "attribute type";
-        node_label           = "node label";
-        branch_label          = "branch label";
-        branch_attributes     = "branch attributes";
-        branch_annotations    = "branch annotations";
-        annotation_tag        = "annotation tag";
-        branch_lengths        = "branch lengths";
-  //      background            = "background";
-
-        headers               = "headers";
-        content               = "content";
-        partition_count       = "partition count";
-        partitions            = "data partitions";
-
-        tested                = "tested";
-        uncorrected_pvalue    = "Uncorrected P-value";
-        corrected_pvalue      = "Corrected P-value";
-        pvalue_threshold      = "P-value threshold";
-        relative_site_rates   = "Relative site rate estimates";
-      //  site_log_likelihood   = "site log likelihood";
-     //   evidence_ratios       = "evidence ratios";
-        options               = "options";
-        runtime               = "runtime";
-        version               = "version";
-        convergence_failures  = "convergence failures";
-        omega_ratio           = "omega";
-        proportion            = "proportion";
-        positive              = "positive test results";
-    }
-"""
+    
+        self.site_logl = "Site Log Likelihood"
+        self.evidence_ratios = "Evidence Ratios"
         
+        self.LRT = "LRT"
+        self.uncorrected_p = "Uncorrected P-value"
+        self.corrected_p   = "Corrected P-value"
+        self.baseline_omega = "Baseline MG94xREV omega ratio"
+        self.rate_classes   = "Rate classes"
+
+
+        self.nonsyn_syn_ratio_for = "non-synonymous/synonymous rate ratio for"
+
+
+
+
+class AnalysisNames():
+    """
+        Class to define names of analyses which we can parse. All upper case except relative rates, which have no real name.
+    """
+    def __init__(self):
+        self.absrel   = "ABSREL"
+        self.busted   = "BUSTED"
+        self.fel      = "FEL"
+        self.fubar    = "FUBAR"
+        self.meme     = "MEME"
+        self.relax    = "RELAX"
+        self.relrates = "relative_rates"
+        self.slac     = "SLAC"
+        
+        self.all_analyses = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.slac]
+        self.site_methods = [self.fel, self.fubar, self.meme, self.slac]
+
+        self.slac_by = ["by-site", "by-branch"]
+        self.slac_ancestral_type = ["AVERAGED", "RESOLVED"]
+
 
 class HyPhyParser():
     
@@ -119,8 +102,12 @@ class HyPhyParser():
         """
         self.fields = JSONFields()
         self.genetics = pyvolve.Genetics()
+        
+        self.analysis_names = AnalysisNames()
+        self.allowed_analyses = self.analysis_names.all_analyses
+        
         self.json_path = json_path
-        assert(os.path.exists(self.json_path)), "\nERROR: JSON file provided does not exist."
+        assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file provided does not exist."
         
         ## Parse to dictionary
         self._unpack_json()
@@ -144,17 +131,19 @@ class HyPhyParser():
     
     def _determine_analysis_from_json(self):
 
-        analyis_matches = ["FEL", "SLAC", "MEME", "FUBAR", "ABSREL", "RELAX", "BUSTED"]
         json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
         
-        for name in analyis_matches:
+        for name in self.allowed_analyses:
         
             find_analysis = re.search(name.upper(), json_info)
             if find_analysis is not None:
                 self.analysis = name
                 break
         
-        assert(self.analysis is not None), "\nERROR: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted."
+        if "RELnuc" or "RELprot" in json_info: ### Find a better solution, which is probably just that they need to provide themselves.
+            self.analysis = self.analysis_names.relrates
+        
+        assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted."
 
 
 
@@ -162,7 +151,7 @@ class HyPhyParser():
         """
             Define self.npartitions
         """
-        if self.analysis == "relative rates":
+        if self.analysis == self.analysis_names.relrates:
             self.npartitions = 1
         else:
             self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
@@ -228,7 +217,7 @@ class HyPhyParser():
             try:
                 d = attr[str(node)]
             except:
-                raise KeyError("\nERROR: Unable to parse JSON.")
+                raise KeyError("\n[ERROR]: Unable to parse JSON.")
             rates = d[self.fields.rate_distributions]
             if len(rates) > 1:
                 for pair in rates:
@@ -238,25 +227,23 @@ class HyPhyParser():
             else:
                 prop = "0"
             
-            if d["LRT"] == 1 and d["Uncorrected P-value"] ==  1 and d["Corrected P-value"] == 1:
+            if d[ self.fields.LRT ] == 1 and d[ self.fields.uncorrected_p ] ==  1 and d[ self.fields.corrected_p ] == 1:
                 run = "0"
             else:
                 run  = "1"
                 
             row = "\n" + delim.join([node, 
-                                    str(d["Baseline MG94xREV omega ratio"]), 
-                                    str(d["Rate classes"]), 
+                                    str(d[self.fields.baseline_omega]), 
+                                    str(d[self.fields.rate_classes]), 
                                     run,
                                     prop,
-                                    str(d["LRT"]), 
-                                    str(d["Uncorrected P-value"]), 
-                                    str(d["Corrected P-value"]) ])
+                                    str(d[self.fields.LRT]), 
+                                    str(d[self.fields.uncorrected_p]), 
+                                    str(d[self.fields.corrected_p]) ])
             full_rows += row
         
         with open(self.csv, "w") as f:
             f.write(header + full_rows)
-
-
 
 
     def _parse_relrates_to_csv(self, delim):
@@ -302,7 +289,7 @@ class HyPhyParser():
         
             return source + target
         else:
-            raise AssertionError("ERROR: Bad rate reform.")
+            raise AssertionError("[ERROR]: Bad rate reform.")
 
 
 
@@ -334,12 +321,12 @@ class HyPhyParser():
         try:
             model_fit = self.json[ self.fields.model_fits ][ model_name ]
         except:
-            raise KeyError("\nERROR: Invalid model name.")
+            raise KeyError("\n[ERROR]: Invalid model name.")
             
         try:
             component = model_fit[component]
         except: 
-            raise KeyError("\nERROR: Invalid model component.")
+            raise KeyError("\n[ERROR]: Invalid model component.")
             
         return component
 
@@ -374,19 +361,19 @@ class HyPhyParser():
         rawrates = self.extract_model_component(model_name, self.fields.rate_distributions)
         rates = {}
         
-        if model_name == "Nucleotide GTR": ### TODO: dehardcode
+        if model_name == self.fields.nucleotide_gtr: 
             for k,v in rawrates.items():
                 rates[ self._reform_rate_phrase(k) ] = v       
         
-        elif "MG94xREV" in model_name:
-            if self.analysis == "ABSREL":
-                rates = rawrates["Per-branch omega"]   ### TODO: dehardcode 
+        elif self.fields.generic_mg94xrev in model_name:
+            if self.analysis == self.analysis_names.absrel:
+                rates = rawrates[self.fields.per_branch_omega]   
             else:
                 rates = {}
                 for k,v in rawrates.items():
-                    find = re.search(u"non-synonymous/synonymous rate ratio for \*(\w+)\*", k) ### TODO: dehardcode 
+                    find = re.search(r""+self.fields.nonsyn_syn_ratio_for +" \*(\w+)\*", k)
                     if find:
-                        rates[find.group(1)] = {"omega": v[0][0], "proportion": 1.0}
+                        rates[find.group(1)] = {self.fields.omega: v[0][0], self.fields.proportion: 1.0}
                     else:
                         rates["omega"] = v[0][0]  
         else:
@@ -409,11 +396,12 @@ class HyPhyParser():
             try:
                 fdict = dict(zip( codes[len(f)], f))
             except:
-                raise AssertionError("\nERROR: Unknown frequencies found in JSON. Please report bug to github.com/veg/hyphy/issues.")            
+                raise AssertionError("\n[ERROR]: Unknown frequencies found in JSON. Please report bug to github.com/veg/hyphy/issues.")            
             return fdict
         else:
             return f   
     ###################################################################################################################
+    
     
     
      
@@ -430,7 +418,7 @@ class HyPhyParser():
         try:
             branch_sets = self.json[ self.fields.tested ]["0"]
         except:
-            raise KeyError("\nERROR: Provided JSON has no branch set designations")
+            raise KeyError("\n[ERROR]: Provided JSON has no branch set designations")
             
         if not by_set:
             return branch_sets
@@ -468,7 +456,7 @@ class HyPhyParser():
                 try:
                     return self.input_tree[partition]
                 except:
-                    raise KeyError("\nERROR: Partition not found. Note that partitions are enumerated starting from 0.")
+                    raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
             else:
                 return self.input_tree
 
@@ -478,10 +466,9 @@ class HyPhyParser():
             Return a dictionary of all the attributes and their attribute type (node label or branch label)
         """
         attributes_info = self.json[ self.fields.branch_attributes ][ self.fields.attributes ]
-        #attributes_list = [str(x) for x in self.json[ self.fields.branch_attributes ][ self.fields.attributes ].keys()]
         self.attribute_names = {}
         for x in attributes_info:
-            if x == "display order":
+            if x == self.fields.display_order:
                 continue
             else:
                 self.attribute_names[str(x)] = str(attributes_info[x][self.fields.attribute_type])
@@ -497,7 +484,7 @@ class HyPhyParser():
             If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
         """
         self.reveal_branch_attributes() ## Needed to create self.attribute_names
-        assert(attribute_name in self.attribute_names), "\nERROR: Specified attribute does not exist in JSON."
+        assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
         
         attr_dict = {}
         for x in range(self.npartitions):
@@ -510,7 +497,7 @@ class HyPhyParser():
             try:
                 return attr_dict[str(partition)]
             except:
-                raise KeyError("\nERROR: Partition not found. Note that partitions are enumerated starting from 0.")
+                raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
         else:
             return attr_dict
         
@@ -524,7 +511,7 @@ class HyPhyParser():
             If there are multiple partitions, default returns a list of mapped for all partitions. 
             If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
         """
-        assert(attribute_name != self.fields.rate_distributions), "\nERROR: Cannot map rate distributions onto a tree."
+        assert(attribute_name != self.fields.rate_distributions), "\n[ERROR]: Cannot map rate distributions onto a tree."
                 
         attr_dict = self.extract_branch_attribute(attribute_name)
         self.extract_input_tree()       ## Needed to grab input tree (grab all)
@@ -546,7 +533,7 @@ class HyPhyParser():
             try:
                 return many_trees[partition]
             except:
-                raise KeyError("\nERROR: Partition not found. Note that partitions are enumerated starting from 0.")
+                raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
         else:
             return many_trees
     
@@ -557,42 +544,49 @@ class HyPhyParser():
             This is just a special case of map_branch_attribute.
         """
         return self.map_branch_attribute(model, partition = partition)
-        
-           
     ############################################################################################################################
+
+
+
+    
+    ################################################### MISCELLANEOUS ##########################################################
+ 
+
+    def reveal_fields(self):
+        """
+            Return list of top-level JSON fields.
+        """
+        return [str(x) for x in list( self.json.keys() )]
+        
+        
 
     def extract_csv(self, csv, delim = ",", slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
         """
             Extract results to a CSV. Currently only for SLAC, MEME, FEL, FUBAR, aBSREL, and relative rates. Other analyses do not lend well to CSV.
-            
+            Note that we don't export BUSTED (could be site logl or ERs) because these quantities are not actual tests for selection and users should not be readily able to treat as such. They can grab on their own if that interested.
         """       
         
         self.csv = csv
 
         ### Standard site output ###
-        if self.analysis in ["SLAC", "MEME", "FEL", "FUBAR"]:
-            assert(slac_by in ["by-site", "by-branch"]), "\nERROR: Argument `slac_by` must be either 'by-site' or 'by-branch'."
-            assert(slac_ancestral_type in ["AVERAGED", "RESOLVED"]), "\nERROR: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
+        if self.analysis in self.analysis_names.site_methods:
+            assert(slac_by in self.analysis_names.slac_by), "\n[ERROR]: Argument `slac_by` must be either 'by-site' or 'by-branch'."
+            assert(slac_ancestral_type in self.analysis_names.slac_ancestral_type), "\n[ERROR]: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
             self._parse_sitemethod_to_csv(delim)
-            
+       
 
         ### aBSREL ###
-        elif self.analysis == "ABSREL":
+        elif self.analysis == self.analysis_names.absrel:
             self._parse_absrel_to_csv(delim)
         
-
-        ## TODO: should be parsed out somehow ##
-        elif self.analysis == "relative rates":
+        ## relative rates ##
+        elif self.analysis == self.analysis_names.relrates:
             self._parse_relrates_to_csv(delim)
             
         else:
             print("\nContent from provided analysis is not convertable to CSV.")
-        
-        
-        
-        
-      ############################################################################################################################
-      
+ 
+ 
     def extract_timers(self):
         """
             Extract dictionary of timers, with display order removed
@@ -600,16 +594,40 @@ class HyPhyParser():
         raw = self.json[self.fields.timers]
         final = {}
         for step in raw:
-            del raw[step]["order"]
+            del raw[step][self.fields.order]
             for k,v in raw[step].items():
                 final[str(step)] = float(v)
         return final
         
-        
-          
-        
-        
-        
-        
-                
+ 
 
+    def extract_site_logl(self):
+        """
+            Extract BUSTED site log likelihoods, as dictionary
+        """
+        assert(self.analysis == self.analysis_names.busted), "\n[ERROR]: Site Log Likelihoods are specific to BUSTED."
+        
+        raw = self.json[self.fields.site_logl]
+        site_logl = {}
+        for k,v in raw.items():
+            site_logl[str(k)] = v[0]
+        
+        return site_logl
+    
+    
+    def extract_evidence_ratios(self):
+        """
+            Extract BUSTED ERs, as dictionary
+        """                    
+        assert(self.analysis == self.analysis_names.busted), "\n[ERROR]: Site Log Likelihoods are specific to BUSTED."
+        raw = self.json[self.fields.evidence_ratios]
+        if len(raw) == 0:
+            print("\nWarning: Evidence ratios are only computed for BUSTED models with significant tests for selection.")
+            return None
+        else:
+            ev_ratios = {}
+            for k,v in raw.items():
+                ev_ratios[str(k)] = v[0]
+        return ev_ratios
+    ###################################################################################################################
+    
