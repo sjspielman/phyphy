@@ -1,6 +1,12 @@
+#!/usr/bin/env python
+
+##############################################################################
+##  phyhy: Python HyPhy: Facilitating the execution and parsing of standard HyPhy analyses.
+##
+##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
+##############################################################################
 """
-    phyphy
-    Parse HyPhy JSON output
+    Parse JSON output from a standard HyPhy analysis.
 """
 
 import os

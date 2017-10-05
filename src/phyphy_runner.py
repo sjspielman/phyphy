@@ -1,5 +1,13 @@
+#!/usr/bin/env python
+
+##############################################################################
+##  phyhy: Python HyPhy: Facilitating the execution and parsing of standard HyPhy analyses.
+##
+##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
+##############################################################################
+
 """
-    Run a HyPhy analysis
+    Execute a standard HyPhy analysis.
 """
     
 import subprocess
