@@ -1,28 +1,36 @@
-# hyphyhelper
-
-This repository contains various code bits for helping you to use HyPhy and analyze its output. 
+# phyphy
 
 **IN DEVELOPMENT. NOT NECESSARILY EXPECTED TO WORK.**
 
-`hyphyhelper` provides functionality so that you can write and execute standard HyPhy analyses in a python environment. Never again worry about absolute paths or HyPhy idiosyncracies (mostly).
+
+`phyphy` aims to facilitate HyPhy usage in two primary ways:
+1) Execute standard analyses in a Python scripting environment
+2) Conveniently parse various information from the resulting JSON output.
+
+`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**".
+
+Future functionality will allow users to define and fit custom HyPhy models.
 
 ## Available Analyses
 
-All implemented analyses are **only available** through the `v2.3-dev` branch in HyPhy. In other words, `hyphyhelper` will (almost entirely) **not work** with the current HyPhy release and/or `master` branch (as exists on 7/26/17).
+`phyphy` is compatible with HyPhy version >=2.3.4 and supports the following analyses (in alphabetical order):
 
-+ RELAX
-+ BUSTED
 + aBSREL
++ BUSTED
 + FEL
++ FUBAR
 + MEME
++ RELAX
 + RelativeProteinRates
 + RelativeNucleotideRates
-
-> + SLAC*
-> 
-> SLAC.bf is currently experiencing bugs so please don't try use SLAC in v2.3-dev yet.
++ SLAC
 
 
+## Get help
+
+Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
+
+<!--
 ## Example script
 
 ```python
@@ -50,32 +58,7 @@ All implemented analyses are **only available** through the `v2.3-dev` branch in
     ## Run the analysis
     f.run_analysis()
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-    SJS
-    phyphy provides a convenient python library for executing HyPhy analyses. 
-    
-    Implemented so far:
-        1) Run analyses FEL, SLAC, MEME, ABSREL, BUSTED, RELAX
-        
-    Forthcoming:
-        1) Run more analyses as they are ported to libv3
-        2) Run rate4site
-        3) Parse and provide meaningful output for JSONs
-	
-	
-	
-	
+-->
 	
 	
 	

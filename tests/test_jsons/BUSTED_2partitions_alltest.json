@@ -1,0 +1,484 @@
+{
+ "analysis":{
+   "info":"BUSTED (branch-site unrestricted statistical test of episodic diversification) uses a random effects branch-site model fitted jointly to all or a subset of tree branches in order to test for alignment-wide evidence of episodic diversifying selection. Assuming there is evidence of positive selection (i.e. there is an omega > 1), BUSTED will also perform a quick evidence-ratio style analysis to explore which individual sites may have been subject to selection.",
+   "version":"1.2",
+   "citation":"*Gene-wide identification of episodic selection*, Mol Biol Evol. 32(5):1365-71",
+   "authors":"Sergei L Kosakovsky Pond",
+   "contact":"spond@temple.edu",
+   "requirements":"in-frame codon alignment and a phylogenetic tree (optionally annotated with {})"
+  },
+ "input":{
+   "file name":"/home/sjspielman/Dropbox/simulate_for_stephen/CURRENT/input_data/dat_partitioned.nex",
+   "number of sequences":12,
+   "number of sites":40,
+   "partition count":2,
+   "trees":{
+     "0":"(T1:0.140821,(((T4:0.0918075,T9:0.0712801)Node5:0.131355,(T10:0.416582,T7:0.0476408)Node8:0.0883192)Node4:0.637702,(T3:0.698741,T12:0.0835068)Node11:0.0469205)Node3:0.0741876,(((T5:0.0865238,T8:0.0535977)Node16:0.10328,T6:0.0885736)Node15:0.250248,(T2:0.0743222,T11:0.183571)Node20:0.644012)Node14:0.438272)",
+     "1":"(((T3:0.0197597,T10:0.16236)Node3:0.288468,T8:0.697417)Node2:0.235357,(((T11:0.178972,T5:0.347042)Node9:0.0479737,T1:0.08913)Node8:0.176925,(T7:0.407659,T2:0.27863)Node13:0.0266932)Node7:0.396699,(((T12:0.135414,T6:0.178748)Node18:0.0538266,T4:0.0910871)Node17:0.025723,T9:0.076758)Node16:0.0141549)"
+    }
+  },
+ "background":0,
+ "fits":{
+   "Nucleotide GTR":{
+     "Log Likelihood":-1064.296397644798,
+     "estimated parameters":50,
+     "AIC-c":2240.480907177708,
+     "Equilibrium frequencies":[
+      [0.25],
+      [0.2284722222222222],
+      [0.2222222222222222],
+      [0.2993055555555555]
+      ],
+     "Rate Distributions":{
+       "Substitution rate from nucleotide A to nucleotide C":2.106566109539294,
+       "Substitution rate from nucleotide A to nucleotide G":1,
+       "Substitution rate from nucleotide A to nucleotide T":1.076538782699893,
+       "Substitution rate from nucleotide C to nucleotide G":1.782769396531916,
+       "Substitution rate from nucleotide C to nucleotide T":1.550865509777897,
+       "Substitution rate from nucleotide G to nucleotide T":1.544416048078026
+      },
+     "display order":0
+    },
+   "MG94xREV with separate rates for branch sets":{
+     "Log Likelihood":-1035.808452977612,
+     "estimated parameters":57,
+     "AIC-c":2071.616905955224,
+     "Equilibrium frequencies":[
+      [0.01856513893204412],
+      [0.01245983645199219],
+      [0.009617093639635971],
+      [0.01794514423266947],
+      [0.01233852622990081],
+      [0.008280897840081645],
+      [0.006391590311411447],
+      [0.01192647324776935],
+      [0.0159602514202994],
+      [0.01071158816303621],
+      [0.008267712565092669],
+      [0.01542724860693543],
+      [0.01978106765461465],
+      [0.01327589676136906],
+      [0.0102469677508337],
+      [0.0191204662371556],
+      [0.02296485314431642],
+      [0.01541266754693204],
+      [0.01189622894381767],
+      [0.02219792717228299],
+      [0.01526260826402389],
+      [0.01024337084126649],
+      [0.007906320194935276],
+      [0.01475290369046998],
+      [0.0197426386818419],
+      [0.01325010548032779],
+      [0.01022706081499103],
+      [0.01908332062452945],
+      [0.02446894232188736],
+      [0.01642212431589801],
+      [0.01267537562922683],
+      [0.02365178632890477],
+      [0.0242585206287578],
+      [0.01628090157084112],
+      [0.01256637320624228],
+      [0.02344839180292172],
+      [0.01612238907406668],
+      [0.01082040548220871],
+      [0.008351702941060146],
+      [0.01558397156996042],
+      [0.02085479078485217],
+      [0.01399651698653683],
+      [0.01080317667145288],
+      [0.02015833169609963],
+      [0.0258473389030269],
+      [0.01734722355861575],
+      [0.01338941116873429],
+      [0.02498415047381687],
+      [0.0190985615805868],
+      [0.02750649605399529],
+      [0.01891261606228938],
+      [0.01269304279801045],
+      [0.009797093375238954],
+      [0.01828101714170773],
+      [0.01641882916728993],
+      [0.01267283227700528],
+      [0.02364704052688179],
+      [0.03032061778555747],
+      [0.0203494269616982],
+      [0.01570665436561921],
+      [0.02930804134443192]
+      ],
+     "Rate Distributions":{
+       "non-synonymous/synonymous rate ratio for *test*":[
+        [0.4604351950212898, 1]
+        ]
+      },
+     "display order":1
+    },
+   "Unconstrained model":{
+     "Log Likelihood":-1035.808511036201,
+     "estimated parameters":61,
+     "AIC-c":2211.712715852305,
+     "Rate Distributions":{
+       "Test":{
+         "0":{
+           "omega":0.4366753069186917,
+           "proportion":0
+          },
+         "1":{
+           "omega":0.461704968832918,
+           "proportion":1
+          },
+         "2":{
+           "omega":1.000400160064032,
+           "proportion":0
+          }
+        }
+      },
+     "display order":2
+    }
+  },
+ "timers":{
+   "Overall":{
+     "timer":244,
+     "order":0
+    },
+   "Preliminary model fitting":{
+     "timer":62,
+     "order":1
+    },
+   "Unconstrained BUSTED model fitting":{
+     "timer":177,
+     "order":2
+    }
+  },
+ "Site Log Likelihood":{
+   "unconstrained":[
+    [-32.31148164236539, -13.63068330012101, -18.89029039707788, -13.94875585757315, -30.40209217195231, -23.29811105531142, -33.37305081086966, -29.52424724278016, -30.96846011843322, -22.38592004095824, -17.13848784716846, -13.3593030510075, -20.0097744832708, -31.19911157220556, -26.55160295409634, -16.69603510779753, -31.18080998410834, -17.17563901170235, -9.405052047809164, -15.45550455572921, -24.69574563728836, -21.6007784646711, -37.62861333660365, -19.16761256087765, -17.20056931974215, -28.6620341008154, -28.67563989069697, -27.73031537901886, -15.70905363210886, -43.20055067747453, -40.51059442878473, -34.00579237621499, -36.3818648237532, -30.39271939235782, -35.73748968161343, -23.14030510285869, -36.83159509824126, -35.13427481539264, -21.58470940791356, -30.91383965743501]
+    ]
+  },
+ "Evidence Ratios":{
+  },
+ "tested":{
+   "0":{
+     "T1":"test",
+     "T4":"test",
+     "T9":"test",
+     "Node5":"test",
+     "T10":"test",
+     "T7":"test",
+     "Node8":"test",
+     "Node4":"test",
+     "T3":"test",
+     "T12":"test",
+     "Node11":"test",
+     "Node3":"test",
+     "T5":"test",
+     "T8":"test",
+     "Node16":"test",
+     "T6":"test",
+     "Node15":"test",
+     "T2":"test",
+     "T11":"test",
+     "Node20":"test",
+     "Node14":"test"
+    },
+   "1":{
+     "T3":"test",
+     "T10":"test",
+     "Node3":"test",
+     "T8":"test",
+     "Node2":"test",
+     "T11":"test",
+     "T5":"test",
+     "Node9":"test",
+     "T1":"test",
+     "Node8":"test",
+     "T7":"test",
+     "T2":"test",
+     "Node13":"test",
+     "Node7":"test",
+     "T12":"test",
+     "T6":"test",
+     "Node18":"test",
+     "T4":"test",
+     "Node17":"test",
+     "T9":"test",
+     "Node16":"test"
+    }
+  },
+ "data partitions":{
+   "0":{
+     "name":"busted.filter.SPAN_1",
+     "coverage":[
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      ]
+    },
+   "1":{
+     "name":"busted.filter.SPAN_2",
+     "coverage":[
+      [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "T1":{
+       "original name":"T1",
+       "Nucleotide GTR":0.07811631414008892,
+       "MG94xREV with separate rates for branch sets":0.07896049809392217,
+       "unconstrained":0.07898660042270057
+      },
+     "T2":{
+       "original name":"T2",
+       "Nucleotide GTR":0.06276973043207794,
+       "MG94xREV with separate rates for branch sets":0.05764971925276933,
+       "unconstrained":0.05766503933903266
+      },
+     "T3":{
+       "original name":"T3",
+       "Nucleotide GTR":0.3679870611263812,
+       "MG94xREV with separate rates for branch sets":0.4074357016035395,
+       "unconstrained":0.4077019986460486
+      },
+     "T4":{
+       "original name":"T4",
+       "Nucleotide GTR":0.03529099628220834,
+       "MG94xREV with separate rates for branch sets":0.03626816912518165,
+       "unconstrained":0.03627016254965693
+      },
+     "T5":{
+       "original name":"T5",
+       "Nucleotide GTR":0.05289595310290682,
+       "MG94xREV with separate rates for branch sets":0.05034495842496197,
+       "unconstrained":0.05036686849457181
+      },
+     "T6":{
+       "original name":"T6",
+       "Nucleotide GTR":0.03652720095424745,
+       "MG94xREV with separate rates for branch sets":0.03364722219633426,
+       "unconstrained":0.03365928834430969
+      },
+     "T7":{
+       "original name":"T7",
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "T8":{
+       "original name":"T8",
+       "Nucleotide GTR":0.01751863897672182,
+       "MG94xREV with separate rates for branch sets":0.01668075115759653,
+       "unconstrained":0.01669255275870359
+      },
+     "T9":{
+       "original name":"T9",
+       "Nucleotide GTR":0.01699440963496919,
+       "MG94xREV with separate rates for branch sets":0.01729321986117907,
+       "unconstrained":0.01730253674779038
+      },
+     "T10":{
+       "original name":"T10",
+       "Nucleotide GTR":0.1887123088401529,
+       "MG94xREV with separate rates for branch sets":0.1967190423871341,
+       "unconstrained":0.1965254211524247
+      },
+     "T11":{
+       "original name":"T11",
+       "Nucleotide GTR":0.08377635995447913,
+       "MG94xREV with separate rates for branch sets":0.08306719943358502,
+       "unconstrained":0.08301323811024471
+      },
+     "T12":{
+       "original name":"T12",
+       "Nucleotide GTR":0.07812300419139986,
+       "MG94xREV with separate rates for branch sets":0.0837450999271856,
+       "unconstrained":0.08375083599040334
+      },
+     "Node11":{
+       "Nucleotide GTR":0.03434499435837449,
+       "MG94xREV with separate rates for branch sets":0.02830793451540899,
+       "unconstrained":0.02832600283174573
+      },
+     "Node14":{
+       "Nucleotide GTR":0.2639144981597718,
+       "MG94xREV with separate rates for branch sets":0.2688151091785512,
+       "unconstrained":0.268943577576582
+      },
+     "Node15":{
+       "Nucleotide GTR":0.06683901325917399,
+       "MG94xREV with separate rates for branch sets":0.0710476702207067,
+       "unconstrained":0.07106247975264628
+      },
+     "Node16":{
+       "Nucleotide GTR":0.01564499938528049,
+       "MG94xREV with separate rates for branch sets":0.0167264826030123,
+       "unconstrained":0.01672590658589455
+      },
+     "Node20":{
+       "Nucleotide GTR":0.1028505763877884,
+       "MG94xREV with separate rates for branch sets":0.09631332780671926,
+       "unconstrained":0.09632836564299607
+      },
+     "Node3":{
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "Node4":{
+       "Nucleotide GTR":0.1866611825064384,
+       "MG94xREV with separate rates for branch sets":0.198326535638895,
+       "unconstrained":0.1981016274310793
+      },
+     "Node5":{
+       "Nucleotide GTR":0.0371579129290541,
+       "MG94xREV with separate rates for branch sets":0.03925414135035615,
+       "unconstrained":0.0392743716270472
+      },
+     "Node8":{
+       "Nucleotide GTR":0.01588385857974938,
+       "MG94xREV with separate rates for branch sets":0.01712551880037436,
+       "unconstrained":0.01711398926208237
+      }
+    },
+   "attributes":{
+     "original name":{
+       "attribute type":"node label",
+       "display order":0
+      },
+     "Nucleotide GTR":{
+       "attribute type":"branch length",
+       "display order":0
+      },
+     "MG94xREV with separate rates for branch sets":{
+       "attribute type":"branch length",
+       "display order":1
+      },
+     "unconstrained":{
+       "attribute type":"branch length",
+       "display order":0
+      }
+    },
+   "1":{
+     "T1":{
+       "original name":"T1",
+       "Nucleotide GTR":0.0149587117170768,
+       "MG94xREV with separate rates for branch sets":0.02709698066971161,
+       "unconstrained":0.02703792824214689
+      },
+     "T2":{
+       "original name":"T2",
+       "Nucleotide GTR":0.5656494823008253,
+       "MG94xREV with separate rates for branch sets":0.5769114239788781,
+       "unconstrained":0.5765703060858903
+      },
+     "T3":{
+       "original name":"T3",
+       "Nucleotide GTR":0.351595950480097,
+       "MG94xREV with separate rates for branch sets":0.3677642558820226,
+       "unconstrained":0.3674278301036142
+      },
+     "T4":{
+       "original name":"T4",
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "T5":{
+       "original name":"T5",
+       "Nucleotide GTR":0.229974178625554,
+       "MG94xREV with separate rates for branch sets":0.3360052164946553,
+       "unconstrained":0.3353384871215102
+      },
+     "T6":{
+       "original name":"T6",
+       "Nucleotide GTR":0.3972125389548009,
+       "MG94xREV with separate rates for branch sets":0.4293826085646841,
+       "unconstrained":0.4295254908507413
+      },
+     "T7":{
+       "original name":"T7",
+       "Nucleotide GTR":0.05416876195587192,
+       "MG94xREV with separate rates for branch sets":0.05768117999489317,
+       "unconstrained":0.05766476367419063
+      },
+     "T8":{
+       "original name":"T8",
+       "Nucleotide GTR":0.6373209959928321,
+       "MG94xREV with separate rates for branch sets":0.6919120451286681,
+       "unconstrained":0.6923795151080161
+      },
+     "T9":{
+       "original name":"T9",
+       "Nucleotide GTR":0.03436863736345766,
+       "MG94xREV with separate rates for branch sets":0.03436500301800815,
+       "unconstrained":0.03435212744160262
+      },
+     "T10":{
+       "original name":"T10",
+       "Nucleotide GTR":0.07990136062397747,
+       "MG94xREV with separate rates for branch sets":0.07981037322388408,
+       "unconstrained":0.07983507645094626
+      },
+     "T11":{
+       "original name":"T11",
+       "Nucleotide GTR":0.3639815444437743,
+       "MG94xREV with separate rates for branch sets":0.444202316829496,
+       "unconstrained":0.4429432332374586
+      },
+     "T12":{
+       "original name":"T12",
+       "Nucleotide GTR":0.008388678440169675,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "Node13":{
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "Node16":{
+       "Nucleotide GTR":0.06303266524136986,
+       "MG94xREV with separate rates for branch sets":0.05746271157070881,
+       "unconstrained":0.05747796101450661
+      },
+     "Node17":{
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "Node18":{
+       "Nucleotide GTR":0.2499029639709752,
+       "MG94xREV with separate rates for branch sets":0.2634287384376295,
+       "unconstrained":0.2634027928763228
+      },
+     "Node2":{
+       "Nucleotide GTR":0,
+       "MG94xREV with separate rates for branch sets":0,
+       "unconstrained":0
+      },
+     "Node3":{
+       "Nucleotide GTR":0.05682672182644191,
+       "MG94xREV with separate rates for branch sets":0.05437053878355103,
+       "unconstrained":0.0543485404614493
+      },
+     "Node7":{
+       "Nucleotide GTR":0.008165278392356336,
+       "MG94xREV with separate rates for branch sets":0.009591314786950002,
+       "unconstrained":0.009627336531338647
+      },
+     "Node8":{
+       "Nucleotide GTR":0.2627031300106011,
+       "MG94xREV with separate rates for branch sets":0.2657790248747166,
+       "unconstrained":0.2654950259298589
+      },
+     "Node9":{
+       "Nucleotide GTR":0.08321215733942783,
+       "MG94xREV with separate rates for branch sets":0.001152046567541404,
+       "unconstrained":0.00178292628538418
+      }
+    }
+  },
+ "test results":{
+   "LRT":0,
+   "p-value":1
+  }
+}

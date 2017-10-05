@@ -11,7 +11,8 @@ from copy import deepcopy
 
 class JSONFields():
     """
-        Define the fields used in JSONs. Essentially the terms.json namespace terms.
+        This class defines the strings of relevant JSON keys. 
+        Note that these strings correspond precisely to those in the HyPhy distribution. See file: `TemplateBatchFiles/libv3/all-terms.bf` in the `terms.json` namespace.
     """
     
     def __init__(self):
@@ -24,58 +25,59 @@ class JSONFields():
         self.input_npartitions    = "partition count"
         self.input_trees          = "trees"
         
-        self.rate_distributions   = "Rate Distributions"
         
         self.analysis_description      = "analysis"
         self.analysis_description_info = "info"
         
-        self.relative_site_rates = "Relative site rate estimates"
-        self.UB                  = "UB"
-        self.LB                  = "LB"
+        self.substitution_rate    = re.compile(r"Substitution rate from [\w-]+ (\w) to [\w-]+ (\w)")
+        
+        self.model_fits           = "fits"
+        self.log_likelihood       =  "Log Likelihood"
+        self.aicc                 = "AIC-c"
+        self.estimated_parameters = "estimated parameters"
+        self.frequencies          = "Equilibrium frequencies"
+        self.nucleotide_gtr       = "Nucleotide GTR"    
+        self.generic_mg94xrev     = "MG94xREV"      
+        self.per_branch_omega     = "Per-branch omega"
+        self.omega                = "omega"
+        self.proportion           = "proportion"
+        self.rate_distributions   = "Rate Distributions"
+        self.nonsyn_syn_ratio_for = "non-synonymous/synonymous rate ratio for"
 
-        self.tested = "tested"
         self.MLE                       = "MLE"
         self.MLE_headers               = "headers"
         self.MLE_content               = "content"
+        self.relative_site_rates       = "Relative site rate estimates"
+        self.UB                        = "UB"
+        self.LB                        = "LB"
+
+        self.tested          = "tested"
         
-        self.model_fits   = "fits"
-        self.log_likelihood =  "Log Likelihood"
-        self.aicc           = "AIC-c"
-        self.estimated_parameters = "estimated parameters"
-        self.frequencies = "Equilibrium frequencies"
-        self.nucleotide_gtr = "Nucleotide GTR"    
-        self.generic_mg94xrev = "MG94xREV"      
-        self.per_branch_omega = "Per-branch omega"
-        self.omega       = "omega"
-        self.proportion =  "proportion"
-    
+        self.site_logl       = "Site Log Likelihood"
+        self.evidence_ratios = "Evidence Ratios"        
         
-        self.branch_attributes   = "branch attributes"
-        self.attributes          = "attributes"
-        self.attribute_type      ="attribute type"
-        self.timers = "timers"
-        self.order = "order"
-        self.display_order = "display order"
-    
-    
-        self.site_logl = "Site Log Likelihood"
-        self.evidence_ratios = "Evidence Ratios"
-        
-        self.LRT = "LRT"
-        self.uncorrected_p = "Uncorrected P-value"
-        self.corrected_p   = "Corrected P-value"
+        self.LRT            = "LRT"
+        self.uncorrected_p  = "Uncorrected P-value"
+        self.corrected_p    = "Corrected P-value"
         self.baseline_omega = "Baseline MG94xREV omega ratio"
         self.rate_classes   = "Rate classes"
+   
+        self.branch_attributes   = "branch attributes"
+        self.attributes          = "attributes"
+        self.attribute_type      = "attribute type"
+        
+        self.timers        = "timers"
+        self.order         = "order"
+        self.display_order = "display order"
 
-
-        self.nonsyn_syn_ratio_for = "non-synonymous/synonymous rate ratio for"
+        
 
 
 
 
 class AnalysisNames():
     """
-        Class to define names of analyses which we can parse. All upper case except relative rates, which have no real name.
+        This class defines the names of analyses which we can parse. All upper case except relative rates, which have no real name.
     """
     def __init__(self):
         self.absrel   = "ABSREL"
@@ -87,21 +89,44 @@ class AnalysisNames():
         self.relrates = "relative_rates"
         self.slac     = "SLAC"
         
-        self.all_analyses = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.slac]
-        self.site_methods = [self.fel, self.fubar, self.meme, self.slac]
+        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.slac]
+        self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac]
+        self.single_partition_analyses = [self.relrates, self.absrel, self.relax]
 
         self.slac_by = ["by-site", "by-branch"]
         self.slac_ancestral_type = ["AVERAGED", "RESOLVED"]
 
 
+class Genetics():
+    """
+        Class to define codes used. 
+        Primarily (only?) used to extract frequencies as dictionaries.
+    """
+    def __init__(self):
+        self.nucleotides  = ["A", "C", "G", "T"]
+        self.amino_acids  = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"]
+        self.codons       = ["AAA", "AAC", "AAG", "AAT", "ACA", "ACC", "ACG", "ACT", "AGA", "AGC", "AGG", "AGT", "ATA", "ATC", "ATG", "ATT", "CAA", "CAC", "CAG", "CAT", "CCA", "CCC", "CCG", "CCT", "CGA", "CGC", "CGG", "CGT", "CTA", "CTC", "CTG", "CTT", "GAA", "GAC", "GAG", "GAT", "GCA", "GCC", "GCG", "GCT", "GGA", "GGC", "GGG", "GGT", "GTA", "GTC", "GTG", "GTT", "TAC", "TAT", "TCA", "TCC", "TCG", "TCT", "TGC", "TGG", "TGT", "TTA", "TTC", "TTG", "TTT"]
+        self.genetics     = {4: self.nucleotides, 20: self.amino_acids, 61: self.codons}
+ 
+    
+
 class HyPhyParser():
+    """
+        This class parses JSON output and contains a variety of methods for pulling out various pieces of information.
+    """    
     
     def __init__(self, json_path, analysis = None):
         """
-            Parse JSON output.
+            Initialize a HyPhyParser instance.
+            
+            Require arguments:
+                1. **json_path**, the path (filename) of JSON to parse
+            
+            Optional keyword arguments:
+                2. **analysis**, the name of the analysis run for which the JSON file gives results. Note that this will (barring pathological situations) be parsed out from the JSON if not provided. This will work as expected *most* of the time.
         """
         self.fields = JSONFields()
-        self.genetics = pyvolve.Genetics()
+        self.genetics = Genetics()
         
         self.analysis_names = AnalysisNames()
         self.allowed_analyses = self.analysis_names.all_analyses
@@ -149,9 +174,9 @@ class HyPhyParser():
 
     def _count_partitions(self):
         """
-            Define self.npartitions
+            Define self.npartitions, the number of partitions in analysis.
         """
-        if self.analysis == self.analysis_names.relrates:
+        if self.analysis in self.analysis_names.single_partition_analyses:
             self.npartitions = 1
         else:
             self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
@@ -160,7 +185,7 @@ class HyPhyParser():
 
     def _extract_slac_sitetable(self, raw, slac_by, slac_ancestral_type):
         """
-            Extract the specific SLAC tables of interest
+            Extract the specific SLAC tables of interest for parsing to CSV.
         """
         final = {}
         for x in range(self.npartitions):
@@ -174,7 +199,7 @@ class HyPhyParser():
 
     def _parse_sitemethod_to_csv(self, delim, slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
         """
-            Extract a CSV from a site-level method JSON, including FEL, SLAC, MEME, FUBAR.
+            Extract a CSV from a **site-level** method JSON, including FEL, SLAC, MEME, FUBAR.
         """
         site_block =  self.json[ self.fields.MLE ]
         raw_header = site_block[ self.fields.MLE_headers ]
@@ -203,7 +228,8 @@ class HyPhyParser():
 
     def _parse_absrel_to_csv(self, delim):
         """
-            Create CSV from aBSREL results:
+            Extract a CSV from an aBSREL JSON. 
+            CSV contents:
                 Node name, Baseline MG94 omega, Number of inferred rate classes, Tested (bool), Proportion of selected sites, LRT, uncorrected P, bonferroni-holm P
         """
         
@@ -248,7 +274,8 @@ class HyPhyParser():
 
     def _parse_relrates_to_csv(self, delim):
         """
-            Parse AA or nucleotide relative rates to CSV:
+            Extract a CSV from a relative rates analysis 
+            CSV contents:
                 site, rate, lower95, upper95
         """
         
@@ -267,27 +294,18 @@ class HyPhyParser():
             f.write(header + full_rows)
        
         
-        
-
-
-
-
-
-
-
-
-
-     
+    
     def _reform_rate_phrase(self, phrase):
         """
             Convert rate phrase to simpler key, i.e. A->C returns key "AC"
         """
-        find = re.search(u"Substitution rate from [\w-]+ (\w) to [\w-]+ (\w)", phrase)
+        ### TODO: this should somehow be in fields.
+        find = re.search(self.fields.substitution_rate, phrase)
         if find:
             source = find.group(1).upper()
             target = find.group(2).upper()
         
-            return source + target
+            return str(source + target)
         else:
             raise AssertionError("[ERROR]: Bad rate reform.")
 
@@ -392,9 +410,8 @@ class HyPhyParser():
         f = [float(x[0]) for x in fraw]
         
         if as_dict:
-            codes = {4: self.genetics.nucleotides, 20: self.genetics.amino_acids, 61: self.genetics.codons}
             try:
-                fdict = dict(zip( codes[len(f)], f))
+                fdict = dict(zip( self.genetics.genetics[len(f)], f))
             except:
                 raise AssertionError("\n[ERROR]: Unknown frequencies found in JSON. Please report bug to github.com/veg/hyphy/issues.")            
             return fdict
@@ -569,7 +586,7 @@ class HyPhyParser():
         self.csv = csv
 
         ### Standard site output ###
-        if self.analysis in self.analysis_names.site_methods:
+        if self.analysis in self.analysis_names.site_analyses:
             assert(slac_by in self.analysis_names.slac_by), "\n[ERROR]: Argument `slac_by` must be either 'by-site' or 'by-branch'."
             assert(slac_ancestral_type in self.analysis_names.slac_ancestral_type), "\n[ERROR]: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
             self._parse_sitemethod_to_csv(delim)

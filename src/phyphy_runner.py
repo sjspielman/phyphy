@@ -35,44 +35,58 @@ _GENETIC_CODE = {
 
 
 class HyPhy():
+    """
+        This class creates a HyPhy instance. Generally this is only a necessary step if any of these applies:
+            + You wish to use a local **build** of HyPhy (not a canonically installed build)
+            + You wish to use a local **install** of HyPhy (installed elsewhere from /usr/local)
+            + You wish to use a different HyPhy executable from the default, HYPHYMP
+    
+        Optional keyword arguments to __init__:
+            1) executable, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
+            2) build_path, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
+            3) install_path, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
+            4) cpu, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
+            5) quiet, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
+    """
 
     def __init__(self, **kwargs):
-        """
-            Initialize a HyPhy instance. Generally this is only a necessary step if either applies:
-                + You wish to use a local build of HyPhy (not an installed build)
-                + You wish to use a different HyPhy executable (default is HYPHYMP)
-        
-            Optional keyword arguments:
-                1) executable, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
-                2) path, the path to a **local hyphy build**. Only use this argument if you **do not** want to use the installed hyphy in /usr/local.
-                3) cpu, the maximum number of CPUs per analysis. 
-                4) quiet, suppress screen output (still creates messages.log and errors.log, when applicable). Default: False
-        """
 
-        self.executable = kwargs.get("executable", "HYPHYMP")
-        self.user_path  = kwargs.get("path", None)  ### only for local or non-standard installs
-        self.cpu        = kwargs.get("cpu", None)       
-        self.quiet      = kwargs.get("quiet", False) ### run hyphy quietly
+
+        self.executable    = kwargs.get("executable", "HYPHYMP")
+        self.build_path    = kwargs.get("build_path", None)  
+        self.install_path  = kwargs.get("install_path", None) 
+        self.cpu           = kwargs.get("cpu", None)       
+        self.quiet         = kwargs.get("quiet", False) ### run hyphy quietly
         
         
-        ### Sanity checks for a local/non-standard install ###
-        if self.user_path is not None: 
-            assert(os.path.exists(self.user_path)), "\n[ERROR] HyPhy not detected in provided path."
-            self.user_path = os.path.abspath(self.user_path) + "/" ## os.path.abspath will strip any trailing "/"
-            self.libpath = self.user_path + "res/"
-            assert(os.path.exists(self.libpath)), "\n[ERROR]: User path does not contain a correctly built HyPhy."
-            self.executable = self.user_path + self.executable
+        
+        ### Sanity checks for a local install ###
+        if self.build_path is not None: 
+            assert(os.path.exists(self.build_path)), "\n[ERROR] Build path does not exist."
+            self.build_path = os.path.abspath(self.build_path) + "/" ## os.path.abspath will strip any trailing "/"
+            self.libpath = self.build_path + "res/"
+            assert(os.path.exists(self.libpath)), "\n[ERROR]: Build path does not contain a correctly built HyPhy."
+            self.executable = self.build_path + self.executable
             self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
         
-        else: ## default install
-            self.libpath = _DEFAULT_PATH
-            self.hyphy_call = deepcopy(self.executable)
+        else: 
+            ## Installed in non-default path
+            if self.install_path is not None:
+                assert(os.path.exists(self.install_path)), "\n[ERROR]: Install path does not exist."
+                self.libpath = self.install_path + "lib/hyphy/"
+                assert(os.path.exists(self.libpath)), "\n[ERROR]: Install path does not contain a correctly built HyPhy."               
+                self.executable = self.build_path + self.executable
+                self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
+            ## Installed in default path
+            else:
+                self.libpath = _DEFAULT_PATH
+                self.hyphy_call = deepcopy(self.executable)
             
         ## Ensure executable exists somewhere
         with open("/dev/null", "w") as hushpuppies:
             exit_code = subprocess.call(["which", self.executable], stdout = hushpuppies, stderr = hushpuppies) # If you're reading this, I hope you enjoy reading hushpuppies as much as I enjoyed writing it. --SJS
             if exit_code == 1:
-                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed or in your provided local install path.")
+                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed or in your provided path.")
 
         if self.cpu is not None:
             self.hyphy_call += " CPU=" + str(self.cpu)
@@ -82,10 +96,34 @@ class HyPhy():
         
 
 class Analysis(object):
-    
+    """
+        Parent class for all analysis methods. 
+        Children classes include:
+            ABSREL
+            BUSTED
+            FEL
+            FUBAR
+            MEME
+            RELAX
+            SLAC
+            RelativeNucleotideRates
+            RelativeProteinRates                         
+    """
+        
+            
     def __init__(self, **kwargs):
         """
-            Parent class for all analysis methods.
+            Initialize a HyPhy analysis. 
+            
+            Required arguments:
+                1. **alignment** _and_ **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                           
+            Optional keyword arguments:
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **alpha**, a threshold for calling selection hypothesis tests as significant. Default: 0.1. Note that this is overridden for many children, notably FUBAR which uses posterior probabilities
+                3. **output**, name (and path to) to final output JSON file. Default: Goes to same directory as provided data
+            
+            See children classes for analysis-specific arguments.
         """
 
         self.hyphy = kwargs.get("hyphy", None)
@@ -171,6 +209,8 @@ class Analysis(object):
                         self.tree_string = find_tree.group(1)
                     else:
                         raise AssertionError("\n[ERROR] Malformed tree in input data.")
+
+
             
     def _build_command(self):
         print("Parent method. Not run.")
@@ -222,14 +262,14 @@ class Analysis(object):
                 check = subprocess.call(full_command, shell = True, stdout = quiet, stderr = quiet)
         else:    
             check = subprocess.call(full_command, shell = True)
-        assert(check == 0), "[ERROR] HyPhy failed to run."
+        assert(check == 0), "\n[ERROR] HyPhy failed to run."
         
         ### Move JSON to final resting place
-        if self.user_json_path is not None:
+        if self.user_json_path is None:
             self.json_path = self.default_json_path
         else:
             self.json_path = self.user_json_path
-            shutil.move(self.default_json_path, self.user_json_path)
+        shutil.move(self.default_json_path, self.json_path)
 
 
 
@@ -245,21 +285,21 @@ class FEL(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **two_rate**, "Yes"/"No" or True/False accepted
-                3. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
-                4. **output**, New path and/or file for the JSON
-                5. **alpha**, The p-value threshold for selection
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **srv**, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values "Yes"/"No" or True/False accepted. Default: True.
+                3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
+                5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
-                
+        
         super(FEL, self).__init__(**kwargs)
         
         self.batchfile = "FEL.bf"
         self.default_json_path = self.hyphy_alignment + ".FEL.json"
 
-        self.tworate = kwargs.get("two_rate", "Yes") ## They can provide T/F or Yes/No
-        self.tworate = self._format_yesno(self.tworate)
+        self.srv = kwargs.get("two_rate", "Yes") ## They can provide T/F or Yes/No
+        self.srv = self._format_yesno(self.srv)
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
@@ -277,7 +317,7 @@ class FEL(Analysis):
                                            self.hyphy_alignment ,
                                            self.hyphy_tree ,
                                            self.branches , 
-                                           self.tworate , 
+                                           self.srv , 
                                            self.alpha ])
 
         
@@ -296,10 +336,10 @@ class MEME(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
-                3. **output**, New path and/or file for the JSON
-                4. **alpha**, The p-value threshold for selection
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
+                4. **alpha**, The p-value threshold for calling sites as positively selected. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
 
@@ -335,9 +375,9 @@ class SLAC(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
-                3. **output**, New path and/or file for the JSON
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **bootstrap_samples**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
@@ -382,9 +422,9 @@ class ABSREL(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
-                3. **output**, New path and/or file for the JSON
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
                 
@@ -419,9 +459,9 @@ class BUSTED(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **branches**, "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
-                3. **output**, New path and/or file for the JSON
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
                 
@@ -458,11 +498,12 @@ class RELAX(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **test_label**, the label found in your tree(!) referring to the branches along which to test for relaxation of selection
-                3. **reference_label**, the label found in your tree(!) referring to the reference branches used in the test for relaxation of selection. **Only provide this argument if your tree has multiple labels in it!**
-                4. **analysis_type**, "All" (run hypothesis test and fit descriptive models) or "Minimal" (only run hypothesis test). Default: "All".
-                5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **test_label**, The label (must be found in your tree) corresponding to the **test** branch set
+                3. **reference_label**, The label f(must be found in your tree) corresponding to the **reference** branch set. **Only provide this argument if your tree has multiple labels in it.**
+                4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
+                5. **analysis_type**, "All" (run hypothesis test and fit descriptive models) or "Minimal" (only run hypothesis test). Default: "All".
+                6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
                 
         super(RELAX, self).__init__(**kwargs)
@@ -480,7 +521,7 @@ class RELAX(Analysis):
         self.reference_label = kwargs.get("reference_label", None)
         if len(self._all_labels) > 1:
             if self.reference_label is None:
-                print("WARNING: No branches were selected as 'reference' even though multiple labels exist in the tree. Defaulting to using all non-test branches.")
+                print("\nWARNING: No branches were selected as 'reference' even though multiple labels exist in the tree. Defaulting to using all non-test branches.")
                 self.reference_label = self.shared_branch_choices[-1]
             else:
                 assert(self.reference_label in self._all_labels), "\n [ERROR] The value for `reference_label` must correspond to a label in your tree. To simply use all non-test branches as reference, do not provide the argument `reference_label`."
@@ -523,9 +564,9 @@ class RelativeProteinRates(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **model**, the protein model to use to fit relative rates. Default: JC.
-                3. **plusF**, should the model use +F frequencies? +F means frequencies will be empirically read in from alignment, in contrast to using the default model frequencies. Default: False.
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **model**, The protein model to use to fit relative rates. Options include LG, WAG, JTT, JC69. Default: JC69.
+                3. **plusF**, Whether the protein model should use +F frequencies? +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
          """                
         super(RelativeProteinRates, self).__init__(**kwargs)
         
@@ -536,7 +577,7 @@ class RelativeProteinRates(Analysis):
         self.model = kwargs.get("model", "JC69")
         assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
         
-        self.plus_f = kwargs.get("plusF", "False")
+        self.plus_f = kwargs.get("plusF", "True")
         self.plus_f = self._format_yesno(self.plus_f)
 
 
@@ -563,8 +604,8 @@ class RelativeNucleotideRates(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, your HyPhy instance
-                2. **model**, the nucleotide model to use to fit relative rates. Default: JC69.
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **model**, The nucleotide model to use to fit relative rates. Options include GTR, HKY85, or JC69. Default: GTR.
          """                
         super(RelativeNucleotideRates, self).__init__(**kwargs)
         
@@ -572,7 +613,7 @@ class RelativeNucleotideRates(Analysis):
         self.batchfile = "relative_nucleotide_rates.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
         
-        self.model = kwargs.get("model", "JC69")
+        self.model = kwargs.get("model", "GTR")
         assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
 
 
@@ -589,63 +630,7 @@ class RelativeNucleotideRates(Analysis):
                                          ])
   
 
-    
 
-def main():
-    
-    if __name__ == "__main__":
-    
-        ## Check out these sweet relative paths!!!! 
-        ### when providing the data, give either alignment and tree OR data. 
-        #aa_alignment = "data/aa.fasta"  ### file with AA alignment
-        #codon_alignment = "data/seqs.fasta" ### file with codon alignment
-        #tree      = "data/test.tre"  ### file with just tree
-        #data      = "data/seqs.dat"    ### file with codon sequences *and* tree
-    
-        ### output file, hyphyhelper will move the output json to here for you
-        #json = "out.json"
-    
-        ## FIRST, Create a HyPhy instance if you want to use a local (aka not installed into /usr/local) hyphy and/or specify other things. See __init__ docstring for the things.
-        #hyphy = HyPhy(path = "/path/to/local/hyphy", quiet=False)
-    
-    
-        #f = FEL(hyphy = hyphy, data = "original_part.nex", two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
-        #f.run_analysis()    
-
-        ### FEL ###
-        #f = FEL(hyphy = hyphy, alignment = codon_alignment, tree = tree, two_rate = False, output = json)     ## NOTE: This line could be used instead:   f = FEL(hyphy = hyphy, data = data, two_rate = False, output = json)
-        #f.run_analysis()
-
-        ### MEME ###
-        #f = MEME(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)
-        #f.run_analysis()
-
-        ### SLAC ###   ###### NOTE: CURRENT V2.3-DEV SLAC IMPLEMENTATION IS BROKEN. THIS WILL NOT RUN.
-        #f = SLAC(hyphy = hyphy, alignment = codon_alignment, tree = tree, output = json)     
-        #f.run_analysis()
-
-        #### ABSREL ####
-        #f = ABSREL(hyphy = hyphy, data = data, branches = "Internal", output = json)
-        #f.run_analysis()
-            
-        #### RELAX ####
-        #f = RELAX(hyphy = hyphy, data = data, test_label = "test", reference_label = "reference", analysis_type = "Minimal", output = json)
-        #f.run_analysis()
- 
-        #### BUSTED ####
-        #f = BUSTED(hyphy = hyphy, data = data, output = json, foreground = ["Node1", "Node2", "t3"])
-        #f.run_analysis()        
-
-        ### RelativeProteinRates ###
-        #f = RelativeProteinRates(hyphy = hyphy, alignment = aa_alignment, tree = tree, model = "JC", plusF = True)
-        #f.run_analysis()
-    
-        ### RelativeNucleotideRates ###
-        f = RelativeNucleotideRates(hyphy = hyphy, alignment = codon_alignment, tree = tree, model = "GTR")
-        f.run_analysis()        
-main()
-        
-    
     
 
         
