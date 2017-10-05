@@ -2,7 +2,6 @@
 
 **IN DEVELOPMENT. NOT NECESSARILY EXPECTED TO WORK.**
 
-
 `phyphy` aims to facilitate HyPhy usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
@@ -29,6 +28,24 @@ Future functionality will allow users to define and fit custom HyPhy models.
 ## Get help
 
 Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
+
+## Install
+
+You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
+
+Alternatively, you can download from source. `phyphy` uses the usual `setuptools` procedure. Briefly:
+
+1. Download the master branch and `cd` in. 
+2. **Build** the package with `python setup.py build` (with a `sudo` as needed)
+3. Optionally, run tests with `python setup.py test`  (with a `sudo` as needed)
+4. **Install** per your own adventure:
+	> To specify a different install directory, add the argument `--prefix=/path/to/my/favorite/directory` to the install line.
+
+	+ To install as root: `sudo python setup.py install`
+	+ To install for user only: `python setup.py install --user`
+
+
+
 
 <!--
 ## Example script
