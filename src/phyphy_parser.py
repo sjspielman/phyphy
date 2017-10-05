@@ -161,6 +161,9 @@ class HyPhyParser():
             
     
     def _determine_analysis_from_json(self):
+        """
+            Determine the relevant analysis name directly from the JSON description field.
+        """
 
         json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
         
@@ -283,6 +286,9 @@ class HyPhyParser():
             Extract a CSV from a relative rates analysis 
             CSV contents:
                 site, rate, lower95, upper95
+                
+            Required arguments:
+                1. **delim**, the delimitor for output file. Default: "," (i.e., CSV).
         """
         
         header = delim.join( ["site", "rate", "lower_95_bound", "upper_95_bound"] )
@@ -303,9 +309,11 @@ class HyPhyParser():
     
     def _reform_rate_phrase(self, phrase):
         """
-            Convert rate phrase to simpler key, i.e. A->C returns key "AC"
+            Convert rate phrase to simpler key, i.e. "Substitution rate from nucleotide A to nucleotide C" returns simply "AC"
+                
+            Required arguments:
+                1. **phrase**, the key to reform
         """
-        ### TODO: this should somehow be in fields.
         find = re.search(self.fields.substitution_rate, phrase)
         if find:
             source = find.group(1).upper()
@@ -313,13 +321,18 @@ class HyPhyParser():
         
             return str(source + target)
         else:
-            raise AssertionError("[ERROR]: Bad rate reform.")
+            raise AssertionError("\n[ERROR]: Bad rate reform.")
 
 
 
     def _replace_tree_info(self, tree, node, newvalue):
         """
-            Replace <stuff> in :Node<stuff> in tree at given node with the newvalue, for attribute mapping.
+            Faciliate attribute mapping onto a phylogeny by replacing the branch length for a given node with the provided value (ie, replace <stuff> in :Node<stuff>)
+                            
+            Required arguments:
+                1. **tree**, the newick tree string of interest
+                2. **node**, the node node whose branch length should be replaced
+                3. **newvalue**, the new value to replace the old branch length
         """
         return re.sub(node + ":[\.\de-]+?([,\)])", node + ":" + newvalue + "\\1", tree)
         
@@ -331,7 +344,7 @@ class HyPhyParser():
     ################################################ MODEL FITS #######################################################
     def extract_model_names(self):
         """
-            Get the list of fitted models.
+            Return a list of all model names in the `fits` JSON field.
         """
 
         self.fitted_models = list( self.json[ self.fields.model_fits ].keys())
@@ -340,7 +353,18 @@ class HyPhyParser():
 
     def extract_model_component(self, model_name, component):
         """
-            For a given fitted model that appears in "fits", return a component of the fit.
+            Return a model component for a given model name found in the `fits` JSON field.
+            
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+                2. **component**, the component of the model to return. 
+
+            Note there are a variety of convenience methods which wrap this function to extract all components (note that not all analyses will have all of these components):
+                + .extract_model_logl(model_name) returns the log likelihood of a given model fit
+                + .extract_model_estimated_parameters(model_name) returns the number of estimated parameters in a given model fit
+                + .extract_model_aicc(model_name) returns the small-sample AIC (AIC-c) for a given model fit
+                + .extract_model_rate_distributions(model_name) returns rate distributions for a given model fit 
+                + .extract_model_frequencies(model_name) returns the equilibrium frequencies for the given model fit
         """
         try:
             model_fit = self.json[ self.fields.model_fits ][ model_name ]
@@ -357,30 +381,41 @@ class HyPhyParser():
 
     def extract_model_logl(self, model_name):
         """
-            Return log likelihood for a given model that appears in "fits".
+            Return log likelihood (as a float) for a given model that appears in the the `fits` field.
+
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
         """
-        return self.extract_model_component(model_name, self.fields.log_likelihood)
+        return float( self.extract_model_component(model_name, self.fields.log_likelihood) )
 
 
     def extract_model_estimated_parameters(self, model_name):
         """
-            Return estimated parameters for a given model that appears in "fits".
+            Return estimated parameters (as an int) for a given model that appears in the `fits` field.
+
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
         """
-        return self.extract_model_component(model_name, self.fields.estimated_parameters)
+        return int( self.extract_model_component(model_name, self.fields.estimated_parameters) )
 
 
     def extract_model_aicc(self, model_name):
         """
-            Return AICc for a given model that appears in "fits".
+            Return AICc (as a float) for a given model that appears in the `fits` field.
+            
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
         """
-        return self.extract_model_component(model_name, self.fields.AICc)
+        return float( self.extract_model_component(model_name, self.fields.AICc) )
 
 
     def extract_model_rate_distributions(self, model_name):
         """
-            Return rate distributions, as a reformatted dictionary, for a given model that appears in "fits".
-            
+            Return rate distributions, as a reformatted dictionary, for a given model that appears in the `fits` field.            
             NOTE: Currently assumes dS = 1 for all initial MG94xREV fits, as in the current HyPhy implementation (True in <=2.3.4).
+
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
         """
         rawrates = self.extract_model_component(model_name, self.fields.rate_distributions)
         rates = {}
@@ -399,7 +434,7 @@ class HyPhyParser():
                     if find:
                         rates[find.group(1)] = {self.fields.omega: v[0][0], self.fields.proportion: 1.0}
                     else:
-                        rates["omega"] = v[0][0]  
+                        rates[self.fields.omega] = v[0][0]  
         else:
             rates = rawrates
         return rates
@@ -408,9 +443,12 @@ class HyPhyParser():
 
     def extract_model_frequencies(self, model_name, as_dict = False):
         """
-            Return log likelihood for a given model that appears in "fits".
-            With "as_dict = True", returns frequencies as dictionary
-
+            Return a list of equilibrium frequencies (in alphabetical order) for a given model that appears in the field `fits`.
+            
+            Required arguments:
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+            Optional keyword arguments:
+                1. **as_dict**, Boolean to indicate if the frequencies should be returned as a dictionary. Default: False.
         """
         fraw = self.extract_model_component(model_name, self.fields.frequencies)
         f = [float(x[0]) for x in fraw]
@@ -432,11 +470,12 @@ class HyPhyParser():
   
     def extract_branch_sets(self, by_set = False):
         """
-            Return branch set designations for all nodes.
-            Default, returns as is in JSON where nodes are keys
-            If by_set if True, swap out so keys are branch sets and values are list of nodes
-
-            NOTE: Assumes that all partitions share the same branch sets (True in <=2.3.4)
+            Return branch set designations as a dictionary for all nodes. 
+            By default, this function will return the branch sets "as is" is the JSON field `tested`, where keys are node and values are the branch set to which the given node belongs
+            NOTE: Assumes that all partitions share the same branch sets.
+            
+            Optional keyword arguments:
+                1. **by_set**, Boolean to indicate if the returned dictionary should use *branch sets* as keys, and values are a *list* of nodes in that branch set. Default: False.
         """
         try:
             branch_sets = self.json[ self.fields.tested ]["0"]
@@ -461,9 +500,17 @@ class HyPhyParser():
     
     def extract_input_tree(self, partition = None):
         """
-            Return the inputted newick phylogeny.
-            If there are multiple partitions (and therefore multiple trees), default returns a *list* of trees. 
-            If partition = [some integer], that partition's tree only will be returned. NOTE: PARTITION STARTS FROM 0.
+            Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
+            For analyses with a single partition, returns a string.
+            For analyses with multiple partitions (and hence multiple trees), returns a *list* of trees. 
+            
+            
+            Return branch set designations as a dictionary for all nodes. 
+            By default, this function will return the branch sets "as is" is the JSON field `tested`, where keys are node and values are the branch set to which the given node belongs
+            NOTE: Assumes that all partitions share the same branch sets.
+            
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0.
         """
         tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
         if self.npartitions == 1:
@@ -486,7 +533,7 @@ class HyPhyParser():
     
     def reveal_branch_attributes(self):
         """
-            Return a dictionary of all the attributes and their attribute type (node label or branch label)
+            Return a dictionary of all the attributes in the `branch attributes` field and their attribute type (node label or branch label).
         """
         attributes_info = self.json[ self.fields.branch_attributes ][ self.fields.attributes ]
         self.attribute_names = {}
