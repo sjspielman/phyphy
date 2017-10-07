@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 ##############################################################################
-##  phyhy: Python HyPhy: Facilitating the execution and parsing of standard HyPhy analyses.
+##  phyhy: *P*ython *HyPhy*: Facilitating the execution and parsing of standard HyPhy analyses.
 ##
 ##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
 ##############################################################################
 
+	
+	
 """
     Execute a standard HyPhy analysis.
 """
@@ -17,6 +19,7 @@ import re
 from Bio import Phylo
 from copy import deepcopy
 from StringIO import StringIO
+from math import ceil
 
 _DEFAULT_PATH = "/usr/local/lib/hyphy/"
 _GENETIC_CODE = {
@@ -50,11 +53,12 @@ class HyPhy():
             + You wish to use a different HyPhy executable from the default, HYPHYMP
     
         Optional keyword arguments to __init__:
-            1) executable, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
-            2) build_path, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
-            3) install_path, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
-            4) cpu, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
-            5) quiet, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
+            1. **executable**, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
+            2. **build_path**, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
+            3. **install_path**, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
+            4. **cpu**, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
+            5. **quiet**, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
+            6. **suppress_log**, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)
     """
 
     def __init__(self, **kwargs):
@@ -65,6 +69,7 @@ class HyPhy():
         self.install_path  = kwargs.get("install_path", None) 
         self.cpu           = kwargs.get("cpu", None)       
         self.quiet         = kwargs.get("quiet", False) ### run hyphy quietly
+        self.suppress_log   = kwargs.get("suppres_stdout", False) ### send messages.log, errors.log to /dev/null
         
         
         
@@ -98,6 +103,9 @@ class HyPhy():
 
         if self.cpu is not None:
             self.hyphy_call += " CPU=" + str(self.cpu)
+        
+        if self.suppress_me is True:
+            self.hyphy_call += "USEPATH=/dev/null/"
 
         
         
@@ -128,8 +136,7 @@ class Analysis(object):
                            
             Optional keyword arguments:
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **alpha**, a threshold for calling selection hypothesis tests as significant. Default: 0.1. Note that this is overridden for many children, notably FUBAR which uses posterior probabilities
-                3. **output**, name (and path to) to final output JSON file. Default: Goes to same directory as provided data
+                2. **output**, name (and path to) to final output JSON file. Default: Goes to same directory as provided data
             
             See children classes for analysis-specific arguments.
         """
@@ -144,10 +151,10 @@ class Analysis(object):
         self.data      = kwargs.get("data", None)    ### combined alignment and tree or NEXUS
         self._check_files()
 
-        self.alpha          = str( kwargs.get("alpha", 0.1) )   ### significance
         self.user_json_path = kwargs.get("output", None)
-        
-        
+        if self.user_json_path is not None:
+            assert( os.path.exists(os.path.dirname(self.user_json_path)) ),"\n[ERROR]: Provided output path does not exist."
+                    
         ### Unused in AA analyses 
         self.genetic_code = kwargs.get("genetic_code", "Universal")
         assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified."
@@ -259,7 +266,6 @@ class Analysis(object):
     def run_analysis(self):
         """
             Call HyPhy as a subprocess to run a given analysis. 
-            Upon completion, move JSON to the user-specified location (if applicable).
         """    
         self._build_analysis_command()
         full_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
@@ -271,15 +277,20 @@ class Analysis(object):
         else:    
             check = subprocess.call(full_command, shell = True)
         assert(check == 0), "\n[ERROR] HyPhy failed to run."
-        
-        ### Move JSON to final resting place
-        if self.user_json_path is None:
-            self.json_path = self.default_json_path
-        else:
-            self.json_path = self.user_json_path
-        shutil.move(self.default_json_path, self.json_path)
+
+        self._save_output()
 
 
+        def _save_output(self):
+            """
+                Move JSON to final location. 
+            """        
+
+            if self.user_json_path is None:
+                final_path = self.default_json_path
+            else:
+                final_path = self.user_json_path            
+            shutil.move(self.default_json_path, final_path)
 
  
 
@@ -306,8 +317,9 @@ class FEL(Analysis):
         self.batchfile = "FEL.bf"
         self.default_json_path = self.hyphy_alignment + ".FEL.json"
 
-        self.srv = kwargs.get("two_rate", "Yes") ## They can provide T/F or Yes/No
-        self.srv = self._format_yesno(self.srv)
+        self.srv   = kwargs.get("srv", "Yes") ## They can provide T/F or Yes/No
+        self.srv   = self._format_yesno(self.srv)
+        self.alpha = str( kwargs.get("alpha", 0.1) )
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
@@ -332,8 +344,102 @@ class FEL(Analysis):
         
         
         
+      
+      
+      
+      
+class FUBAR(analysis):       
+        
+    def __init__(self, **kwargs):
+        """
+            Required arguments:
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+
+            Optional keyword arguments:
+                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                2. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data. 
+                3. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                4. **grid_size**, Number of grid points per rate grid dimension (Default: 20, allowed [5,50])
+                5. **nchains**, Number of MCMC chains to run (Default: 5, allowed [2,20])
+                6. **chain_length**, The length of each chain (Default: 2e6, allowed [5e5,5e7])
+                7. **burnin**, Number of samples to consider as burn-in (Default 1e6, allowed [ceil(chain_length/20),ceil(95*chain_length/100)])
+                8. **samples_per_chain**, Number of samples to draw per chain (Default 100, allowed [50,chain_length-burnin])
+                9. **alpha**, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])
+                10. **cache**, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument **False** to not save the cache (this argument simply sends it to /dev/null)
+        """                
+
+
+
+        super(FUBAR, self).__init__(**kwargs)
+        
+        self.batchfile = "FUBAR.bf"
+        self.default_json_path = self.hyphy_alignment + ".MEME.json"
+        self.cache             = kwargs.get("cache", None)
+
+        self.grid_size         = kwargs.get("grid_size", 20)
+        self.nchains           = kwargs.get("nchains", 5)
+        self.chain_length      = kwargs.get("chain_length", 2e6)
+        self.burnin            = kwargs.get("burnin", 1e6)
+        self.samples_per_chain = kwargs.get("grid_size", 100)
+        self.alpha             = kwargs.get("alpha", 0.5)
+        
+        self._sanity_fubar()
+    
+    
+    
+    
+    def _sanity_fubar(self):
+        """
+            Sanity check FUBAR arguments
+        """
+        assert(self.grid_size >=5 and self.grid_size <=50), "\n[ERROR]: FUBAR grid size must be in range [5,50]."
+        assert(self.nchains >=2 and self.nchains <=20), "\n[ERROR]: FUBAR nchains must be in range [2,20]."
+        assert(self.chain_length >=5e5 and self.chain_length <=5e7), "\n[ERROR]: FUBAR chain length must be in range [5e5,5e7]."
+        assert(self.burnin >=ceil(self.chain_length/20) and self.burnin <= ceil(95*self.chain_length/100)), "\n[ERROR]: FUBAR burnin size out of range."
+        assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_lenghth - self.burnin), "\n[ERROR]: FUBAR samples_per_chain out of range."
+        assert(self.alpha >=0.001 and self.alpha <= 1), "\n[ERROR]: FUBAR Dirichlet prior parameter alpha must in be in range [0.001,1]."
+        
+        self.default_cache_path = self.user_json_path.replace("json", "cache")
+        if self.cache is False:
+            self.cache_path = "/dev/null/"
+        elif type(self.cache) == "str":
+            assert( os.path.exists(os.path.dirname(self.cache)) ),"\n[ERROR]: Provided path to output cache does not exist."       
+            self.cache_path = self.cache
+        else:
+            self.cache_path = self.default_cache_path
         
         
+    def _build_analysis_command(self):
+        """
+            Construct the MEME command with all arguments to provide to the executable. 
+        """
+        self.batchfile_with_path = self.analysis_path + self.batchfile
+        
+        self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                           self.genetic_code ,
+                                           self.hyphy_alignment ,
+                                           self.hyphy_tree ,
+                                           self.grid_size,
+                                           self.nchains, 
+                                           self.chain_length,
+                                           self.burnin,
+                                           self.samples_per_chain,
+                                           self.alpha ])
+
+
+    def _save_output(self):
+        """
+            Move JSON  and cache to final location. 
+        """        
+
+        if self.user_json_path is None:
+            final_json_path = self.default_json_path
+        else:
+            final_json_path = self.user_json_path            
+        shutil.move(self.default_json_path, final_path)
+        
+        if self.cache_path != self.default_cache_path:
+            shutil.move(self.default_cache_path, self.cache_path)
        
 
 class MEME(Analysis):
@@ -355,7 +461,9 @@ class MEME(Analysis):
         
         self.batchfile = "MEME.bf"
         self.default_json_path = self.hyphy_alignment + ".MEME.json"
-
+        
+        self.alpha = str( kwargs.get("alpha", 0.1) )
+        
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
     
@@ -386,8 +494,9 @@ class SLAC(Analysis):
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
-                4. **bootstrap_samples**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
+                4. **alpha**, The p-value threshold for calling sites as positively selected. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                6. **bootstrap_samples**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
         """                
 
         super(SLAC, self).__init__(**kwargs)
@@ -397,6 +506,8 @@ class SLAC(Analysis):
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
+    
+        self.alpha = str( kwargs.get("alpha", 0.1) )
     
         self.bootstrap_samples = kwargs.get("bootstrap_samples", 100)
         self.range_bootstrap_samples = [0,100000]
