@@ -92,12 +92,13 @@ class AnalysisNames():
         self.fubar    = "FUBAR"
         self.meme     = "MEME"
         self.relax    = "RELAX"
-        self.relrates = "relative_rates"
+        self.relrates = "RELrates"
+        self.relprot  = "RELprot" ## Legacy retention necessary
         self.slac     = "SLAC"
         
-        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.slac]
+        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.relprot, self.slac]
         self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac]
-        self.single_partition_analyses = [self.relrates, self.absrel, self.relax]
+        self.single_partition_analyses = [self.relrates, self.relprot, self.absrel, self.relax]
 
         self.slac_by = ["by-site", "by-branch"]
         self.slac_ancestral_type = ["AVERAGED", "RESOLVED"]
@@ -174,10 +175,10 @@ class HyPhyParser():
                 self.analysis = name
                 break
         
-        if "RELnuc" or "RELprot" in json_info: ### Find a better solution, which is probably just that they need to provide themselves.
+        if self.analysis is None and (self.relprot in json_info or self.relrates in json_info):
             self.analysis = self.analysis_names.relrates
         
-        assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted."
+        assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.4."
 
 
 

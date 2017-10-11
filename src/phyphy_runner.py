@@ -104,7 +104,7 @@ class HyPhy():
         if self.cpu is not None:
             self.hyphy_call += " CPU=" + str(self.cpu)
         
-        if self.suppress_me is True:
+        if self.suppress_log is True:
             self.hyphy_call += "USEPATH=/dev/null/"
 
         
@@ -153,7 +153,8 @@ class Analysis(object):
 
         self.user_json_path = kwargs.get("output", None)
         if self.user_json_path is not None:
-            assert( os.path.exists(os.path.dirname(self.user_json_path)) ),"\n[ERROR]: Provided output path does not exist."
+            dirname = os.path.dirname(os.path.abspath(self.user_json_path))
+            assert( os.path.exists(dirname) ),"\n[ERROR]: Provided output path does not exist."
                     
         ### Unused in AA analyses 
         self.genetic_code = kwargs.get("genetic_code", "Universal")
@@ -185,6 +186,7 @@ class Analysis(object):
         self.yesno_truefalse = {True: "Yes", False: "No"}
         if type(argument) == str:
             argument.capitalize()
+            assert(argument in list(self.yesno_truefalse.keys())),"\n[ERROR]: Incorrect Yes/No argument."
         elif type(argument) is bool:
             argument = self.yesno_truefalse[argument]
         else:
@@ -269,7 +271,6 @@ class Analysis(object):
         """    
         self._build_analysis_command()
         full_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
-        
 
         if self.hyphy.quiet:
             with open("/dev/null", "w") as quiet:
@@ -281,16 +282,15 @@ class Analysis(object):
         self._save_output()
 
 
-        def _save_output(self):
-            """
-                Move JSON to final location. 
-            """        
-
-            if self.user_json_path is None:
-                final_path = self.default_json_path
-            else:
-                final_path = self.user_json_path            
-            shutil.move(self.default_json_path, final_path)
+    def _save_output(self):
+        """
+            Move JSON to final location. 
+        """        
+        if self.user_json_path is None:
+            final_path = self.default_json_path
+        else:
+            final_path = self.user_json_path            
+        shutil.move(self.default_json_path, final_path)
 
  
 
@@ -348,7 +348,7 @@ class FEL(Analysis):
       
       
       
-class FUBAR(analysis):       
+class FUBAR(Analysis):       
         
     def __init__(self, **kwargs):
         """
@@ -396,14 +396,15 @@ class FUBAR(analysis):
         assert(self.nchains >=2 and self.nchains <=20), "\n[ERROR]: FUBAR nchains must be in range [2,20]."
         assert(self.chain_length >=5e5 and self.chain_length <=5e7), "\n[ERROR]: FUBAR chain length must be in range [5e5,5e7]."
         assert(self.burnin >=ceil(self.chain_length/20) and self.burnin <= ceil(95*self.chain_length/100)), "\n[ERROR]: FUBAR burnin size out of range."
-        assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_lenghth - self.burnin), "\n[ERROR]: FUBAR samples_per_chain out of range."
+        assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_lenghth - self.burnin)), "\n[ERROR]: FUBAR samples_per_chain out of range."
         assert(self.alpha >=0.001 and self.alpha <= 1), "\n[ERROR]: FUBAR Dirichlet prior parameter alpha must in be in range [0.001,1]."
         
         self.default_cache_path = self.user_json_path.replace("json", "cache")
         if self.cache is False:
             self.cache_path = "/dev/null/"
         elif type(self.cache) == "str":
-            assert( os.path.exists(os.path.dirname(self.cache)) ),"\n[ERROR]: Provided path to output cache does not exist."       
+            dirname = os.path.dirname(os.path.abspath(self.cache))
+            assert( os.path.exists(dirname) ),"\n[ERROR]: Provided path to output cache does not exist."  
             self.cache_path = self.cache
         else:
             self.cache_path = self.default_cache_path
@@ -675,67 +676,43 @@ class RELAX(Analysis):
                                              ])
 
 
-class RelativeProteinRates(Analysis):
+class RelativeRates(Analysis):
 
     def __init__(self, **kwargs):
         """
             Required arguments:
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                2. **type**, either "nucleotide" or "protein" indicating the type of data being analyzed
 
             Optional keyword arguments:
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **model**, The protein model to use to fit relative rates. Options include LG, WAG, JTT, JC69. Default: JC69.
-                3. **plusF**, Whether the protein model should use +F frequencies? +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
+                2. **model**, The nucleotide model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, and JC69 for Protein (Default JC69).
+                3. **plusF**, Only applicable to protein analyses, this option controls the protein model should use +F frequencies. +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
          """                
-        super(RelativeProteinRates, self).__init__(**kwargs)
-        
-        self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/ProteinAnalyses/"
-        self.batchfile = "relative_prot_rates.bf"
-        self.default_json_path = self.hyphy_alignment + ".site-rates.json"
-        
-        self.model = kwargs.get("model", "JC69")
-        assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
-        
-        self.plus_f = kwargs.get("plusF", "True")
-        self.plus_f = self._format_yesno(self.plus_f)
-
-
-    def _build_analysis_command(self):
-        """
-            Construct the relative_prot_rates command with all arguments to provide to the executable. 
-        """
-        self.batchfile_with_path = self.analysis_path + self.batchfile
-        
-        self.analysis_command = " ".join([ self.batchfile_with_path , 
-                                           self.hyphy_alignment ,
-                                           self.hyphy_tree,
-                                           self.model,
-                                           self.plus_f
-                                         ])
-   
-
-
-class RelativeNucleotideRates(Analysis):
-
-    def __init__(self, **kwargs):
-        """
-            Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
-
-            Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **model**, The nucleotide model to use to fit relative rates. Options include GTR, HKY85, or JC69. Default: GTR.
-         """                
-        super(RelativeNucleotideRates, self).__init__(**kwargs)
+        super(RelativeRates, self).__init__(**kwargs)
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
-        self.batchfile = "relative_nucleotide_rates.bf"
+        self.batchfile = "relative_rates_scaler.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
+        self.type_nucleotide = "Nucleotide"
+        self.type_protein    = "Protein"
         
-        self.model = kwargs.get("model", "GTR")
-        assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
-
-
+        self.type = kwargs.get("type", None).capitalize()
+        
+        if self.type == self.type_nucleotide:
+            self.model = kwargs.get("model", "GTR")
+            assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
+        
+        elif self.type == self.type_protein:
+            self.model = kwargs.get("model", "JC69")
+            assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
+            self.plus_f = kwargs.get("plusF", True)
+            self.plus_f = self._format_yesno(self.plus_f)
+            self.model = self.model + " " + self.plus_f ## To provide analysis command
+        else:
+            raise AssertionError("\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive).")
+            
+            
     def _build_analysis_command(self):
         """
             Construct the relative_prot_rates command with all arguments to provide to the executable. 
@@ -743,11 +720,12 @@ class RelativeNucleotideRates(Analysis):
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
         self.analysis_command = " ".join([ self.batchfile_with_path , 
-                                           self.hyphy_alignment ,
-                                           self.hyphy_tree,
+                                           self.type,
                                            self.model,
+                                           self.hyphy_alignment ,
+                                           self.hyphy_tree
                                          ])
-  
+
 
 
     
