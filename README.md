@@ -12,16 +12,15 @@ Future functionality will allow users to define and fit custom HyPhy models.
 
 ## Available Analyses
 
-`phyphy` is compatible with HyPhy version >=2.3.4 and supports the following analyses (in alphabetical order):
+`phyphy` is compatible with HyPhy version >=2.3.6 and supports the following analyses (in alphabetical order):
 
 + aBSREL
 + BUSTED
 + FEL
 + FUBAR
++ LEISR
 + MEME
 + RELAX
-+ RelativeProteinRates
-+ RelativeNucleotideRates
 + SLAC
 
 
@@ -29,11 +28,12 @@ Future functionality will allow users to define and fit custom HyPhy models.
 
 Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
 
+
 ## Install
-
+<!--
 You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
-
-Alternatively, you can download from source. `phyphy` uses the usual `setuptools` procedure. Briefly:
+-->
+Until release, you must download `phyphy` from source, with the usual `setuptools` procedure. Briefly:
 
 1. Download the master branch and `cd` in. 
 2. **Build** the package with `python setup.py build` (with a `sudo` as needed)
