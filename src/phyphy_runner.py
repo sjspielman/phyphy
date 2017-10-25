@@ -20,6 +20,7 @@ from Bio import Phylo
 from copy import deepcopy
 from StringIO import StringIO
 from math import ceil
+import json
 
 _DEFAULT_PATH = "/usr/local/lib/hyphy/"
 _GENETIC_CODE = {
@@ -114,16 +115,15 @@ class HyPhy():
 class Analysis(object):
     """
         Parent class for all analysis methods. 
-        Children classes include:
-            ABSREL
-            BUSTED
-            FEL
-            FUBAR
-            MEME
-            RELAX
-            SLAC
-            RelativeNucleotideRates
-            RelativeProteinRates                         
+        Child classes:
+            + ABSREL
+            + BUSTED
+            + FEL
+            + FUBAR
+            + LEISR
+            + MEME
+            + RELAX
+            + SLAC                        
     """
         
             
@@ -280,6 +280,14 @@ class Analysis(object):
         assert(check == 0), "\n[ERROR] HyPhy failed to run."
 
         self._save_output()
+
+
+    def return_json(self):
+        """
+            Return **parsed*** JSON to user
+            
+            
+        """
 
 
     def _save_output(self):
@@ -676,7 +684,7 @@ class RELAX(Analysis):
                                              ])
 
 
-class RelativeRates(Analysis):
+class LEISR(Analysis):
 
     def __init__(self, **kwargs):
         """
@@ -687,41 +695,48 @@ class RelativeRates(Analysis):
             Optional keyword arguments:
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
                 2. **model**, The nucleotide model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, and JC69 for Protein (Default JC69).
-                3. **plusF**, Only applicable to protein analyses, this option controls the protein model should use +F frequencies. +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
+                3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD (Default No). Note that Gamma and GDD will use four categories each.
+                4. **plusF**, Only applicable to protein analyses, this option controls the protein model should use +F frequencies. +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
+            
          """                
-        super(RelativeRates, self).__init__(**kwargs)
+        super(LEISR, self).__init__(**kwargs)
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
-        self.batchfile = "relative_rates_scaler.bf"
+        self.batchfile = "LEISR.bf"
         self.default_json_path = self.hyphy_alignment + ".site-rates.json"
         self.type_nucleotide = "Nucleotide"
         self.type_protein    = "Protein"
         
         self.type = kwargs.get("type", None).capitalize()
-        
+        self.rv   = kwargs.get("rate_variation", "No").capitalize()
+        assert(self.rv in ["No", "Gamma", "Gdd"]), "\n[ERROR] Provided rate variation is unavailable. Use either `No`, `Gamma`, `GDD`."
+        if self.rv == "Gdd":
+            self.rv = "GDD"
+            
         if self.type == self.type_nucleotide:
             self.model = kwargs.get("model", "GTR")
             assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
-        
+            
         elif self.type == self.type_protein:
             self.model = kwargs.get("model", "JC69")
             assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
             self.plus_f = kwargs.get("plusF", True)
             self.plus_f = self._format_yesno(self.plus_f)
-            self.model = self.model + " " + self.plus_f ## To provide analysis command
+            self.rv = self.rv + " " + self.plus_f ## To provide analysis command
         else:
             raise AssertionError("\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive).")
-            
-            
+          
+         
     def _build_analysis_command(self):
         """
-            Construct the relative_prot_rates command with all arguments to provide to the executable. 
+            Construct the LEISR command with all arguments to provide to the executable. 
         """
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
         self.analysis_command = " ".join([ self.batchfile_with_path , 
                                            self.type,
                                            self.model,
+                                           self.rv,
                                            self.hyphy_alignment ,
                                            self.hyphy_tree
                                          ])

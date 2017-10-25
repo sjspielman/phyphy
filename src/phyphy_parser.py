@@ -83,22 +83,21 @@ class JSONFields():
 
 class AnalysisNames():
     """
-        This class defines the names of analyses which we can parse. All upper case except relative rates, which have no real name.
+        This class defines the names of analyses which we can parse.
     """
     def __init__(self):
         self.absrel   = "ABSREL"
         self.busted   = "BUSTED"
         self.fel      = "FEL"
         self.fubar    = "FUBAR"
+        self.leisr    = "LEISR"
         self.meme     = "MEME"
         self.relax    = "RELAX"
-        self.relrates = "RELrates"
-        self.relprot  = "RELprot" ## Legacy retention necessary
         self.slac     = "SLAC"
         
-        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.meme, self.relax, self.relrates, self.relprot, self.slac]
+        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.leisr, self.meme, self.relax, self.slac]
         self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac]
-        self.single_partition_analyses = [self.relrates, self.relprot, self.absrel, self.relax]
+        self.single_partition_analyses = [self.absrel, self.leisr, self.relax]
 
         self.slac_by = ["by-site", "by-branch"]
         self.slac_ancestral_type = ["AVERAGED", "RESOLVED"]
@@ -122,12 +121,12 @@ class HyPhyParser():
         This class parses JSON output and contains a variety of methods for pulling out various pieces of information.
     """    
     
-    def __init__(self, json_path, analysis = None):
+    def __init__(self, **kwargs):
         """
             Initialize a HyPhyParser instance.
             
             Require arguments:
-                1. **json_path**, the path (filename) of JSON to parse
+                1. **json_path**, the path (filename) of JSON to parse OR **json**, a parsed JSON into a dictionary
             
             Optional keyword arguments:
                 2. **analysis**, the name of the analysis run for which the JSON file gives results. Note that this will (barring pathological situations) be parsed out from the JSON if not provided. This will work as expected *most* of the time.
@@ -138,14 +137,18 @@ class HyPhyParser():
         self.analysis_names = AnalysisNames()
         self.allowed_analyses = self.analysis_names.all_analyses
         
-        self.json_path = json_path
-        assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file provided does not exist."
+        self.json = kwargs.get("json", None)
+        if self.json is not None:
+            assert( type(self.json) == dict ), "\n[ERROR] Expected a parsed dictionary for keyword `json`. To provide a file, use the keyword argument `json_path`."
+        else:
+            self.json_path = kwargs.get("json_path", None)
+            assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file provided does not exist."
+            self._unpack_json()
         
-        ## Parse to dictionary
-        self._unpack_json()
+        assert(self.json is not None), "\n[ERROR]: Unable to obtain JSON contents."
         
         ## Determine analysis method
-        self.analysis = analysis
+        self.analysis = kwargs.get("analysis", None)
         if self.analysis is None:
             self._determine_analysis_from_json()
             
@@ -174,9 +177,6 @@ class HyPhyParser():
             if find_analysis is not None:
                 self.analysis = name
                 break
-        
-        if self.analysis is None and (self.relprot in json_info or self.relrates in json_info):
-            self.analysis = self.analysis_names.relrates
         
         assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.4."
 
@@ -282,9 +282,9 @@ class HyPhyParser():
             f.write(header + full_rows)
 
 
-    def _parse_relrates_to_csv(self, delim):
+    def _parse_leisr_to_csv(self, delim):
         """
-            Extract a CSV from a relative rates analysis 
+            Extract a CSV from a LEISR analysis 
             CSV contents:
                 site, rate, lower95, upper95
                 
@@ -650,9 +650,9 @@ class HyPhyParser():
         elif self.analysis == self.analysis_names.absrel:
             self._parse_absrel_to_csv(delim)
         
-        ## relative rates ##
-        elif self.analysis == self.analysis_names.relrates:
-            self._parse_relrates_to_csv(delim)
+        ## LEISR ##
+        elif self.analysis == self.analysis_names.leisr:
+            self._parse_leisr_to_csv(delim)
             
         else:
             print("\nContent from provided analysis is not convertable to CSV.")
