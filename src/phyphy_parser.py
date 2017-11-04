@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##############################################################################
-##  phyhy: Python HyPhy: Facilitating the execution and parsing of standard HyPhy analyses.
+##  phyhy: *P*ython *HyPhy*: Facilitating the execution and parsing of standard HyPhy analyses.
 ##
 ##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
 ##############################################################################
@@ -13,6 +13,7 @@ import os
 import re
 import json
 import pyvolve
+from .phyphy_runner import *
 from copy import deepcopy
 
 class JSONFields():
@@ -121,15 +122,14 @@ class HyPhyParser():
         This class parses JSON output and contains a variety of methods for pulling out various pieces of information.
     """    
     
-    def __init__(self, **kwargs):
+    def __init__(self, content):
         """
             Initialize a HyPhyParser instance.
             
-            Require arguments:
-                1. **json_path**, the path (filename) of JSON to parse OR **json**, a parsed JSON into a dictionary
-            
-            Optional keyword arguments:
-                2. **analysis**, the name of the analysis run for which the JSON file gives results. Note that this will (barring pathological situations) be parsed out from the JSON if not provided. This will work as expected *most* of the time.
+            Required arguments:
+                1. **content**, The input content to parse. Two types of input may be provided here:
+                    + The path to a JSON file to parse, provided as a string
+                    + A phyphy `Analysis` (i.e. `BUSTED`, `SLAC`, `FEL`, etc.) object which has been used to execute a HyPhy analysis through the phyphy interface
         """
         self.fields = JSONFields()
         self.genetics = Genetics()
@@ -137,32 +137,30 @@ class HyPhyParser():
         self.analysis_names = AnalysisNames()
         self.allowed_analyses = self.analysis_names.all_analyses
         
-        self.json = kwargs.get("json", None)
-        if self.json is not None:
-            assert( type(self.json) == dict ), "\n[ERROR] Expected a parsed dictionary for keyword `json`. To provide a file, use the keyword argument `json_path`."
+        ### Input ###
+        if type(content) == str:
+            self.json_path = content
+        elif isinstance(content, Analysis):
+            self.json_path = content.final_path
         else:
-            self.json_path = kwargs.get("json_path", None)
-            assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file provided does not exist."
-            self._unpack_json()
+            raise AssertionError("\n[ERROR]: Expected a single argument. Provide either the path to the JSON to parse, or an `Analysis` object which has been executed.")
+        assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file does not exist."
         
-        assert(self.json is not None), "\n[ERROR]: Unable to obtain JSON contents."
-        
-        ## Determine analysis method
-        self.analysis = kwargs.get("analysis", None)
-        if self.analysis is None:
-            self._determine_analysis_from_json()
-            
-        ## Count partitions, which is generally useful to have
-        self._count_partitions()
+        self._unpack_json()
+        self._determine_analysis_from_json()
+        self._count_partitions()             ## This seems to be generally useful
+
 
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
         """
             Unpack JSON into dictionary
         """ 
+        self.json = None
         with open (self.json_path, "rU") as f:
             self.json = json.load(f)
-            
+        assert(self.json is not None and len(self.json)!=0), "\n[ERROR]: Unable to obtain JSON contents."
+
     
     def _determine_analysis_from_json(self):
         """
@@ -214,7 +212,7 @@ class HyPhyParser():
         site_block =  self.json[ self.fields.MLE ]
         raw_header = site_block[ self.fields.MLE_headers ]
         raw_content = site_block[ self.fields.MLE_content]
-        if self.analysis == "SLAC":
+        if self.analysis == self.analysis_names.slac:
             raw_content = self._extract_slac_sitetable(raw_content, slac_by, slac_ancestral_type)
             
         final_header = "site,"+delim.join( [x[0].replace(" ","_") for x in raw_header] )
@@ -354,7 +352,7 @@ class HyPhyParser():
 
     def extract_model_component(self, model_name, component):
         """
-            Return a model component for a given model name found in the `fits` JSON field.
+            Return a model component for a given model name found in the `fits` JSON field. 
             
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
@@ -366,7 +364,7 @@ class HyPhyParser():
                 + .extract_model_aicc(model_name) returns the small-sample AIC (AIC-c) for a given model fit
                 + .extract_model_rate_distributions(model_name) returns rate distributions for a given model fit 
                 + .extract_model_frequencies(model_name) returns the equilibrium frequencies for the given model fit
-        """
+        """            
         try:
             model_fit = self.json[ self.fields.model_fits ][ model_name ]
         except:
@@ -407,7 +405,7 @@ class HyPhyParser():
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
         """
-        return float( self.extract_model_component(model_name, self.fields.AICc) )
+        return float( self.extract_model_component(model_name, self.fields.aicc) )
 
 
     def extract_model_rate_distributions(self, model_name):
@@ -464,8 +462,7 @@ class HyPhyParser():
             return f   
     ###################################################################################################################
     
-    
-    
+
      
     ################################################ BRANCH SETS ######################################################
   
@@ -693,7 +690,7 @@ class HyPhyParser():
         assert(self.analysis == self.analysis_names.busted), "\n[ERROR]: Site Log Likelihoods are specific to BUSTED."
         raw = self.json[self.fields.evidence_ratios]
         if len(raw) == 0:
-            print("\nWarning: Evidence ratios are only computed for BUSTED models with significant tests for selection.")
+            print("\n[Warning] Evidence ratios are only computed for BUSTED models with significant tests for selection. Note further that they should be interpretted only as **descriptive** measures of selection, NOT statistical tests.")
             return None
         else:
             ev_ratios = {}

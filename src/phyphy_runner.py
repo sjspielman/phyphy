@@ -68,9 +68,11 @@ class HyPhy():
         self.executable    = kwargs.get("executable", "HYPHYMP")
         self.build_path    = kwargs.get("build_path", None)  
         self.install_path  = kwargs.get("install_path", None) 
-        self.cpu           = kwargs.get("cpu", None)       
+        self.cpu           = kwargs.get("cpu", None)  ### For use with MP
+        self.mpi           = kwargs.get("mpi", "mpirun") ### environment for mpi
+        self.mpiopts       = kwargs.get("mpiopts", "") ### To pass to mpi environment   
         self.quiet         = kwargs.get("quiet", False) ### run hyphy quietly
-        self.suppress_log   = kwargs.get("suppres_stdout", False) ### send messages.log, errors.log to /dev/null
+        self.suppress_log   = kwargs.get("suppress_log", False) ### send messages.log, errors.log to /dev/null
         
         
         
@@ -100,13 +102,20 @@ class HyPhy():
         with open("/dev/null", "w") as hushpuppies:
             exit_code = subprocess.call(["which", self.executable], stdout = hushpuppies, stderr = hushpuppies) # If you're reading this, I hope you enjoy reading hushpuppies as much as I enjoyed writing it. --SJS
             if exit_code == 1:
-                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed or in your provided path.")
-
-        if self.cpu is not None:
-            self.hyphy_call += " CPU=" + str(self.cpu)
+                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed, or in your provided local path.")
+        
+        
+        if self.executable == "HYPHYMPI":
+            exit_code = subprocess.call(["which", self.mpi], stdout = hushpuppies, stderr = hushpuppies) 
+            if exit_code == 1:
+                raise AssertionError("\n[ERROR]: Provided MPI environment executable not found. Please ensure it is properly installed and in your PATH.")    
+            self.hyphy_call = self.mpi + " " + self.mpiopts + " " + self.hyphy_call
+        else:
+            if self.cpu is not None:
+                self.hyphy_call += " CPU=" + str(self.cpu)
         
         if self.suppress_log is True:
-            self.hyphy_call += "USEPATH=/dev/null/"
+            self.hyphy_call += " USEPATH=/dev/null/"
 
         
         
@@ -285,8 +294,6 @@ class Analysis(object):
     def return_json(self):
         """
             Return **parsed*** JSON to user
-            
-            
         """
 
 
@@ -294,13 +301,12 @@ class Analysis(object):
         """
             Move JSON to final location. 
         """        
-        if self.user_json_path is None:
-            final_path = self.default_json_path
+        if self.user_json_path is not None:       
+            self.final_path = self.user_json_path
         else:
-            final_path = self.user_json_path            
-        shutil.move(self.default_json_path, final_path)
+            self.final_path = self.default_json_path   
+        shutil.move(self.default_json_path, self.final_path)
 
- 
 
 
 
@@ -436,16 +442,16 @@ class FUBAR(Analysis):
                                            self.alpha ])
 
 
+        
     def _save_output(self):
         """
             Move JSON  and cache to final location. 
         """        
-
-        if self.user_json_path is None:
-            final_json_path = self.default_json_path
+        if self.user_json_path is not None:       
+            self.final_path = self.user_json_path
         else:
-            final_json_path = self.user_json_path            
-        shutil.move(self.default_json_path, final_path)
+            self.final_path = self.default_json_path   
+        shutil.move(self.default_json_path, self.final_path)
         
         if self.cache_path != self.default_cache_path:
             shutil.move(self.default_cache_path, self.cache_path)
@@ -694,20 +700,25 @@ class LEISR(Analysis):
 
             Optional keyword arguments:
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **model**, The nucleotide model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, and JC69 for Protein (Default JC69).
+                2. **model**, The model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, mtMAM, and JC69 for Protein (Default JC69).
                 3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD (Default No). Note that Gamma and GDD will use four categories each.
-                4. **plusF**, Only applicable to protein analyses, this option controls the protein model should use +F frequencies. +F means frequencies will be empirically read in from the provided data, in contrast to using the default model frequencies. Default: True.
             
          """                
         super(LEISR, self).__init__(**kwargs)
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
         self.batchfile = "LEISR.bf"
-        self.default_json_path = self.hyphy_alignment + ".site-rates.json"
+        
+        ### THIS HAS BEEN CALLED DIFFERENT NAMES IN DIFFERENT VERSIONS ###
+        ### TODO: Can probably scrap this and we will just only be compatible with >=2.3.7, due to the options changing anyways.
+        self.default_json_path_choices = [self.hyphy_alignment + ".site-rates.json",  self.hyphy_alignment + ".LEISR.json"]
         self.type_nucleotide = "Nucleotide"
         self.type_protein    = "Protein"
         
-        self.type = kwargs.get("type", None).capitalize()
+        self.type = kwargs.get("type", None)
+        assert(self.type is not None),"\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive)."
+        self.type = self.type.capitalize()
+        
         self.rv   = kwargs.get("rate_variation", "No").capitalize()
         assert(self.rv in ["No", "Gamma", "Gdd"]), "\n[ERROR] Provided rate variation is unavailable. Use either `No`, `Gamma`, `GDD`."
         if self.rv == "Gdd":
@@ -720,12 +731,7 @@ class LEISR(Analysis):
         elif self.type == self.type_protein:
             self.model = kwargs.get("model", "JC69")
             assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
-            self.plus_f = kwargs.get("plusF", True)
-            self.plus_f = self._format_yesno(self.plus_f)
-            self.rv = self.rv + " " + self.plus_f ## To provide analysis command
-        else:
-            raise AssertionError("\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive).")
-          
+                      
          
     def _build_analysis_command(self):
         """
@@ -734,14 +740,32 @@ class LEISR(Analysis):
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
         self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                           self.hyphy_alignment ,
+                                           self.hyphy_tree,
                                            self.type,
                                            self.model,
-                                           self.rv,
-                                           self.hyphy_alignment ,
-                                           self.hyphy_tree
+                                           self.rv
                                          ])
 
 
+    def _save_output(self):
+        """
+            Move JSON to final location.
+            This is an override b/c diff default jsons have existed across versions 
+        """        
+        ##
+        self.default_json_path = None
+        for choice in self.default_json_path_choices:
+            if os.path.exists(choice):
+                self.default_json_path = choice
+                break
+        assert(self.default_json_path is not None), "\n[ERROR]: Could not find the default output JSON from LEISR analysis."
+        
+        if self.user_json_path is not None:       
+            self.final_path = self.user_json_path
+        else:
+            self.final_path = self.default_json_path   
+        shutil.move(self.default_json_path, self.final_path)
 
     
 

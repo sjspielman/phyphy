@@ -12,7 +12,7 @@ Future functionality will allow users to define and fit custom HyPhy models.
 
 ## Available Analyses
 
-`phyphy` is compatible with HyPhy version >=2.3.6 and supports the following analyses (in alphabetical order):
+`phyphy` is compatible with HyPhy version >=2.3.7 and supports the following analyses (in alphabetical order):
 
 + aBSREL
 + BUSTED
@@ -23,6 +23,7 @@ Future functionality will allow users to define and fit custom HyPhy models.
 + RELAX
 + SLAC
 
+Note that the forthcoming `2.3.7` release lives in the `beta` branch in [https://github.com/veg/hyphy](https://github.com/veg/hyphy).
 
 ## Get help
 
@@ -37,8 +38,8 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 
 1. Download the master branch and `cd` in. 
 2. **Build** the package with `python setup.py build` (with a `sudo` as needed)
-3. Optionally, run tests with `python setup.py test`  (with a `sudo` as needed)
-4. **Install** per your own adventure:
+<!--3. [NOT WORKING YET] Optionally, run tests with `python setup.py test`  (with a `sudo` as needed)-->
+3. **Install** per your own adventure:
 	> To specify a different install directory, add the argument `--prefix=/path/to/my/favorite/directory` to the install line.
 
 	+ To install as root: `sudo python setup.py install`
@@ -51,7 +52,7 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 ## Example script
 
 ```python
-	from hyphyhelper import *
+	from phyphy import *
 	
 	
 	## Create a HyPhy instance. In general this is NOT NEEDED if the appropriate version is install in your system as the default HyPhy. If you are using a locally intalled version, you need to specify path. 
@@ -75,7 +76,7 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
     ## Run the analysis
     f.run_analysis()
 ```
+
 -->
-	
 	
 	
