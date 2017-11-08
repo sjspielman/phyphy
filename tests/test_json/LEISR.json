@@ -1,0 +1,364 @@
+{
+ "input":{
+   "file name":"/Users/sjspielman/Research/phyphy/data/aa.fna",
+   "number of sequences":12,
+   "number of sites":32,
+   "tree":null
+  },
+ "analysis":{
+   "info":"LEISR (Likelihood Estimation of Individual Site Rates) infer relative amino-acid or nucleotide rates from a fixed nucleotide or amino-acid alignment and tree. Relative site-specific substitution rates are\n    inferred by first optimizing alignment-wide branch lengths, and then inferring a site-specific uniform tree scaler",
+   "version":"0.1alpha",
+   "citation":"Spielman, S.J. and Kosakovsky Pond, S.L. Relative evolutionary rate inference in HyPhy with LEISR. bioRxiv. https://doi.org/10.1101/206011. (2017); Pupko, T., Bell, R. E., Mayrose, I., Glaser, F. & Ben-Tal, N. Rate4Site: an algorithmic tool for the identification of functional regions in proteins by surface mapping of evolutionary determinants within their homologues. Bioinformatics 18, S71–S77 (2002).",
+   "authors":"Sergei L Kosakovsky Pond and Stephanie J Spielman",
+   "contact":"{spond,stephanie.spielman}@temple.edu"
+  },
+ "fits":{
+   "WAGF":{
+     "Log Likelihood":-637.2669999256775,
+     "estimated parameters":21,
+     "AIC-c":1319.0864860392,
+     "Rate Distributions":{
+      },
+     "EFV":[
+      [0.08662789999999999],
+      [0.0193078],
+      [0.0570451],
+      [0.0580589],
+      [0.0384319],
+      [0.0832518],
+      [0.0244313],
+      [0.048466],
+      [0.0620286],
+      [0.08620899999999999],
+      [0.0195027],
+      [0.0390894],
+      [0.0457631],
+      [0.0367281],
+      [0.043972],
+      [0.06951789999999999],
+      [0.0610127],
+      [0.0708956],
+      [0.0143859],
+      [0.0352742]
+      ]
+    }
+  },
+ "Relative site rate estimates":{
+   "1":{
+     "LB":0.5070139752112551,
+     "MLE":1.383166544340044,
+     "UB":3.061742021614257
+    },
+   "2":{
+     "LB":0.01840963398194947,
+     "MLE":0.3235619118089131,
+     "UB":1.448321463676155
+    },
+   "3":{
+     "LB":0.336750854577851,
+     "MLE":0.9752072610435226,
+     "UB":2.323336210835846
+    },
+   "4":{
+     "LB":0.9713640010053911,
+     "MLE":2.516740664598492,
+     "UB":6.474155928223484
+    },
+   "5":{
+     "LB":0.0604092676480816,
+     "MLE":0.3703364269249834,
+     "UB":1.201341439213343
+    },
+   "6":{
+     "LB":0.01447295476514373,
+     "MLE":0.2540780396460728,
+     "UB":1.157313210901203
+    },
+   "7":{
+     "LB":0.2453419900759309,
+     "MLE":0.8186296606715384,
+     "UB":2.095200626708452
+    },
+   "8":{
+     "LB":0.09177186207266305,
+     "MLE":0.5616700948174943,
+     "UB":1.842543228717334
+    },
+   "9":{
+     "LB":0.4183632701641027,
+     "MLE":1.210482305380377,
+     "UB":2.849613048965561
+    },
+   "10":{
+     "LB":0.04894136782939289,
+     "MLE":0.3025530327460264,
+     "UB":1.018144976227925
+    },
+   "11":{
+     "LB":0.01498112308103029,
+     "MLE":0.2650365786168977,
+     "UB":1.212816057114746
+    },
+   "12":{
+     "LB":0.3239620102700982,
+     "MLE":0.9606549421732402,
+     "UB":2.416327173328181
+    },
+   "13":{
+     "LB":0.4229046425323609,
+     "MLE":1.251053130396333,
+     "UB":3.11365587714725
+    },
+   "14":{
+     "LB":0.7181228673929695,
+     "MLE":1.989406344881672,
+     "UB":5.070105695162606
+    },
+   "15":{
+     "LB":0.3320846777258651,
+     "MLE":0.9996137362054075,
+     "UB":2.579783621647279
+    },
+   "16":{
+     "LB":0.1230700299023263,
+     "MLE":0.5051014903516133,
+     "UB":1.384401384672327
+    },
+   "17":{
+     "LB":0.3674984395175038,
+     "MLE":1.194404941817365,
+     "UB":2.975275783297955
+    },
+   "18":{
+     "LB":0.1087956541037373,
+     "MLE":0.6583159768865734,
+     "UB":2.0858559474236
+    },
+   "19":{
+     "LB":1.425409452740846,
+     "MLE":3.501896708327973,
+     "UB":10.99764972951863
+    },
+   "20":{
+     "LB":0.6827334108504982,
+     "MLE":1.877666272582277,
+     "UB":5.084079690125698
+    },
+   "21":{
+     "LB":0.06093478063601646,
+     "MLE":0.3737807471251686,
+     "UB":1.213847033546771
+    },
+   "22":{
+     "LB":0,
+     "MLE":0,
+     "UB":0.407914777992218
+    },
+   "23":{
+     "LB":0.600218135220237,
+     "MLE":1.606050873472413,
+     "UB":3.944614564846739
+    },
+   "24":{
+     "LB":1.592705289420652,
+     "MLE":4.136596386226595,
+     "UB":10.49114581505387
+    },
+   "25":{
+     "LB":0.2509776379132106,
+     "MLE":0.8401753039134719,
+     "UB":2.139102105335473
+    },
+   "26":{
+     "LB":0.04441799216080591,
+     "MLE":0.2736609570527953,
+     "UB":0.9093047048673476
+    },
+   "27":{
+     "LB":0,
+     "MLE":0,
+     "UB":0.5720336121688679
+    },
+   "28":{
+     "LB":1.011284405379446,
+     "MLE":2.351419217216861,
+     "UB":5.38786030704449
+    },
+   "29":{
+     "LB":0.9076121688300003,
+     "MLE":2.353705357318022,
+     "UB":6.21810791829068
+    },
+   "30":{
+     "LB":0.7109111163180579,
+     "MLE":1.959520113467864,
+     "UB":5.021716193069055
+    },
+   "31":{
+     "LB":0.4258818394800208,
+     "MLE":1.167742012275308,
+     "UB":2.912789441745407
+    },
+   "32":{
+     "LB":0.335643067798122,
+     "MLE":0.9598929224792363,
+     "UB":2.220750911052265
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "t1":{
+       "MLE":0.2412620863976937,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.2609269273824975
+        }
+      },
+     "t4":{
+       "MLE":0.5847865714798608,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.6324514785935464
+        }
+      },
+     "t9":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node5":{
+       "MLE":0.3774080381484686,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.4081698920617378
+        }
+      },
+     "t10":{
+       "MLE":0.6311548028842692,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.6825991015755075
+        }
+      },
+     "t7":{
+       "MLE":0.07274910747173806,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.07867875705563473
+        }
+      },
+     "Node8":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node4":{
+       "MLE":0.5834732007958208,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.6310310574149948
+        }
+      },
+     "t3":{
+       "MLE":0.809741422694703,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.8757419972311102
+        }
+      },
+     "t12":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node11":{
+       "MLE":0.03336258957569262,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.03608191455809291
+        }
+      },
+     "Node3":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t5":{
+       "MLE":0.4431157588019575,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.4792333314583483
+        }
+      },
+     "t8":{
+       "MLE":0.03936015890842041,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.04256833503599821
+        }
+      },
+     "Node16":{
+       "MLE":0.1837610178742746,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1987390496473507
+        }
+      },
+     "t6":{
+       "MLE":0.05968898488998505,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.06455412725002861
+        }
+      },
+     "Node15":{
+       "MLE":0.8771718915482457,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.9486686029511388
+        }
+      },
+     "t2":{
+       "MLE":0.3568408781213276,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.3859263396205146
+        }
+      },
+     "t11":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node20":{
+       "MLE":0.4463766020110586,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.4827599601629693
+        }
+      },
+     "Node14":{
+       "MLE":0.01727603712531864,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.01868417600030519
+        }
+      }
+    }
+  },
+ "attributes":{
+   "WAGF":{
+     "attribute type":"branch length"
+    }
+  }
+}

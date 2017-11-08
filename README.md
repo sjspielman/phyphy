@@ -6,7 +6,7 @@
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
-`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**".
+`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". It can be used with either Python2.7 or Python3.
 
 Future functionality will allow users to define and fit custom HyPhy models.
 
@@ -38,8 +38,9 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 
 1. Download the master branch and `cd` in. 
 2. **Build** the package with `python setup.py build` (with a `sudo` as needed)
-<!--3. [NOT WORKING YET] Optionally, run tests with `python setup.py test`  (with a `sudo` as needed)-->
-3. **Install** per your own adventure:
+3. Optionally, run tests with `python setup.py test`  (with a `sudo` as needed). 
+	+ NOTE: the test suite is `python2.7` compatible only (do not attempt with a `python3` interpretter, or tests will fail). 
+4. **Install** per your own adventure:
 	> To specify a different install directory, add the argument `--prefix=/path/to/my/favorite/directory` to the install line.
 
 	+ To install as root: `sudo python setup.py install`

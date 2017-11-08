@@ -545,29 +545,38 @@ class HyPhyParser():
 
         
     
-    def extract_branch_attribute(self, attribute_name, partition = None, map = False):
+    def extract_branch_attribute(self, attribute_name, partition = None):
         """
             Return dictionary of attributes for given attribute, where keys are nodes and values are attributes.
             If there are multiple partitions, default returns a dictionary with all partitions. 
-            If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
+            If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0. 
+            
+            Importantly, the values for all returned dictionaries will be **strings**, except for the extraction of rate distributions .
+                      
         """
         self.reveal_branch_attributes() ## Needed to create self.attribute_names
         assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
-        
-        attr_dict = {}
+
+        total_attr_dict = {}
         for x in range(self.npartitions):
-            partition_attributes = self.json[ self.fields.branch_attributes ][str(x)]           
+            attr_dict = {}
+            partition_attributes = self.json[ self.fields.branch_attributes ][str(x)]      
             for node in partition_attributes:
                 attribute_value = str( partition_attributes[node][attribute_name] )
-                attr_dict[str(node)] = attribute_value
-        
+                attr_dict[str(node)] = attribute_value   
+            total_attr_dict[str(x)] = attr_dict   
+
         if partition is not None:
             try:
-                return attr_dict[str(partition)]
+                return total_attr_dict[str(partition)]
             except:
                 raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
         else:
-            return attr_dict
+            ## Ignore a partition argument if there is only 1 partition.
+            if self.npartitions == 1:
+                return attr_dict
+            else:
+                return total_attr_dict
         
         
         
