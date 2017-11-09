@@ -72,10 +72,13 @@ class JSONFields():
         self.branch_attributes   = "branch attributes"
         self.attributes          = "attributes"
         self.attribute_type      = "attribute type"
+        self.original_name       = "original name"
         
         self.timers        = "timers"
         self.order         = "order"
         self.display_order = "display order"
+        
+        self.slac_by_site = "by-site"
 
         
 
@@ -148,8 +151,11 @@ class HyPhyParser():
         
         self._unpack_json()
         self._determine_analysis_from_json()
-        self._count_partitions()             ## This seems to be generally useful
-
+        
+        ## These are generally useful to have around ##
+        self._count_partitions()      ### ---> self.npartitions        
+        self._obtain_input_tree()     ### ---> self.input_tree
+        self._obtain_fitted_models()  ### ---> self.fitted_models
 
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
@@ -170,7 +176,6 @@ class HyPhyParser():
         json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
         
         for name in self.allowed_analyses:
-        
             find_analysis = re.search(name.upper(), json_info)
             if find_analysis is not None:
                 self.analysis = name
@@ -190,43 +195,93 @@ class HyPhyParser():
             self.npartitions = int(self.json[ self.fields.input ][ self.fields.input_npartitions ])
    
 
+    def _obtain_input_tree(self):
+        """
+            Save the input tree(s) as either a string (single partition analysis), or as a dictionary (multiple partition analysis).
+        """
+        tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
+        if self.npartitions == 1:
+            self.input_tree = str(tree_field["0"]) + ";"        
+        else:
+            self.input_tree = {}
+            for i in range(len(tree_field)):
+                self.input_tree[i] = str(tree_field[str(i)]) + ";"
+  
 
-    def _extract_slac_sitetable(self, raw, slac_by, slac_ancestral_type):
+    def _obtain_fitted_models(self):
+        """
+            Obtain list of all models in fits/attributes.
+        """
+        self.fitted_models = list( self.json[ self.fields.model_fits ].keys())      
+
+
+
+
+    def _extract_slac_sitetable(self, raw):
         """
             Extract the specific SLAC tables of interest for parsing to CSV.
         """
         final = {}
         for x in range(self.npartitions):
             part = raw[str(x)]
-            subset = part[slac_by][slac_ancestral_type]
+            subset = part[self.fields.slac_by_site][self.slac_ancestral_type]
             final[str(x)] = subset
         return final          
-            
+       
+       
+    
+    def _clean_meme_html_header(self, raw_header):
+        """
+            MEME has html tags all over it and this has to go.
+            THIS IS VERY VERY HARDCODED, but flexible enough to not hurt much if someone changes the headers one day.
+        """
+        if raw_header[0] == "alpha;":
+            raw_header[0] = "alpha"
+        if raw_header[1] == "&beta;<sup>-</sup>":
+            raw_header[1] = "beta_neg"
+        if raw_header[2] == "p<sup>-</sup>":
+            raw_header[2] = "prop_beta_neg"
+        if raw_header[3] == "&beta;<sup>+</sup>":
+            raw_header[3] = "beta_pos"
+        if raw_header[4] == "p<sup>+</sup>":
+            raw_header[4] = "prop_beta_pos"
+        if raw_header[7] == "# branches under selection":
+            raw_header[7] = "num branches under selection"
+        
+        return raw_header
+
         
 
 
-    def _parse_sitemethod_to_csv(self, delim, slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
+    def _parse_sitemethod_to_csv(self, delim):
         """
             Extract a CSV from a **site-level** method JSON, including FEL, SLAC, MEME, FUBAR.
         """
         site_block =  self.json[ self.fields.MLE ]
         raw_header = site_block[ self.fields.MLE_headers ]
+        raw_header = [str(x[0]) for x in raw_header]
         raw_content = site_block[ self.fields.MLE_content]
+        
         if self.analysis == self.analysis_names.slac:
-            raw_content = self._extract_slac_sitetable(raw_content, slac_by, slac_ancestral_type)
+            raw_content = self._extract_slac_sitetable(raw_content)
+        if self.analysis == self.analysis_names.meme:
+            raw_header = self._clean_meme_html_header(raw_header)
+
+        final_header = "site,"+delim.join( [x.replace(" ","_") for x in raw_header] )
             
-        final_header = "site,"+delim.join( [x[0].replace(" ","_") for x in raw_header] )
         if self.npartitions > 1:
             final_header = "partition," + final_header
         
         site_count = 1
         final_content = ""
-        for part in raw_content:
-            for row in raw_content[part]:
-                row = "\n" + str(site_count) + delim + delim.join(str(x) for x in row)
+        for i in range(self.npartitions):
+            for row in raw_content[str(i)]:
+                outrow = str(site_count) + delim + delim.join(str(x) for x in row)
                 if self.npartitions > 1:
-                    row = str(part) + delim + row
-                final_content += row
+                    outrow = "\n" + str(i) + delim + outrow
+                else:
+                    outrow = "\n" + outrow
+                final_content += outrow
                 site_count += 1
         
         with open(self.csv, "w") as f:
@@ -234,7 +289,7 @@ class HyPhyParser():
 
 
 
-    def _parse_absrel_to_csv(self, delim):
+    def _parse_absrel_to_csv(self, delim, original_names):
         """
             Extract a CSV from an aBSREL JSON. 
             CSV contents:
@@ -246,12 +301,21 @@ class HyPhyParser():
         node_names = list( self.json[ self.fields.branch_attributes ]["0"].keys())  
         
         full_rows = ""
-        for node in node_names:
-            
+        for node in node_names:           
             try:
                 d = attr[str(node)]
             except:
                 raise KeyError("\n[ERROR]: Unable to parse JSON.")
+                
+            if original_names is True:
+                try:
+                    outnode = str( d[self.fields.original_name] )
+                except:
+                    outnode = node
+            else:
+                outnode = node
+                
+                
             rates = d[self.fields.rate_distributions]
             if len(rates) > 1:
                 for pair in rates:
@@ -341,14 +405,12 @@ class HyPhyParser():
 
 
     ################################################ MODEL FITS #######################################################
-    def extract_model_names(self):
+    def reveal_model_names(self):
         """
-            Return a list of all model names in the `fits` JSON field.
+            Reveal a list of all model names in the `fits` JSON field.
         """
-
-        self.fitted_models = list( self.json[ self.fields.model_fits ].keys())
         return self.fitted_models
-
+        
 
     def extract_model_component(self, model_name, component):
         """
@@ -365,11 +427,8 @@ class HyPhyParser():
                 + .extract_model_rate_distributions(model_name) returns rate distributions for a given model fit 
                 + .extract_model_frequencies(model_name) returns the equilibrium frequencies for the given model fit
         """            
-        try:
-            model_fit = self.json[ self.fields.model_fits ][ model_name ]
-        except:
-            raise KeyError("\n[ERROR]: Invalid model name.")
-            
+        assert(model_name in self.fitted_models), "\n[ERROR]: Invalid model name."
+        model_fit = self.json[ self.fields.model_fits ][ model_name ]
         try:
             component = model_fit[component]
         except: 
@@ -499,34 +558,19 @@ class HyPhyParser():
     def extract_input_tree(self, partition = None):
         """
             Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
-            For analyses with a single partition, returns a string.
-            For analyses with multiple partitions (and hence multiple trees), returns a *list* of trees. 
-            
-            
-            Return branch set designations as a dictionary for all nodes. 
-            By default, this function will return the branch sets "as is" is the JSON field `tested`, where keys are node and values are the branch set to which the given node belongs
-            NOTE: Assumes that all partitions share the same branch sets.
+            For analyses with a single partition OR for a request for a specific partition's tree, returns a string.
+            For analyses with multiple partitions (and hence multiple trees), returns a *dictionary* of trees. 
             
             Optional keyword arguments:
-                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0.
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.
         """
-        tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
-        if self.npartitions == 1:
-            self.input_tree = str(tree_field["0"]) + ";"
+        if partition is None or self.npartitions == 1:
             return self.input_tree
-        
         else:
-            self.input_tree = []
-            for i in range(len(tree_field)):
-                self.input_tree.append( str(tree_field[str(i)]) + ";" )
-        
-            if partition is not None:
-                try:
-                    return self.input_tree[partition]
-                except:
-                    raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
-            else:
-                return self.input_tree
+            try:
+                return self.input_tree[partition]
+            except:
+                raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
 
     
     def reveal_branch_attributes(self):
@@ -547,15 +591,24 @@ class HyPhyParser():
     
     def extract_branch_attribute(self, attribute_name, partition = None):
         """
+
             Return dictionary of attributes for given attribute, where keys are nodes and values are attributes.
             If there are multiple partitions, default returns a dictionary with all partitions. 
             If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0. 
             
             Importantly, the values for all returned dictionaries will be **strings**, except for the extraction of rate distributions .
-                      
+
+
+            Required positional arguments:
+                1. **attribute_name**, the name of the attribute to obtain. Attribute names available can be revealed with the method `.reveal_branch_attributes()`.
+                
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
         """
         self.reveal_branch_attributes() ## Needed to create self.attribute_names
         assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
+        if self.npartitions == 1:
+            assert(partition is None), "\n[ERROR]: There is only one partition in your data."
 
         total_attr_dict = {}
         for x in range(self.npartitions):
@@ -564,11 +617,11 @@ class HyPhyParser():
             for node in partition_attributes:
                 attribute_value = str( partition_attributes[node][attribute_name] )
                 attr_dict[str(node)] = attribute_value   
-            total_attr_dict[str(x)] = attr_dict   
+            total_attr_dict[x] = attr_dict   
 
         if partition is not None:
             try:
-                return total_attr_dict[str(partition)]
+                return total_attr_dict[partition]
             except:
                 raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
         else:
@@ -580,45 +633,56 @@ class HyPhyParser():
         
         
         
-        
-        
     def map_branch_attribute(self, attribute_name, partition = None):
         """
-            Return an attribute mapped onto the newick phylogeny.
-            If there are multiple partitions, default returns a list of mapped for all partitions. 
-            If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
+            Return the newick phylogeny with specified attribute mapped onto branch lengths.
+            If there are multiple partitions, default returns a dictionary of mapped trees for all partitions. 
+            If partition is specified, only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
+
+            Required positional arguments:
+                1. **attribute_name**, the name of the attribute to obtain. Attribute names available can be revealed with the method `.reveal_branch_attributes()`.
+                
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+
         """
         assert(attribute_name != self.fields.rate_distributions), "\n[ERROR]: Cannot map rate distributions onto a tree."
-                
-        attr_dict = self.extract_branch_attribute(attribute_name)
-        self.extract_input_tree()       ## Needed to grab input tree (grab all)
-        ptree = deepcopy( self.input_tree )
+
+        attr_dict = self.extract_branch_attribute(attribute_name, partition = partition)
+        maptree = deepcopy( self.input_tree )
         
-        if self.npartitions == 1:
+        if self.npartitions == 1 or partition is not None:
+            if type(maptree) == dict:
+                try:
+                    maptree = maptree[partition]
+                except:
+                    raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
             for node in attr_dict:
-                ptree = self._replace_tree_info( ptree, node, str(attr_dict[node]) )
-            return ptree
+                maptree = self._replace_tree_info( maptree, node, str(attr_dict[node]) )
+            return maptree
         
         else:
-            many_trees = []
-            for ptree in self.input_tree:
-                for node in attr_dict:
-                    ptree = self._replace_tree_info( ptree, node, str(attr_dict[node]) )
-                many_trees.append(ptree)
-        
-        if partition is not None:
-            try:
-                return many_trees[partition]
-            except:
-                raise KeyError("\n[ERROR]: Partition not found. Note that partitions are enumerated starting from 0.")
-        else:
-            return many_trees
+            maptrees = {}
+            for key in maptree:
+                maptree_here = deepcopy(maptree[key])
+                for node in attr_dict[key]:
+                    maptree_here = self._replace_tree_info( maptree_here, node, str(attr_dict[key][node]) )
+                maptrees[key] = maptree_here
+            return maptrees
     
+ 
  
     def extract_model_tree(self, model, partition = None):
         """
             Return newick phylogeny fitted to a certain model, i.e. with branch lengths optimized for specified model.
             This is just a special case of map_branch_attribute.
+
+            Required positional arguments:
+                1. **model**, the name of the model whose optimized tree you wish to obtain. Models names available can be revealed with the method `.reveal_model_names()`.
+                
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+
         """
         return self.map_branch_attribute(model, partition = partition)
     ############################################################################################################################
@@ -637,24 +701,40 @@ class HyPhyParser():
         
         
 
-    def extract_csv(self, csv, delim = ",", slac_by = "by-site", slac_ancestral_type = "AVERAGED"):
+    def extract_csv(self, csv, delim = ",", original_names = True, slac_ancestral_type = "AVERAGED"):
         """
-            Extract results to a CSV. Currently only for SLAC, MEME, FEL, FUBAR, aBSREL, and relative rates. Other analyses do not lend well to CSV.
-            Note that we don't export BUSTED (could be site logl or ERs) because these quantities are not actual tests for selection and users should not be readily able to treat as such. They can grab on their own if that interested.
+            
+            Extract a CSV from JSON, for certain methods:
+                + FEL
+                + SLAC
+                + MEME
+                + FUBAR
+                + LEISR
+                + aBSREL
+                
+            Required positional arguments:
+                1. **csv**, File name for output CSV
+                
+            Optional keyword arguments:
+                1. **delim**, A different delimitor for the output, e.g. "\t" for tab
+                2. **original_names**, An *ABSREL* specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True
+                3. **slac_ancestral_type**, A *SLAC* specific argument, either "AVERAGED" (Default) or "RESOLVED" (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.
+
         """       
         
         self.csv = csv
-
-        ### Standard site output ###
+        
+        ### FEL, MEME, SLAC, FUBAR ###
         if self.analysis in self.analysis_names.site_analyses:
-            assert(slac_by in self.analysis_names.slac_by), "\n[ERROR]: Argument `slac_by` must be either 'by-site' or 'by-branch'."
-            assert(slac_ancestral_type in self.analysis_names.slac_ancestral_type), "\n[ERROR]: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
+            assert(slac_ancestral_type.upper() in self.analysis_names.slac_ancestral_type), "\n[ERROR]: Argument `slac_ancestral_type` must be either 'AVERAGED' or 'RESOLVED'."
+            self.slac_ancestral_type = slac_ancestral_type.upper()
+    
             self._parse_sitemethod_to_csv(delim)
        
-
         ### aBSREL ###
         elif self.analysis == self.analysis_names.absrel:
-            self._parse_absrel_to_csv(delim)
+            assert(type(original_names) == bool), "\n[ERROR]: Argument `original_names` must be boolean."
+            self._parse_absrel_to_csv(delim, original_names)
         
         ## LEISR ##
         elif self.analysis == self.analysis_names.leisr:
