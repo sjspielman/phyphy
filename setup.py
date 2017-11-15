@@ -35,6 +35,6 @@ setup(name = 'phyphy',
     package_dir = {'phyphy':'src'},
     packages = ['phyphy', 'tests'],
     package_data = {'tests': ['test_jsons/*', 'test_data/*']},
-    install_requires=['Biopython'],
+    install_requires=['Biopython', 'dendropy>=4.3'],
     test_suite = "tests"
 )

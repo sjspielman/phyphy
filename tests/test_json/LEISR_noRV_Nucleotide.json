@@ -1,0 +1,278 @@
+{
+ "input":{
+   "file name":"/Users/sjspielman/Research/phyphy/tests/test_data/codon.fna",
+   "number of sequences":15,
+   "number of sites":30,
+   "partition count":1,
+   "trees":{
+     "0":"(((t8:0.01,(t13:0.07,t4:0.18)Node5:0.06)Node3:0.24,(t1:0.14,(t7:0.11,t15:0.03)Node10:0.21)Node8:0.11)Node2:0.09,(t5:0.05,t14:0.31)Node13:0.111,(((t9:0.04,t6:0.15)Node18:0.46,(t12:0.1,t11:0.12)Node21:0.25)Node17:0.17,(t2:0.04,(t3:0.05,t10:0.19)Node26:1e-10)Node24:0.29)Node16:0.27)"
+    }
+  },
+ "analysis":{
+   "info":"LEISR (Likelihood Estimation of Individual Site Rates) infer relative amino-acid or nucleotide rates from a fixed nucleotide or amino-acid alignment and tree. Relative site-specific substitution rates are\n    inferred by first optimizing alignment-wide branch lengths, and then inferring a site-specific uniform tree scaler",
+   "version":"0.1alpha",
+   "citation":"Spielman, S.J. and Kosakovsky Pond, S.L. Relative evolutionary rate inference in HyPhy with LEISR. bioRxiv. https://doi.org/10.1101/206011. (2017); Pupko, T., Bell, R. E., Mayrose, I., Glaser, F. & Ben-Tal, N. Rate4Site: an algorithmic tool for the identification of functional regions in proteins by surface mapping of evolutionary determinants within their homologues. Bioinformatics 18, S71–S77 (2002).",
+   "authors":"Sergei L Kosakovsky Pond and Stephanie J Spielman",
+   "contact":"{spond,stephanie.spielman}@temple.edu"
+  },
+ "fits":{
+   "GTR":{
+     "Log Likelihood":-197.181338953953,
+     "estimated parameters":35,
+     "AIC-c":470.4496344296451,
+     "Rate Distributions":{
+       "Substitution rate from nucleotide A to nucleotide C":0.5221445778732207,
+       "Substitution rate from nucleotide A to nucleotide G":1,
+       "Substitution rate from nucleotide A to nucleotide T":0.8021277402846714,
+       "Substitution rate from nucleotide C to nucleotide G":0.8235008299662891,
+       "Substitution rate from nucleotide C to nucleotide T":0.2626214246979535,
+       "Substitution rate from nucleotide G to nucleotide T":1.71496112238803
+      },
+     "EFV":[
+      [0.2111111111111111],
+      [0.3711111111111111],
+      [0.1933333333333333],
+      [0.2244444444444444]
+      ]
+    }
+  },
+ "MLE":{
+   "headers":[
+    ["MLE", "Relative rate estimate at a site"],
+    ["Lower", "Lower bound of 95% profile likelihood CI"],
+    ["Upper", "Upper bound of 95% profile likelihood CI"]
+    ],
+   "content":{
+     "0":[
+      [0, 0, 2.616778572295194],
+      [0, 0, 2.616778572295194],
+      [1.635187071698367, 0.2651116995114225, 5.552813356212713],
+      [0, 0, 1.406631197253939],
+      [3.54640074177928, 0.8097343011219343, 11.22831931188498],
+      [1.593386074043221, 0.2566375967323056, 5.434747800127519],
+      [0, 0, 0.919592324760686],
+      [0, 0, 2.616778572295194],
+      [1.199645307194215, 0.1946827974162279, 4.0806519605994],
+      [1.640908142907837, 0.2668771850139795, 5.503556325617042],
+      [1.545091678141935, 0.2462862789642591, 5.568081670837519],
+      [1.699311464692795, 0.2753256228852368, 5.750909165733521],
+      [0, 0, 2.616778572295194],
+      [0.7859759032782425, 0.04435259696245195, 3.651941091173168],
+      [2.004251928985943, 0.4800238994059935, 5.778718319051086],
+      [0, 0, 2.616778572295194],
+      [0, 0, 1.406631197253939],
+      [5.952542894425077, 1.661261922216378, 19.95503393945375],
+      [0, 0, 2.616778572295194],
+      [0.4896589093682639, 0.02765509112146097, 2.259580929288915],
+      [1.066420163407708, 0.1733870538466124, 3.565758018354342],
+      [0.7093535498853381, 0.03989708538000154, 3.329004112207533],
+      [0.8063890331773491, 0.04546987278370068, 3.762743911669499],
+      [0, 0, 2.616778572295194],
+      [0, 0, 2.616778572295194],
+      [1.293406029622102, 0.07180448338390333, 6.487857644795913],
+      [2.801422910691642, 0.8057727656494638, 8.154143889210809],
+      [0.8321197928634855, 0.04688222214298045, 3.890574409526337],
+      [0, 0, 1.406631197253939],
+      [1.703906243571951, 0.2746023401075599, 5.863319402422498]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "t8":{
+       "MLE":0.03665717401417535,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.0666238262528107
+        }
+      },
+     "t13":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t4":{
+       "MLE":0.1139898693109186,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.2071747605152123
+        }
+      },
+     "Node5":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node3":{
+       "MLE":0.07361864368714484,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1338007049884218
+        }
+      },
+     "t1":{
+       "MLE":0.03453027595590543,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.06275822312047924
+        }
+      },
+     "t7":{
+       "MLE":0.07017624276134087,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1275441964783934
+        }
+      },
+     "t15":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node10":{
+       "MLE":0.105709094918596,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1921245857761698
+        }
+      },
+     "Node8":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node2":{
+       "MLE":0.0692846554128176,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1259237507622494
+        }
+      },
+     "t5":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t14":{
+       "MLE":0.06760297079328502,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1228673159192242
+        }
+      },
+     "Node13":{
+       "MLE":0.03177403292912732,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.05774879559462646
+        }
+      },
+     "t9":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t6":{
+       "MLE":0.143524688942369,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.2608538218300024
+        }
+      },
+     "Node18":{
+       "MLE":0.146671240122283,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.2665726281685681
+        }
+      },
+     "t12":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t11":{
+       "MLE":0.03463056399655808,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.06294049502701228
+        }
+      },
+     "Node21":{
+       "MLE":0.09950222612680862,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1808437012268555
+        }
+      },
+     "Node17":{
+       "MLE":0.1355632200884348,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.2463839797893543
+        }
+      },
+     "t2":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t3":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "t10":{
+       "MLE":0.06847721884712042,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1244562477451763
+        }
+      },
+     "Node26":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      },
+     "Node24":{
+       "MLE":0.07014748162763579,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0.1274919235788497
+        }
+      },
+     "Node16":{
+       "MLE":0,
+       "Evolutionary time parameter":{
+         "ID":"t",
+         "MLE":0
+        }
+      }
+    }
+  },
+ "attributes":{
+   "GTR":{
+     "attribute type":"branch length"
+    }
+  }
+}

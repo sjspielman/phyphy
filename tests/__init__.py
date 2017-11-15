@@ -4,9 +4,9 @@ Written by Stephanie J. Spielman.
 Test modules
 ----------------
 
-* parser_test
+* analysis_test
 
-* runner_test
+* extractor_test
 
 
 """

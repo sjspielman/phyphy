@@ -5,16 +5,16 @@ Python modules
 ----------------
 The package consists of the following Python modules:
 
-* phyphy_parser.py
+* analysis.py
 
-* phyphy_runner.py
+* extractor.py
 
 
 
 """
 __version__ = '0.1'
-from .phyphy_parser import *
-from .phyphy_runner import *
+from .analysis import *
+from .extractor import *
 
 
 

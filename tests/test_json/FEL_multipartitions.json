@@ -260,7 +260,7 @@
  "branch attributes":{
    "0":{
      "AF231119":{
-       "original name":"AF231119",
+       "original name":"AF231119~~2",
        "Nucleotide GTR":0.005148012715551797,
        "Global MG94xREV":0.005318694153967571
       },
@@ -381,7 +381,7 @@
     },
    "1":{
      "AF231119":{
-       "original name":"AF231119",
+       "original name":"AF231119~~2",
        "Nucleotide GTR":0.002712189851558636,
        "Global MG94xREV":0.002725718049341564
       },
@@ -488,7 +488,7 @@
     },
    "2":{
      "AF231119":{
-       "original name":"AF231119",
+       "original name":"AF231119~~2",
        "Nucleotide GTR":0.001928390466381175,
        "Global MG94xREV":0.001940965570051385
       },
@@ -595,7 +595,7 @@
     },
    "3":{
      "AF231119":{
-       "original name":"AF231119",
+       "original name":"AF231119~~2",
        "Nucleotide GTR":0.0008240679766676501,
        "Global MG94xREV":0.0008257579431624356
       },

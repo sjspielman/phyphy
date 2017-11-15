@@ -23,17 +23,24 @@ Future functionality will allow users to define and fit custom HyPhy models.
 + RELAX
 + SLAC
 
-Note that the forthcoming `2.3.7` release lives in the `beta` branch in [https://github.com/veg/hyphy](https://github.com/veg/hyphy).
+Note that the forthcoming `2.3.7` release lives in the `beta` branch in [the HyPhy repository](https://github.com/veg/hyphy).
 
 ## Get help
 
-Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
++ Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
+
++ [This PDF](data/json-fields.pdf) contains a reference describing the contents JSON fields in most HyPhy methods.
 
 
 ## Install
 <!--
 You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
 -->
+Dependencies:
+
++ `Biopython`
++ `dendropy >=4.3`
+
 Until release, you must download `phyphy` from source, with the usual `setuptools` procedure. Briefly:
 
 1. Download the master branch and `cd` in. 
@@ -46,6 +53,8 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 	+ To install as root: `sudo python setup.py install`
 	+ To install for user only: `python setup.py install --user`
 
+
+## Sparknotes usage
 
 
 

@@ -20,7 +20,7 @@ from Bio import Phylo
 from copy import deepcopy
 from StringIO import StringIO
 from math import ceil
-import json
+
 
 _DEFAULT_PATH = "/usr/local/lib/hyphy/"
 _GENETIC_CODE = {
@@ -206,7 +206,7 @@ class Analysis(object):
     def _check_files(self):
         """
             Check provided paths for alignment+tree or data. Assign input hyphy variables accordingly.
-            Additionally extract the tree string
+            Additionally extract the tree string for use in label finding.
         """
         if self.alignment is not None:
             assert(os.path.exists(self.alignment)), "\n[ERROR] Provided alignment not found, check path?"
@@ -220,6 +220,7 @@ class Analysis(object):
             assert(os.path.exists(self.data)), "\n[ERROR] Provided data not found, check path?"
             self.hyphy_alignment = os.path.abspath(self.data)
             try:
+                ## NOTE: We must use biopython, *not* dendropy here, because HyPhy uses curly braces for labels and dendropy will not parse a tree with labels formatted in this manner that HyPhy requires
                 t = Phylo.read(self.hyphy_alignment, "nexus") ## If no error, tree is there and there will be no prompt 
                 tree_handle = StringIO()
                 Phylo.write(t, tree_handle, "newick")
