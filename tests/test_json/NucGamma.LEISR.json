@@ -1,0 +1,191 @@
+{
+ "input":{
+   "file name":"/Users/sjspielman/Research/phyphy/tests/test_data/codon.fna",
+   "number of sequences":15,
+   "number of sites":30,
+   "partition count":1,
+   "trees":{
+     "0":"(((t8:0.01,(t13:0.07,t4:0.18)Node5:0.06)Node3:0.24,(t1:0.14,(t7:0.11,t15:0.03)Node10:0.21)Node8:0.11)Node2:0.09,(t5:0.05,t14:0.31)Node13:0.111,(((t9:0.04,t6:0.15)Node18:0.46,(t12:0.1,t11:0.12)Node21:0.25)Node17:0.17,(t2:0.04,(t3:0.05,t10:0.19)Node26:1e-10)Node24:0.29)Node16:0.27)"
+    }
+  },
+ "analysis":{
+   "info":"LEISR (Likelihood Estimation of Individual Site Rates) infer relative amino-acid or nucleotide rates from a fixed nucleotide or amino-acid alignment and tree. Relative site-specific substitution rates are\n    inferred by first optimizing alignment-wide branch lengths, and then inferring a site-specific uniform tree scaler",
+   "version":"0.2",
+   "citation":"Spielman, S.J. and Kosakovsky Pond, S.L. Relative evolutionary rate inference in HyPhy with LEISR. bioRxiv. https://doi.org/10.1101/206011. (2017); Pupko, T., Bell, R. E., Mayrose, I., Glaser, F. & Ben-Tal, N. Rate4Site: an algorithmic tool for the identification of functional regions in proteins by surface mapping of evolutionary determinants within their homologues. Bioinformatics 18, S71–S77 (2002).",
+   "authors":"Sergei L Kosakovsky Pond and Stephanie J Spielman",
+   "contact":"{spond,stephanie.spielman}@temple.edu"
+  },
+ "fits":{
+   "GTR+4Gamma":{
+     "Log Likelihood":-196.9000539538075,
+     "estimated parameters":36,
+     "AIC-c":472.2504711037409,
+     "Rate Distributions":{
+       "Gamma distribution shape parameter":3.968501006333897,
+       "Substitution rate from nucleotide A to nucleotide C":0.5574185497729823,
+       "Substitution rate from nucleotide A to nucleotide G":1,
+       "Substitution rate from nucleotide A to nucleotide T":0.8550099863790355,
+       "Substitution rate from nucleotide C to nucleotide G":0.9071448921267548,
+       "Substitution rate from nucleotide C to nucleotide T":0.2933179867983706,
+       "Substitution rate from nucleotide G to nucleotide T":1.918587929564282
+      },
+     "EFV":[
+      [0.2111111111111111],
+      [0.3711111111111111],
+      [0.1933333333333333],
+      [0.2244444444444444]
+      ]
+    }
+  },
+ "MLE":{
+   "headers":[
+    ["MLE", "Relative rate estimate at a site"],
+    ["Lower", "Lower bound of 95% profile likelihood CI"],
+    ["Upper", "Upper bound of 95% profile likelihood CI"]
+    ],
+   "content":{
+     "0":[
+      [0, 0, 2.56561686517056],
+      [0, 0, 2.56561686517056],
+      [1.671816174872456, 0.2712673456288087, 5.690099882665765],
+      [0, 0, 1.365961654854381],
+      [3.493660308518086, 0.7969967322473029, 11.05043354089144],
+      [1.578174048737292, 0.254314325991947, 5.377428303362842],
+      [0, 0, 0.9078930473881711],
+      [0, 0, 2.56561686517056],
+      [1.197030096340073, 0.1939789504903807, 4.095235938011684],
+      [1.681105537111318, 0.2728913911453912, 5.636718838517903],
+      [1.507220872464888, 0.2402082169016019, 5.434408137009276],
+      [1.749368974176605, 0.2830318690790506, 5.944133121515986],
+      [0, 0, 2.56561686517056],
+      [0.8063890331773491, 0.04542919178437201, 3.742625555472515],
+      [2.004251928985943, 0.479185082297354, 5.777218609406885],
+      [0, 0, 2.56561686517056],
+      [0, 0, 1.365961654854381],
+      [5.955547031928958, 1.655835175073724, 20.13656095606017],
+      [0, 0, 2.56561686517056],
+      [0.4826161719104107, 0.02726377208143078, 2.231804365848195],
+      [1.052261710659086, 0.1709597558453368, 3.530263439815903],
+      [0.6896242252480869, 0.03880472038255717, 3.24044447994142],
+      [0.8252398625238364, 0.0465145801166581, 3.85113031770054],
+      [0, 0, 2.56561686517056],
+      [0, 0, 2.56561686517056],
+      [1.267380586090183, 0.0703100567627028, 6.369925294651323],
+      [2.812225429202109, 0.8078743980683347, 8.232690929668244],
+      [0.8493832587611692, 0.04785749155482497, 3.974256580822678],
+      [0, 0, 1.365961654854381],
+      [1.671816174872456, 0.2695793286959817, 5.765168817517608]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "t8":{
+       "original name":"t8",
+       "GTR+4Gamma":0.03691827767989201
+      },
+     "t9":{
+       "original name":"t9",
+       "GTR+4Gamma":0
+      },
+     "t6":{
+       "original name":"t6",
+       "GTR+4Gamma":0.14548874616389
+      },
+     "t7":{
+       "original name":"t7",
+       "GTR+4Gamma":0.06951158684163458
+      },
+     "t4":{
+       "original name":"t4",
+       "GTR+4Gamma":0.1149265907700658
+      },
+     "t5":{
+       "original name":"t5",
+       "GTR+4Gamma":0
+      },
+     "t2":{
+       "original name":"t2",
+       "GTR+4Gamma":0
+      },
+     "t3":{
+       "original name":"t3",
+       "GTR+4Gamma":0
+      },
+     "t1":{
+       "original name":"t1",
+       "GTR+4Gamma":0.03431092664032923
+      },
+     "t14":{
+       "original name":"t14",
+       "GTR+4Gamma":0.06693275146799045
+      },
+     "t15":{
+       "original name":"t15",
+       "GTR+4Gamma":0
+      },
+     "t10":{
+       "original name":"t10",
+       "GTR+4Gamma":0.06790122369426775
+      },
+     "t11":{
+       "original name":"t11",
+       "GTR+4Gamma":0.03468943696339822
+      },
+     "t12":{
+       "original name":"t12",
+       "GTR+4Gamma":0
+      },
+     "t13":{
+       "original name":"t13",
+       "GTR+4Gamma":0
+      },
+     "Node10":{
+       "GTR+4Gamma":0.1057268791749988
+      },
+     "Node13":{
+       "GTR+4Gamma":0.03053608023513107
+      },
+     "Node16":{
+       "GTR+4Gamma":0
+      },
+     "Node17":{
+       "GTR+4Gamma":0.1415598403851623
+      },
+     "Node18":{
+       "GTR+4Gamma":0.1535362312528186
+      },
+     "Node2":{
+       "GTR+4Gamma":0.06985657559518366
+      },
+     "Node21":{
+       "GTR+4Gamma":0.09965871149394179
+      },
+     "Node24":{
+       "GTR+4Gamma":0.07109452586346124
+      },
+     "Node26":{
+       "GTR+4Gamma":0
+      },
+     "Node3":{
+       "GTR+4Gamma":0.0734844294788615
+      },
+     "Node5":{
+       "GTR+4Gamma":0
+      },
+     "Node8":{
+       "GTR+4Gamma":0
+      }
+    },
+   "attributes":{
+     "original name":{
+       "attribute type":"node label",
+       "display order":-1
+      },
+     "GTR+4Gamma":{
+       "attribute type":"branch length",
+       "display order":0
+      }
+    }
+  }
+}

@@ -36,11 +36,12 @@ class test_extractor_init(unittest.TestCase):
         self.fel_json = self.json_path + "FEL.json"
         self.fel_mult_json = self.json_path + "FEL_multipartitions.json"
         self.fubar_json = self.json_path + "FUBAR.json"
-        self.leisr_json = self.json_path + "LEISR_Gamma_Nucleotide.json"
+        self.leisr_json = self.json_path + "NucGamma.LEISR.json"
+        self.leisr_json_depr = self.json_path + "LEISR_deprecated.json"
         self.meme_json = self.json_path + "MEME.json"
         self.slac_json = self.json_path + "SLAC.json"
         
-        self.fel_input_tree = "((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"
+        self.fel_input_tree = {0:"((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"}
 
         self.felmult_input_trees ={0:"((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);",
                                    1:"(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);",
@@ -58,7 +59,7 @@ class test_extractor_init(unittest.TestCase):
         p = Extractor(self.busted_json)
         self.assertEqual(p.analysis,self.names.busted, msg = "Could not identify a BUSTED json")
 
-    def test_determine_analysis_from_json_fel(self):
+    def test_determine_analysis_from_json_ext(self):
         p = Extractor(self.fel_json)
         self.assertEqual(p.analysis,self.names.fel, msg = "Could not identify a FEL json")
 
@@ -69,6 +70,9 @@ class test_extractor_init(unittest.TestCase):
     def test_determine_analysis_from_json_leisr(self):
         p = Extractor(self.leisr_json)
         self.assertEqual(p.analysis,self.names.leisr, msg = "Could not identify a LEISR json")
+
+    def test_determine_analysis_from_json_leisr_depracated(self):
+        self.assertRaises(AssertionError, Extractor, self.leisr_json_depr) ## cant get message, dont know why, moving on.
             
     def test_determine_analysis_from_json_meme(self):
         p = Extractor(self.meme_json)
@@ -115,14 +119,22 @@ class test_extractor_init(unittest.TestCase):
         true = {'Horse': 'Horse', 'Baboon': 'Baboon', 'Cow': 'Cow', 'Chimp': 'Chimp', 'RhMonkey': 'RhMonkey', 'Pig': 'Pig~gy', 'Rat': 'Rat', 'Human': 'Human', 'Cat': 'Cat', 'Mouse': 'Mouse'}
         self.assertDictEqual(true, p.original_names, msg = "Couldn't obtain original names, single partition")
         
-     def test_obtain_original_names_mult(self):
+    def test_obtain_original_names_mult(self):
         p = Extractor(self.fel_mult_json)
         true ={'AF187824': 'AF187824', 'AF186242': 'AF186242', 'AF082576': 'AF082576', 'AF186243': 'AF186243', 'AF231113': 'AF231113', 'AF231115': 'AF231115', 'AF231114': 'AF231114', 'AF231117': 'AF231117', 'AF231116': 'AF231116', 'AF231119': 'AF231119~~2', 'AF231118': 'AF231118', 'AF186241': 'AF186241', 'AF234767': 'AF234767'}
         self.assertDictEqual(true, p.original_names, msg = "Couldn't obtain original names, multiple partitions")
-        
-       
-        
-        
+    ######################################################################################
+    
+    def test_obtain_branch_attributes(self):
+        p = Extractor(self.fel_json)
+        true_names = {"original name":"node label", "Nucleotide GTR":"branch length", "Global MG94xREV":"branch length"}
+        true_attr = {0: {u'Horse': {u'Global MG94xREV': 0.2113106183812873, u'Nucleotide GTR': 0.2091399114870585, u'original name': u'Horse'}, u'Node12': {u'Global MG94xREV': 0.01786361958885256, u'Nucleotide GTR': 0.01783411482156217}, u'Cow': {u'Global MG94xREV': 0.247996722936406, u'Nucleotide GTR': 0.2482866748291939, u'original name': u'Cow'}, u'Node2': {u'Global MG94xREV': 0.06442499327694048, u'Nucleotide GTR': 0.06618583366623292}, u'Chimp': {u'Global MG94xREV': 0.001828369999957279, u'Nucleotide GTR': 0.001817790979570076, u'original name': u'Chimp'}, u'RhMonkey': {u'Global MG94xREV': 0.00372054481786096, u'Nucleotide GTR': 0.0037736588512939, u'original name': u'RhMonkey'}, u'Pig': {u'Global MG94xREV': 0.192554792970548, u'Nucleotide GTR': 0.1871273830860675, u'original name': u'Pig~gy'}, u'Node9': {u'Global MG94xREV': 0.02592063449177876, u'Nucleotide GTR': 0.02567698991454467}, u'Node8': {u'Global MG94xREV': 0.1094317536021449, u'Nucleotide GTR': 0.1061208481791134}, u'Rat': {u'Global MG94xREV': 0.0670087588444032, u'Nucleotide GTR': 0.06669610805919829, u'original name': u'Rat'}, u'Human': {u'Global MG94xREV': 0, u'Nucleotide GTR': 0, u'original name': u'Human'}, u'Node1': {u'Global MG94xREV': 0.2844341964472285, u'Nucleotide GTR': 0.2772894331724504}, u'Cat': {u'Global MG94xREV': 0.2737323698545656, u'Nucleotide GTR': 0.2661033669982888, u'original name': u'Cat'}, u'Baboon': {u'Global MG94xREV': 0.001770167035796363, u'Nucleotide GTR': 0.001680964928103793, u'original name': u'Baboon'}, u'Mouse': {u'Global MG94xREV': 0.1201669476969837, u'Nucleotide GTR': 0.1181705956932674, u'original name': u'Mouse'}, u'Node3': {u'Global MG94xREV': 0.1017191894071242, u'Nucleotide GTR': 0.09890712980323799}}}
+        self.assertDictEqual(true_names, p.attribute_names, msg = "Couldn't obtain attributes names")
+        self.assertDictEqual(true_attr, p.branch_attributes, msg = "Couldn't obtain branch attributes")
+
+
+
+
 class test_extractor_extract_reveal(unittest.TestCase):
 
 
@@ -134,7 +146,7 @@ class test_extractor_extract_reveal(unittest.TestCase):
         self.busted_json = self.json_path + "BUSTED.json"
         self.fel_mult_json = self.json_path + "FEL_multipartitions.json"
  
-        self.felmodels = ["Nucleotide GTR", "Global MG94xREV"]
+        self.extmodels = ["Nucleotide GTR", "Global MG94xREV"]
         self.fel = Extractor(self.fel_json)
         self.felmult = Extractor(self.fel_mult_json)
         self.busted = Extractor(self.busted_json)
@@ -161,7 +173,7 @@ class test_extractor_extract_reveal(unittest.TestCase):
         self.fel_branch_sets = {u'Node9': u'test', u'Horse': u'test', u'Pig': u'test', u'Cow': u'test', u'Chimp': u'test', u'RhMonkey': u'test', u'Cat': u'test', u'Baboon': u'test', u'Node8': u'test', u'Rat': u'test', u'Node12': u'test', u'Human': u'test', u'Node1': u'test', u'Node3': u'test', u'Node2': u'test', u'Mouse': u'test'}
         self.fel_branch_sets_byset = {u'test': [u'Node9', u'Horse', u'Pig', u'Cow', u'Chimp', u'RhMonkey', u'Cat', u'Baboon', u'Node8', u'Rat', u'Node12', u'Human', u'Node1', u'Node3', u'Node2', u'Mouse']}
         self.fel_input_tree = "((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"
-
+        self.fel_input_tree_original_names = "((((Pig~gy:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"
         self.felmult_input_trees ={0:"((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);",
                                    1:"(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);",
                                    2:"(AF231119:0.00208218,AF231117:1e-10,((AF082576:1e-10,AF231113:0.00433775)Node4:0.00208919,((((AF186242:0.00216055,AF186243:0.00437974)Node10:0.00214339,((AF186241:1e-10,AF187824:0.00215048)Node14:0.00214528,AF231116:1e-10)Node13:1e-10)Node9:0.0112142,(AF231118:0.0244917,AF234767:0.0835686)Node18:0.0280857)Node8:0.0021073,(AF231115:1e-10,AF231114:0.00868934)Node21:0.00639388)Node7:1e-10)Node3:1e-10);",
@@ -186,8 +198,11 @@ class test_extractor_extract_reveal(unittest.TestCase):
                                         }
 
         self.fel_mg94_mapped = "((((Pig:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);"
+        self.fel_mg94_mapped_original_names = "((((Pig~gy:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);"
+        self.fel_mg94_mapped_as_label = "((((Pig:0.147969,Cow:0.21343)0.101719189407:0.085099,Horse:0.165787,Cat:0.264806)0.0644249932769:0.058611,((RhMonkey:0.002015,Baboon:0.003108)0.0259206344918:0.022733,(Human:0.004349,Chimp:0.000799)0.0178636195889:0.011873)0.109431753602:0.101856)0.284434196447:0.340802,Rat:0.050958,Mouse:0.09795);"
+        self.fel_mg94_mapped_as_label_updated_bl = "((((Pig:0.187127383086,Cow:0.248286674829)0.101719189407:0.0989071298032,Horse:0.209139911487,Cat:0.266103366998)0.0644249932769:0.0661858336662,((RhMonkey:0.00377365885129,Baboon:0.0016809649281)0.0259206344918:0.0256769899145,(Human:0,Chimp:0.00181779097957)0.0178636195889:0.0178341148216)0.109431753602:0.106120848179)0.284434196447:0.277289433172,Rat:0.0666961080592,Mouse:0.118170595693);"
+        self.fel_mg94_mapped_as_label_updated_bl_original_names = "((((Pig~gy:0.187127383086,Cow:0.248286674829)0.101719189407:0.0989071298032,Horse:0.209139911487,Cat:0.266103366998)0.0644249932769:0.0661858336662,((RhMonkey:0.00377365885129,Baboon:0.0016809649281)0.0259206344918:0.0256769899145,(Human:0,Chimp:0.00181779097957)0.0178636195889:0.0178341148216)0.109431753602:0.106120848179)0.284434196447:0.277289433172,Rat:0.0666961080592,Mouse:0.118170595693);"
 
-        
         self.felmult_mg94_mapped = {1: '(((((AF231119:0.00272571804934,AF231115:0)Node4:0,((AF082576:0.00274243126371,AF231113:0)Node8:0.0027139677452,AF231114:0.011078118042)Node7:0.00276605108624)Node3:0.00271644261188,(AF231117:0.00298921107219,AF231118:0.0505182782033)Node12:0.00258521327296)Node2:0.00550172127052,(AF186242:0,(AF186243:0,AF234767:0.0224059556982)Node17:0.00273365779956)Node15:0.00270941747926)Node1:0,(AF186241:0.00270936341991,AF231116:0)Node20:0,AF187824:0.00546772497238);', 
                                     0: '((((AF231119:0.00531869415397,AF231117:0.00525333850701)Node3:0.00173066495879,(AF186242:0.00174659623697,AF186243:0.00528071977074)Node6:0)Node2:0.00350559708034,(AF186241:0.00353029809931,(AF231116:0,AF187824:0.00351481447066)Node11:0.00350055680229)Node9:0.00180147542735)Node1:0.00352827269693,AF082576:0.00175291092744,(((AF231118:0.0433179795798,AF234767:0.0935491052039)Node17:0.00780239033398,(AF231115:0.00178236736568,AF231114:0.00525220726205)Node20:0.00528241943566)Node16:0,AF231113:0.00351076826388)Node15:0);', 
                                     3: '((AF231119:0.000825757943162,AF082576:0.00164922526359)Node1:0,(((AF231117:0.00496535198201,(AF231116:0,(AF187824:0.00403545041293,AF231113:0.0155673540035)Node10:0.00850461163727)Node8:0.00500231660051)Node6:0.00334883875567,(AF231115:0,AF231114:0.00921003248884)Node13:0.00332228341059)Node5:0.000834802293444,((AF186242:0.00167318619209,AF186243:0.00418691399923)Node17:0.00165089379495,AF186241:0.00416814559846)Node16:0.00334133531256)Node4:0.000813032805157,(AF231118:0.0243312857746,AF234767:0.0313117907259)Node21:0.0190786274375);', 
@@ -224,8 +239,13 @@ class test_extractor_extract_reveal(unittest.TestCase):
     def test_extract_branch_sets_byset(self):
         self.assertDictEqual(self.fel_branch_sets_byset, self.fel.extract_branch_sets(by_set=True), msg = "Could not extract branch sets by set")
 
+#######     def extract_input_tree(self, partition = None, original_names = False):
+ 
     def test_extract_input_tree(self):
         self.assertEqual(self.fel_input_tree, self.fel.extract_input_tree(), msg = "Could not extract input tree (single)")
+
+    def test_extract_input_tree_original_names(self):
+        self.assertEqual(self.fel_input_tree_original_names, self.fel.extract_input_tree(original_names = True), msg = "Could not extract input tree (single), original names True")
 
     def test_extract_input_tree_mult(self):
         self.assertEqual(self.felmult_input_trees, self.felmult.extract_input_tree(), msg = "Could not extract input tree (multiple)")
@@ -248,23 +268,35 @@ class test_extractor_extract_reveal(unittest.TestCase):
     def test_reveal_branch_attributes(self):
         self.assertDictEqual(self.fel_branch_attributes, self.fel.reveal_branch_attributes(), msg = "Could not reveal branch attributes")
 
-#     def test_extract_branch_attribute(self):    
-#         self.assertDictEqual(self.fel_mg94_attributes, self.fel.extract_branch_attribute(self.fel_model), msg = "Could not extract a branch attribute")
-# 
-#     def test_extract_branch_attribute_multpart(self):   
-#         self.assertDictEqual(self.felmult_mg94_attributes, self.felmult.extract_branch_attribute(self.fel_model), msg = "Could not extract a branch attribute for multiple partitions")
-# 
-#     def test_extract_branch_attribute_part1(self):   
-#         self.assertDictEqual(self.felmult_mg94_attributes_part1, self.felmult.extract_branch_attribute(self.fel_model, partition=1), msg = "Could not extract a branch attribute for specific partition")
-# 
-#     def test_map_branch_attribute(self):
-#         self.assertEqual(self.fel_mg94_mapped, self.fel.map_branch_attribute(self.fel_model), msg = "Could not map onto a tree for single partition")
-# 
-#     def test_map_branch_attribute_multpart(self):
-#         self.assertDictEqual(self.felmult_mg94_mapped, self.felmult.map_branch_attribute(self.fel_model), msg = "Could not map onto a tree for multiple partition")
-# 
-#     def test_map_branch_attribute_part1(self):
-#         self.assertEqual(self.felmult_mg94_mapped_part1, self.felmult.map_branch_attribute(self.fel_model, partition=1), msg = "Could not map onto a tree for specified partition")
+    def test_extract_branch_attribute(self):    
+        self.assertDictEqual(self.fel_mg94_attributes, self.fel.extract_branch_attribute(self.fel_model), msg = "Could not extract a branch attribute")
+
+    def test_extract_branch_attribute_multpart(self):   
+        self.assertDictEqual(self.felmult_mg94_attributes, self.felmult.extract_branch_attribute(self.fel_model), msg = "Could not extract a branch attribute for multiple partitions")
+
+    def test_extract_branch_attribute_part1(self):   
+        self.assertDictEqual(self.felmult_mg94_attributes_part1, self.felmult.extract_branch_attribute(self.fel_model, partition=1), msg = "Could not extract a branch attribute for specific partition")
+
+    def test_map_branch_attribute(self):
+        self.assertEqual(self.fel_mg94_mapped, self.fel.map_branch_attribute(self.fel_model), msg = "Could not map onto a tree for single partition")
+
+    def test_map_branch_attribute_multpart(self):
+        self.assertDictEqual(self.felmult_mg94_mapped, self.felmult.map_branch_attribute(self.fel_model), msg = "Could not map onto a tree for multiple partition")
+
+    def test_map_branch_attribute_part1(self):
+        self.assertEqual(self.felmult_mg94_mapped_part1, self.felmult.map_branch_attribute(self.fel_model, partition=1), msg = "Could not map onto a tree for specified partition")
+
+    def test_map_branch_attribute_original_names(self):
+        self.assertEqual(self.fel_mg94_mapped_original_names, self.fel.map_branch_attribute(self.fel_model, original_names=True), msg = "Could not map onto a tree for single partition with original names")
+
+    def test_map_branch_attribute_as_label(self):
+        self.assertEqual(self.fel_mg94_mapped_as_label, self.fel.map_branch_attribute(self.fel_model, as_label=True), msg = "Could not map onto a tree for single partition, as label")
+
+    def test_map_branch_attribute_as_label_updated_bl(self):
+        self.assertEqual(self.fel_mg94_mapped_as_label_updated_bl, self.fel.map_branch_attribute(self.fel_model, as_label=True, update_branch_lengths = "Nucleotide GTR"), msg = "Could not map onto a tree for single partition, as label with updated branch lengths")
+
+    def test_map_branch_attribute_as_label_updated_bl_original_names(self):
+        self.assertEqual(self.fel_mg94_mapped_as_label_updated_bl_original_names, self.fel.map_branch_attribute(self.fel_model, as_label=True, original_names=True, update_branch_lengths = "Nucleotide GTR"), msg = "Could not map onto a tree for single partition, as label with updated branch lengths and original names")
 
 
 
@@ -280,19 +312,18 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_leisr(self):  
         with open(self.data_path + "leisr.csv", "r") as f:
             true = str(f.read())    
-        fel = Extractor(self.json_path + "MEME.json")
-        fel.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "NucGamma.LEISR.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
-        self.assertMultiLineEqual(test, true, msg = "Bad MEME csv.")
-
+        self.assertMultiLineEqual(test, true, msg = "Bad LEISR csv.")
 
     def test_csv_meme(self):  
         with open(self.data_path + "meme.csv", "r") as f:
             true = str(f.read())    
-        fel = Extractor(self.json_path + "MEME.json")
-        fel.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "MEME.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -301,8 +332,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_fubar(self):  
         with open(self.data_path + "fubar.csv", "r") as f:
             true = str(f.read())    
-        fel = Extractor(self.json_path + "FUBAR.json")
-        fel.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "FUBAR.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -312,8 +343,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_fel(self):  
         with open(self.data_path + "fel.csv", "r") as f:
             true = str(f.read())    
-        fel = Extractor(self.json_path + "FEL.json")
-        fel.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "FEL.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -324,8 +355,8 @@ class test_extractor_csv(unittest.TestCase):
 
         with open(self.data_path + "fel_multipartitions.csv", "r") as f:
             true = str(f.read())    
-        fel = Extractor(self.json_path + "FEL_multipartitions.json")
-        fel.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "FEL_multipartitions.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -335,8 +366,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_absrel1(self):  
         with open(self.data_path + "absrel_hyphy_names.csv", "r") as f:
             true = str(f.read())    
-        ab = Extractor(self.json_path + "ABSREL.json")
-        ab.extract_csv("test.csv", original_names=False)
+        ext = Extractor(self.json_path + "ABSREL.json")
+        ext.extract_csv("test.csv", original_names=False)
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -346,8 +377,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_absrel2(self):  
         with open(self.data_path + "absrel_original_names.csv", "r") as f:
             true = str(f.read())    
-        ab = Extractor(self.json_path + "ABSREL.json")
-        ab.extract_csv("test.csv")
+        ext = Extractor(self.json_path + "ABSREL.json")
+        ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -358,8 +389,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_slac1(self):  
         with open(self.data_path + "slac_averaged.csv", "r") as f:
             true = str(f.read())    
-        ab = Extractor(self.json_path + "SLAC.json")
-        ab.extract_csv("test.csv", original_names=False)
+        ext = Extractor(self.json_path + "SLAC.json")
+        ext.extract_csv("test.csv", original_names=False)
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")
@@ -369,8 +400,8 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_slac2(self):  
         with open(self.data_path + "slac_resolved.csv", "r") as f:
             true = str(f.read())     
-        ab = Extractor(self.json_path + "SLAC.json")
-        ab.extract_csv("test.csv", slac_ancestral_type = "RESOLVED")
+        ext = Extractor(self.json_path + "SLAC.json")
+        ext.extract_csv("test.csv", slac_ancestral_type = "RESOLVED")
         with open("test.csv", "r") as f:
             test = str(f.read())
         os.remove("test.csv")

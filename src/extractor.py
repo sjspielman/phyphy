@@ -209,15 +209,11 @@ class Extractor():
             Save the input tree(s) as either a string (single partition analysis), or as a dictionary (multiple partition analysis).
         """
         tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
-        if self.npartitions == 1:
-            self.input_tree = str(tree_field["0"]) + ";"   
-            self.input_tree_dendropy = {0: dendropy.Tree.get(data = self.input_tree, schema = "newick", preserve_underscores=True)}    
-        else:
-            self.input_tree = {}
-            self.input_tree_dendropy = {}
-            for i in range(len(tree_field)):
-                self.input_tree[i] = str(tree_field[str(i)]) + ";"
-                self.input_tree_dendropy[i] = dendropy.Tree.get(data = self.input_tree[i], schema = "newick")     
+        self.input_tree = {}
+        self.input_tree_dendropy = {}
+        for i in range(len(tree_field)):
+            self.input_tree[i] = str(tree_field[str(i)]) + ";"
+            self.input_tree_dendropy[i] = dendropy.Tree.get(data = self.input_tree[i], schema = "newick", preserve_underscores=True)     
 
 
     def _obtain_fitted_models(self):
@@ -229,11 +225,9 @@ class Extractor():
 
     def _obtain_original_names(self):
         """
-            Obtain original names dictionary, selecting only 0th partition if multiple.
+            Obtain original names dictionary, selecting only 0th partition.
         """
-        self.original_names = self.extract_branch_attribute(self.fields.original_name)
-        if self.npartitions > 1:
-            self.original_names = self.original_names[0]
+        self.original_names = self.extract_branch_attribute(self.fields.original_name, partition = 0)
 
 
 
@@ -616,7 +610,7 @@ class Extractor():
 
         
 
-    def extract_input_tree(self,  partition = None, original_names = False):
+    def extract_input_tree(self, partition = None, original_names = False):
         """
             Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
             For analyses with a single partition OR for a request for a specific partition's tree, returns a string.
@@ -631,7 +625,7 @@ class Extractor():
             original_tree = {}
             for key in self.input_tree_dendropy:
                 t = deepcopy(self.input_tree_dendropy[key])
-                original_tree[key] = self._tree_to_original_names(t).as_string("newick", unquoted_underscores=True)
+                original_tree[key] = self._tree_to_original_names(t).as_string("newick", unquoted_underscores=True).strip()
         else:
             original_tree = self.input_tree
         if partition is None:
@@ -640,7 +634,7 @@ class Extractor():
             else:
                 return original_tree
         else:
-            return original_tree[partition] 
+            return original_tree[int(partition)] 
     
         
     def extract_branch_attribute(self, attribute_name, partition = None):
@@ -663,14 +657,23 @@ class Extractor():
             partition = 0
             
         attr_dict = {}
-        for node in self.branch_attributes[partition]:
-            try:
-                attribute_value = str( self.branch_attributes[partition][node][attribute_name] )
-                attr_dict[str(node)] = attribute_value
-            except:
-                assert(attribute_name == self.fields.original_name), "\n[ERROR] Could not extract branch attribute."
-                pass     
-        return attr_dict
+        for x in range(self.npartitions):
+            partition_attr = {}
+            for node in self.branch_attributes[x]:
+                try:
+                    attribute_value = str( self.branch_attributes[x][node][attribute_name] )
+                    partition_attr[str(node)] = attribute_value
+                except:
+                    assert(attribute_name == self.fields.original_name), "\n[ERROR] Could not extract branch attribute."
+                    pass  
+            attr_dict[x] = partition_attr   
+        if self.npartitions == 1:
+            return attr_dict[0]
+        else:
+            if partition is None:
+                return attr_dict
+            else:
+                return attr_dict[int(partition)]
         
         
         
@@ -711,14 +714,14 @@ class Extractor():
                 t = self._replace_tree_branch_length( t, attr_dict )
             if original_names is True:
                 t = self._tree_to_original_names(t)
-            mapped_trees[key] = t.as_string("newick", unquoted_underscores=True)    
-        if partition is None:
-            if self.npartitions == 1:
-                return mapped_trees[0]
-            else:
-                return mapped_trees
+            mapped_trees[key] = t.as_string("newick", unquoted_underscores=True).strip()    
+        if self.npartitions == 1:
+            return mapped_trees[0]
         else:
-            return mapped_trees[partition]
+            if partition is None:
+                return mapped_trees
+            else:
+                return mapped_trees[int(partition)]
 
  
  

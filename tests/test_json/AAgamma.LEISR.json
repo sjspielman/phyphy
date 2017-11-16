@@ -1,0 +1,191 @@
+{
+ "input":{
+   "file name":"/Users/sjspielman/Research/phyphy/tests/test_data/aa.fna",
+   "number of sequences":15,
+   "number of sites":20,
+   "partition count":1,
+   "trees":{
+     "0":"(((t8:0.01,(t13:0.07,t4:0.18)Node5:0.06)Node3:0.24,(t1:0.14,(t7:0.11,t15:0.03)Node10:0.21)Node8:0.11)Node2:0.09,(t5:0.05,t14:0.31)Node13:0.111,(((t9:0.04,t6:0.15)Node18:0.46,(t12:0.1,t11:0.12)Node21:0.25)Node17:0.17,(t2:0.04,(t3:0.05,t10:0.19)Node26:1e-10)Node24:0.29)Node16:0.27)"
+    }
+  },
+ "analysis":{
+   "info":"LEISR (Likelihood Estimation of Individual Site Rates) infer relative amino-acid or nucleotide rates from a fixed nucleotide or amino-acid alignment and tree. Relative site-specific substitution rates are\n    inferred by first optimizing alignment-wide branch lengths, and then inferring a site-specific uniform tree scaler",
+   "version":"0.2",
+   "citation":"Spielman, S.J. and Kosakovsky Pond, S.L. Relative evolutionary rate inference in HyPhy with LEISR. bioRxiv. https://doi.org/10.1101/206011. (2017); Pupko, T., Bell, R. E., Mayrose, I., Glaser, F. & Ben-Tal, N. Rate4Site: an algorithmic tool for the identification of functional regions in proteins by surface mapping of evolutionary determinants within their homologues. Bioinformatics 18, S71–S77 (2002).",
+   "authors":"Sergei L Kosakovsky Pond and Stephanie J Spielman",
+   "contact":"{spond,stephanie.spielman}@temple.edu"
+  },
+ "fits":{
+   "WAGF+4Gamma":{
+     "Log Likelihood":-380.5515552374895,
+     "estimated parameters":28,
+     "AIC-c":823.0957304011782,
+     "Rate Distributions":{
+       "Gamma distribution shape parameter":99.99999999998631
+      },
+     "EFV":[
+      [0.08662789999999999],
+      [0.0193078],
+      [0.0570451],
+      [0.0580589],
+      [0.0384319],
+      [0.0832518],
+      [0.0244313],
+      [0.048466],
+      [0.0620286],
+      [0.08620899999999999],
+      [0.0195027],
+      [0.0390894],
+      [0.0457631],
+      [0.0367281],
+      [0.043972],
+      [0.06951789999999999],
+      [0.0610127],
+      [0.0708956],
+      [0.0143859],
+      [0.0352742]
+      ]
+    }
+  },
+ "MLE":{
+   "headers":[
+    ["MLE", "Relative rate estimate at a site"],
+    ["Lower", "Lower bound of 95% profile likelihood CI"],
+    ["Upper", "Upper bound of 95% profile likelihood CI"]
+    ],
+   "content":{
+     "0":[
+      [1.404463096774708, 0.464206225326107, 3.957212657729317],
+      [1.091566514440568, 0.3315398561013047, 2.749760077004962],
+      [0.4082635092640328, 0.0200885736290168, 4.215253950123277],
+      [2.024596076606552, 0.6172468790102129, 4.865585994720145],
+      [1.300299519664214, 0.3830114124869806, 3.521124432114139],
+      [1.414124850240005, 0.4227770792255021, 3.652843371079889],
+      [0.3790909452156194, 0.0214496194469152, 1.727851535855178],
+      [1.284465378770701, 0.3151946332823393, 3.43435136109147],
+      [0.7536561233266453, 0.123350128541358, 2.435038979299527],
+      [0.8102912361015251, 0.2428634603162154, 2.059903931154174],
+      [0.2492604355422875, 0.01447519768096627, 1.083250354801244],
+      [0.9814535800904459, 0.2243574953378174, 3.145460727465186],
+      [0.5864849915490182, 0.0964712748727129, 1.869225100839564],
+      [1.207547884921467, 0.3469368936437045, 3.445303578434754],
+      [3.045109828288019, 1.13301550530616, 8.929223778665776],
+      [0.4024227111976612, 0.06550207511054897, 1.330674805326482],
+      [0.9093638293933795, 0.2204772081814046, 2.516213654607605],
+      [0.9261379820214177, 0.2795442879432101, 2.35208930240241],
+      [1.334620414431602, 0.4071578214028234, 3.240883783752987],
+      [0.8535977918540208, 0.2531061415482005, 2.303654604028341]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "t8":{
+       "original name":"t8",
+       "WAGF+4Gamma":0
+      },
+     "t9":{
+       "original name":"t9",
+       "WAGF+4Gamma":0
+      },
+     "t6":{
+       "original name":"t6",
+       "WAGF+4Gamma":0.3366480501602711
+      },
+     "t7":{
+       "original name":"t7",
+       "WAGF+4Gamma":0.1085016947520768
+      },
+     "t4":{
+       "original name":"t4",
+       "WAGF+4Gamma":0.05345102263803943
+      },
+     "t5":{
+       "original name":"t5",
+       "WAGF+4Gamma":0.2365446524529256
+      },
+     "t2":{
+       "original name":"t2",
+       "WAGF+4Gamma":0.07324415709187621
+      },
+     "t3":{
+       "original name":"t3",
+       "WAGF+4Gamma":0.2112360708322782
+      },
+     "t1":{
+       "original name":"t1",
+       "WAGF+4Gamma":0.1950594729610595
+      },
+     "t14":{
+       "original name":"t14",
+       "WAGF+4Gamma":0.4141794645420804
+      },
+     "t15":{
+       "original name":"t15",
+       "WAGF+4Gamma":0
+      },
+     "t10":{
+       "original name":"t10",
+       "WAGF+4Gamma":0.1973915061810845
+      },
+     "t11":{
+       "original name":"t11",
+       "WAGF+4Gamma":0.2103998029703581
+      },
+     "t12":{
+       "original name":"t12",
+       "WAGF+4Gamma":0.03702736292046863
+      },
+     "t13":{
+       "original name":"t13",
+       "WAGF+4Gamma":0
+      },
+     "Node10":{
+       "WAGF+4Gamma":0.1788284785383844
+      },
+     "Node13":{
+       "WAGF+4Gamma":0.07210716581930979
+      },
+     "Node16":{
+       "WAGF+4Gamma":0.42278711095528
+      },
+     "Node17":{
+       "WAGF+4Gamma":0.1005555051917793
+      },
+     "Node18":{
+       "WAGF+4Gamma":0.7706534988253305
+      },
+     "Node2":{
+       "WAGF+4Gamma":0
+      },
+     "Node21":{
+       "WAGF+4Gamma":0.6724904279491586
+      },
+     "Node24":{
+       "WAGF+4Gamma":0.1538113150193111
+      },
+     "Node26":{
+       "WAGF+4Gamma":0
+      },
+     "Node3":{
+       "WAGF+4Gamma":0
+      },
+     "Node5":{
+       "WAGF+4Gamma":0
+      },
+     "Node8":{
+       "WAGF+4Gamma":0.1169925329040955
+      }
+    },
+   "attributes":{
+     "original name":{
+       "attribute type":"node label",
+       "display order":-1
+      },
+     "WAGF+4Gamma":{
+       "attribute type":"branch length",
+       "display order":0
+      }
+    }
+  }
+}
