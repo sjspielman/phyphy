@@ -193,9 +193,10 @@ class Analysis(object):
             Format argument to be Yes/No from True/False
         """
         self.yesno_truefalse = {True: "Yes", False: "No"}
+        
         if type(argument) == str:
-            argument.capitalize()
-            assert(argument in list(self.yesno_truefalse.keys())),"\n[ERROR]: Incorrect Yes/No argument."
+            argument = argument.capitalize()
+            assert(argument in list(self.yesno_truefalse.values())),"\n[ERROR]: Incorrect Yes/No argument."
         elif type(argument) is bool:
             argument = self.yesno_truefalse[argument]
         else:
@@ -215,7 +216,6 @@ class Analysis(object):
             self.hyphy_tree      = os.path.abspath(self.tree)
             with open(self.hyphy_tree, "r") as f:
                 self.tree_string = f.read().strip()
-            
         else:
             assert(os.path.exists(self.data)), "\n[ERROR] Provided data not found, check path?"
             self.hyphy_alignment = os.path.abspath(self.data)
@@ -332,7 +332,7 @@ class FEL(Analysis):
         self.batchfile = "FEL.bf"
         self.default_json_path = self.hyphy_alignment + ".FEL.json"
 
-        self.srv   = kwargs.get("srv", "Yes") ## They can provide T/F or Yes/No
+        self.srv   = kwargs.get("srv", True) ## They can provide T/F or Yes/No
         self.srv   = self._format_yesno(self.srv)
         self.alpha = str( kwargs.get("alpha", 0.1) )
 
