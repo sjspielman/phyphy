@@ -709,10 +709,8 @@ class LEISR(Analysis):
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
         self.batchfile = "LEISR.bf"
-        
-        ### THIS HAS BEEN CALLED DIFFERENT NAMES IN DIFFERENT VERSIONS ###
-        ### TODO: Can probably scrap this and we will just only be compatible with >=2.3.7, due to the options changing anyways.
-        self.default_json_path_choices = [self.hyphy_alignment + ".site-rates.json",  self.hyphy_alignment + ".LEISR.json"]
+                
+        self.default_json_path_choices = self.hyphy_alignment + ".LEISR.json"
         self.type_nucleotide = "Nucleotide"
         self.type_protein    = "Protein"
         
@@ -747,7 +745,6 @@ class LEISR(Analysis):
                                            self.model,
                                            self.rv
                                          ])
-
 
     def _save_output(self):
         """
