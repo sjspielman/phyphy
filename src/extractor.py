@@ -33,8 +33,9 @@ class JSONFields():
         self.input_trees          = "trees"
         
         
-        self.analysis_description      = "analysis"
-        self.analysis_description_info = "info"
+        self.analysis_description         = "analysis"
+        self.analysis_description_info    = "info"
+        self.analysis_description_version = "version"
         
         self.substitution_rate    = re.compile(r"Substitution rate from [\w-]+ (\w) to [\w-]+ (\w)")
         
@@ -184,8 +185,13 @@ class Extractor():
             if find_analysis is not None:
                 self.analysis = name
                 break
-        
         assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.4."
+
+        ### LEISR version error out ###
+        version_field = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_version ]
+        assert( str(version_field) != "0.1alpha" ), "\n[ERROR]: LEISR analysis to parse was produced with HyPhy 2.3.6, which is not supported. Please re-analyze with version >=2.3.7 to use with phyphy."
+
+
 
 
     def _count_partitions(self):
