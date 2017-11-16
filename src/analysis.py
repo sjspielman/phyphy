@@ -170,8 +170,8 @@ class Analysis(object):
         assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified."
         if self.genetic_code in list(_GENETIC_CODE.keys()):
             for k,v in _GENETIC_CODE.items():
-                if v == self.genetic_code:
-                    self.genetic_code = str(k)
+                if k == self.genetic_code:
+                    self.genetic_code = str(v)
                     break
         self.genetic_code = self.genetic_code.replace(" ", "\ ") # Sigh.
 
@@ -182,7 +182,8 @@ class Analysis(object):
 
         self.shared_branch_choices = ("All", "Internal", "Leaves", "Unlabeled branches")
         
-        self.available_protein_models = ("JC69", "WAG", "LG", "JTT")
+        ######## 2.3.7 models #######
+        self.available_protein_models = ("JC69", "WAG", "LG", "JTT", "mtMAM", "cpREV", "HIVBm", "HIVWm", "AB")
         self.available_nucleotide_models = ("GTR", "HKY85", "JC69")
     
     
@@ -281,10 +282,10 @@ class Analysis(object):
         """    
         self._build_analysis_command()
         full_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
-
+        
         if self.hyphy.quiet:
-            with open("/dev/null", "w") as quiet:
-                check = subprocess.call(full_command, shell = True, stdout = quiet, stderr = quiet)
+            quiet = open("/dev/null", "w")
+            check = subprocess.call(full_command, shell = True, stdout = quiet, stderr = subprocess.STDOUT)
         else:    
             check = subprocess.call(full_command, shell = True)
         assert(check == 0), "\n[ERROR] HyPhy failed to run."
@@ -382,7 +383,7 @@ class FUBAR(Analysis):
         super(FUBAR, self).__init__(**kwargs)
         
         self.batchfile = "FUBAR.bf"
-        self.default_json_path = self.hyphy_alignment + ".MEME.json"
+        self.default_json_path = self.hyphy_alignment + ".FUBAR.json"
         self.cache             = kwargs.get("cache", None)
 
         self.grid_size         = kwargs.get("grid_size", 20)
@@ -506,7 +507,7 @@ class SLAC(Analysis):
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **alpha**, The p-value threshold for calling sites as positively selected. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
-                6. **bootstrap_samples**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
+                6. **bootstrap**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
         """                
 
         super(SLAC, self).__init__(**kwargs)
@@ -519,7 +520,7 @@ class SLAC(Analysis):
     
         self.alpha = str( kwargs.get("alpha", 0.1) )
     
-        self.bootstrap_samples = kwargs.get("bootstrap_samples", 100)
+        self.bootstrap_samples = kwargs.get("bootstrap", 100)
         self.range_bootstrap_samples = [0,100000]
         assert(self.bootstrap_samples >= self.range_bootstrap_samples[0] and self.bootstrap_samples <= self.range_bootstrap_samples[1]), "\n [ERROR] Number of samples to assess ASR uncertainty must be in range [0,100000]."
         self.bootstrap_samples = str(self.bootstrap_samples)
@@ -560,7 +561,7 @@ class ABSREL(Analysis):
         super(ABSREL, self).__init__(**kwargs)
         
         self.batchfile = "aBSREL.bf"
-        self.default_json_path = self.hyphy_alignment + ".json"
+        self.default_json_path = self.hyphy_alignment + ".ABSREL.json"
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
