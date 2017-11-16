@@ -14,10 +14,6 @@
 import unittest
 import os
 from phyphy import *
-ZERO=1e-8
-DECIMAL=8
-
-#_obtain_original_names
 
 
 
