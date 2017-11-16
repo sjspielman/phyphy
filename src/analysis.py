@@ -413,7 +413,6 @@ class FUBAR(Analysis):
             if self.cache is False:
                 self.cache_path = "/dev/null/"
             else:
-                print "here"
                 dirname = os.path.dirname(os.path.abspath(self.cache))
                 assert( os.path.exists(dirname) ),"\n[ERROR]: Provided path to output cache does not exist."  
                 self.cache_path = self.cache
