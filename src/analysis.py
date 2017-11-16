@@ -292,12 +292,6 @@ class Analysis(object):
         self._save_output()
 
 
-    def return_json(self):
-        """
-            Return **parsed*** JSON to user
-        """
-
-
     def _save_output(self):
         """
             Move JSON to final location. 
