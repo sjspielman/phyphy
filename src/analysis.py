@@ -165,7 +165,6 @@ class Analysis(object):
             dirname = os.path.dirname(os.path.abspath(self.user_json_path))
             assert( os.path.exists(dirname) ),"\n[ERROR]: Provided output path does not exist."
                     
-        ### Unused in AA analyses 
         self.genetic_code = kwargs.get("genetic_code", "Universal")
         assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified."
         if self.genetic_code in list(_GENETIC_CODE.keys()):
@@ -174,12 +173,9 @@ class Analysis(object):
                     self.genetic_code = str(v)
                     break
         self.genetic_code = self.genetic_code.replace(" ", "\ ") # Sigh.
-
         
         
-        ### Will be overriden for SelectionAnalysis methods
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/SelectionAnalyses/"
-
         self.shared_branch_choices = ("All", "Internal", "Leaves", "Unlabeled branches")
         
         ######## 2.3.7 models #######
@@ -210,6 +206,8 @@ class Analysis(object):
             Check provided paths for alignment+tree or data. Assign input hyphy variables accordingly.
             Additionally extract the tree string for use in label finding.
         """
+        
+        assert(self.data is not None or (self.alignment is not None and self.tree is not None)), "\n[ERROR]: You must supply argument `data` (file with alignment and tree) OR arguments `alignment` and `tree` (separate files containing respective contents)."
         if self.alignment is not None:
             assert(os.path.exists(self.alignment)), "\n[ERROR] Provided alignment not found, check path?"
             assert(os.path.exists(self.tree)), "\n[ERROR] A tree must be provided. As needed, check path?"
@@ -236,12 +234,8 @@ class Analysis(object):
                     if find_tree:
                         self.tree_string = find_tree.group(1)
                     else:
-                        raise AssertionError("\n[ERROR] Malformed tree in input data.")
+                        raise AssertionError("\n[ERROR] Malformed or missing tree in input data.")
 
-
-            
-    def _build_command(self):
-        print("Parent method. Not run.")
 
    
     def _sanity_branch_selection(self):
@@ -274,8 +268,12 @@ class Analysis(object):
                 label = ""
             if curly:
                 label += self.tree_string[i]
-        
             
+    def _build_analysis_command(self):
+        print("Parent method. Not run.")
+
+
+           
     def run_analysis(self):
         """
             Call HyPhy as a subprocess to run a given analysis. 
@@ -390,7 +388,7 @@ class FUBAR(Analysis):
         self.nchains           = kwargs.get("nchains", 5)
         self.chain_length      = kwargs.get("chain_length", 2e6)
         self.burnin            = kwargs.get("burnin", 1e6)
-        self.samples_per_chain = kwargs.get("grid_size", 100)
+        self.samples_per_chain = kwargs.get("samples_per_chain", 100)
         self.alpha             = kwargs.get("alpha", 0.5)
         
         self._sanity_fubar()
@@ -406,16 +404,19 @@ class FUBAR(Analysis):
         assert(self.nchains >=2 and self.nchains <=20), "\n[ERROR]: FUBAR nchains must be in range [2,20]."
         assert(self.chain_length >=5e5 and self.chain_length <=5e7), "\n[ERROR]: FUBAR chain length must be in range [5e5,5e7]."
         assert(self.burnin >=ceil(self.chain_length/20) and self.burnin <= ceil(95*self.chain_length/100)), "\n[ERROR]: FUBAR burnin size out of range."
-        assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_lenghth - self.burnin)), "\n[ERROR]: FUBAR samples_per_chain out of range."
+        assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_length - self.burnin)), "\n[ERROR]: FUBAR samples_per_chain out of range."
         assert(self.alpha >=0.001 and self.alpha <= 1), "\n[ERROR]: FUBAR Dirichlet prior parameter alpha must in be in range [0.001,1]."
         
-        self.default_cache_path = self.user_json_path.replace("json", "cache")
-        if self.cache is False:
-            self.cache_path = "/dev/null/"
-        elif type(self.cache) == "str":
-            dirname = os.path.dirname(os.path.abspath(self.cache))
-            assert( os.path.exists(dirname) ),"\n[ERROR]: Provided path to output cache does not exist."  
-            self.cache_path = self.cache
+        self.default_cache_path = self.default_json_path.replace(".json", ".cache")
+        
+        if self.cache is not None:
+            if self.cache is False:
+                self.cache_path = "/dev/null/"
+            else:
+                print "here"
+                dirname = os.path.dirname(os.path.abspath(self.cache))
+                assert( os.path.exists(dirname) ),"\n[ERROR]: Provided path to output cache does not exist."  
+                self.cache_path = self.cache
         else:
             self.cache_path = self.default_cache_path
         
@@ -655,6 +656,7 @@ class RELAX(Analysis):
                 self.reference_label = self.shared_branch_choices[-1]
             else:
                 assert(self.reference_label in self._all_labels), "\n [ERROR] The value for `reference_label` must correspond to a label in your tree. To simply use all non-test branches as reference, do not provide the argument `reference_label`."
+        assert(self.test_label != self.reference_label), "\n[ERROR] Must use different test and reference labels."
 
         self.allowed_types = ("All", "Minimal")
         self.analysis_type = kwargs.get("analysis_type", self.allowed_types[0]).capitalize()
@@ -712,6 +714,7 @@ class LEISR(Analysis):
         self.type = kwargs.get("type", None)
         assert(self.type is not None),"\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive)."
         self.type = self.type.capitalize()
+        assert(self.type == self.type_nucleotide or self.type == self.type_protein), "\n[ERROR]: Must specify either 'nucleotide' or 'protein' for keyword argument `type` (case insensitive)."
         
         self.rv   = kwargs.get("rate_variation", "No").capitalize()
         assert(self.rv in ["No", "Gamma", "Gdd"]), "\n[ERROR] Provided rate variation is unavailable. Use either `No`, `Gamma`, `GDD`."

@@ -18,7 +18,7 @@ To build and install the package as root (globally), enter (from this directory!
 To install for a particular user (locally), enter - 
     python setup.py build
     python setup.py test   # OPTIONAL BUT RECOMMENDED. Please file an issue for any failed tests! 
-    python setup.py build --user # where user is the computer account to install pyolve in
+    python setup.py build --user # where user is the current account
 '''
 
 _VERSION="0.1"
@@ -26,15 +26,15 @@ _VERSION="0.1"
 from setuptools import setup
 setup(name = 'phyphy', 
     version = _VERSION, 
-    description = 'Facilitating the execution and parsing of standard HyPhy analyses',
+    description = 'Facilitating the execution and parsing of standard HyPhy (>=2.3.7) analyses',
     author = 'Stephanie J. Spielman', 
     author_email = 'stephanie.spielman@temple.edu', 
     url = 'https://github.com/sjspielman/phyphy',
     download_url = 'https://github.com/sjspielman/phyphy/tarball/' + _VERSION,
     platforms = 'Tested on Mac OS X.',
     package_dir = {'phyphy':'src'},
-    packages = ['phyphy', 'tests'],
-    package_data = {'tests': ['test_jsons/*', 'test_data/*']},
+    packages = ['phyphy'],
+    package_data = {'tests': ['test_jsons/*']},
     install_requires=['Biopython', 'dendropy>=4.3'],
     test_suite = "tests"
 )

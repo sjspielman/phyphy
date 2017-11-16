@@ -6,10 +6,10 @@
 ##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
 ##############################################################################
 """
-    Unit tests for the extractor.py module.
-    
+    Test suite for phyphy.
     !!!!!!!! TEST SUITE IS PYTHON2.7 COMPATIBLE ONLY !!!!!!!!!!
 """
+
 
 import unittest
 import os
@@ -22,20 +22,19 @@ class test_extractor_init(unittest.TestCase):
     
     def setUp(self):
     
-        self.json_path = "tests/test_json/"
         self.data_path = "tests/test_data/"
     
         self.names = AnalysisNames()    
         
-        self.absrel_json = self.json_path + "ABSREL.json"
-        self.busted_json = self.json_path + "BUSTED.json"
-        self.fel_json = self.json_path + "FEL.json"
-        self.fel_mult_json = self.json_path + "FEL_multipartitions.json"
-        self.fubar_json = self.json_path + "FUBAR.json"
-        self.leisr_json = self.json_path + "NucGamma.LEISR.json"
-        self.leisr_json_depr = self.json_path + "LEISR_deprecated.json"
-        self.meme_json = self.json_path + "MEME.json"
-        self.slac_json = self.json_path + "SLAC.json"
+        self.absrel_json = self.data_path + "ABSREL.json"
+        self.busted_json = self.data_path + "BUSTED.json"
+        self.fel_json = self.data_path + "FEL.json"
+        self.fel_mult_json = self.data_path + "FEL_multipartitions.json"
+        self.fubar_json = self.data_path + "FUBAR.json"
+        self.leisr_json = self.data_path + "NucGamma.LEISR.json"
+        self.leisr_json_depr = self.data_path + "LEISR_deprecated.json"
+        self.meme_json = self.data_path + "MEME.json"
+        self.slac_json = self.data_path + "SLAC.json"
         
         self.fel_input_tree = {0:"((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"}
 
@@ -136,11 +135,11 @@ class test_extractor_extract_reveal(unittest.TestCase):
 
     def setUp(self):
 
-        self.json_path = "tests/test_json/"
         self.data_path = "tests/test_data/"
-        self.fel_json = self.json_path + "FEL.json"
-        self.busted_json = self.json_path + "BUSTED.json"
-        self.fel_mult_json = self.json_path + "FEL_multipartitions.json"
+        self.data_path = self.data_path
+        self.fel_json = self.data_path + "FEL.json"
+        self.busted_json = self.data_path + "BUSTED.json"
+        self.fel_mult_json = self.data_path + "FEL_multipartitions.json"
  
         self.extmodels = ["Nucleotide GTR", "Global MG94xREV"]
         self.fel = Extractor(self.fel_json)
@@ -234,8 +233,6 @@ class test_extractor_extract_reveal(unittest.TestCase):
 
     def test_extract_branch_sets_byset(self):
         self.assertDictEqual(self.fel_branch_sets_byset, self.fel.extract_branch_sets(by_set=True), msg = "Could not extract branch sets by set")
-
-#######     def extract_input_tree(self, partition = None, original_names = False):
  
     def test_extract_input_tree(self):
         self.assertEqual(self.fel_input_tree, self.fel.extract_input_tree(), msg = "Could not extract input tree (single)")
@@ -302,13 +299,12 @@ class test_extractor_csv(unittest.TestCase):
 
     def setUp(self):
 
-        self.json_path = "tests/test_json/"
         self.data_path = "tests/test_data/"
         
     def test_csv_leisr(self):  
         with open(self.data_path + "leisr.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "NucGamma.LEISR.json")
+        ext = Extractor(self.data_path + "NucGamma.LEISR.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -318,7 +314,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_meme(self):  
         with open(self.data_path + "meme.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "MEME.json")
+        ext = Extractor(self.data_path + "MEME.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -328,7 +324,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_fubar(self):  
         with open(self.data_path + "fubar.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "FUBAR.json")
+        ext = Extractor(self.data_path + "FUBAR.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -339,7 +335,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_fel(self):  
         with open(self.data_path + "fel.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "FEL.json")
+        ext = Extractor(self.data_path + "FEL.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -351,7 +347,7 @@ class test_extractor_csv(unittest.TestCase):
 
         with open(self.data_path + "fel_multipartitions.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "FEL_multipartitions.json")
+        ext = Extractor(self.data_path + "FEL_multipartitions.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -362,7 +358,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_absrel1(self):  
         with open(self.data_path + "absrel_hyphy_names.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "ABSREL.json")
+        ext = Extractor(self.data_path + "ABSREL.json")
         ext.extract_csv("test.csv", original_names=False)
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -373,7 +369,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_absrel2(self):  
         with open(self.data_path + "absrel_original_names.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "ABSREL.json")
+        ext = Extractor(self.data_path + "ABSREL.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -385,7 +381,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_slac1(self):  
         with open(self.data_path + "slac_averaged.csv", "r") as f:
             true = str(f.read())    
-        ext = Extractor(self.json_path + "SLAC.json")
+        ext = Extractor(self.data_path + "SLAC.json")
         ext.extract_csv("test.csv", original_names=False)
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -396,7 +392,7 @@ class test_extractor_csv(unittest.TestCase):
     def test_csv_slac2(self):  
         with open(self.data_path + "slac_resolved.csv", "r") as f:
             true = str(f.read())     
-        ext = Extractor(self.json_path + "SLAC.json")
+        ext = Extractor(self.data_path + "SLAC.json")
         ext.extract_csv("test.csv", slac_ancestral_type = "RESOLVED")
         with open("test.csv", "r") as f:
             test = str(f.read())
@@ -407,7 +403,212 @@ class test_extractor_csv(unittest.TestCase):
 
 
 
+class test_analysis(unittest.TestCase):
 
 
+    def setUp(self):
 
+        self.data_path = "tests/test_data/"
+        self.codonfna = self.data_path + "codon.fna"
+        self.codonfasta = self.data_path + "codon.fasta"
+        self.codontree = self.data_path + "test.tre"
+        
+        self.aafna = self.data_path + "aa.fna"
+        
+        self.nexus = self.data_path + "lysin.nex"
+        self.nexus_notree = self.data_path + "lysin_treeless.nex"
+        self.treefromnexus = self.data_path + "lysin.tre"
+        
+    def test_srv(self):
+        x = FEL(data = self.codonfna, srv=False)
+        self.assertTrue(x.srv == "No", msg = "Bad SRV, False")
+        x = FEL(data = self.codonfna, srv=True)
+        self.assertTrue(x.srv == "Yes", msg = "Bad SRV, True")
+        x = FEL(data = self.codonfna, srv="yes")
+        self.assertTrue(x.srv == "Yes", msg = "Bad SRV, yes")    
+        x = FEL(data = self.codonfna, srv="no")
+        self.assertTrue(x.srv == "No", msg = "Bad SRV, no")  
+        
+    def test_branches_good(self):
+        """
+            No error should be thrown
+        """
+        x = FEL(data = self.codonfna, branches="Leaves")
+        x = FEL(data = self.codonfna, branches="All")
+        x = FEL(data = self.codonfna, branches="Internal")
+        x = FEL(data = self.codonfna, branches="steph")
+        x = FEL(data = self.codonfna, branches="stephanie")
+
+    def test_branches_bad(self):
+        kwargs = {"data": self.codonfna, "branches": "badlabel"}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.
+
+    def test_gc_bad(self):
+        kwargs = {"data": self.codonfna, "genetic_code": "notacode"}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.
+
+
+    def test_data_good(self):
+        """
+            No error should be thrown
+        """
+        x = FEL(data = self.codonfna)        
+        x = FEL(data = self.nexus)        
+        x = FEL(alignment = self.codonfasta, tree = self.codontree) 
+        x = FEL(alignment = self.nexus_notree, tree = self.treefromnexus) 
+        
+    def test_data_bad(self):
+        kwargs = {"data": self.codonfasta}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.
+        kwargs = {"alignment": self.codonfasta}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.:
+        kwargs = {"tree": self.codontree}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.
+        kwargs = {"data": self.nexus_notree}
+        self.assertRaises(AssertionError, FEL, **kwargs) ## cant get message, dont know why, moving on.
+
+
+    def test_leisr_type(self):
+        x = LEISR(data = self.codonfna, type = "nucleotide")        
+        x = LEISR(data = self.codonfna, type = "Nucleotide")        
+        x = LEISR(data = self.aafna, type = "Protein")        
+        x = LEISR(data = self.aafna, type = "protein")        
+        
+        kwargs = {"data": self.aafna}
+        self.assertRaises(AssertionError, LEISR, **kwargs) ## cant get message, dont know why, moving on.
+        kwargs = {"data": self.aafna, "type": "badtype"}
+        self.assertRaises(AssertionError, LEISR, **kwargs) ## cant get message, dont know why, moving on.
+
+    def test_leisr_model(self):
+        x = LEISR(data = self.codonfna, type = "nucleotide", model = "GTR")        
+        x = LEISR(data = self.codonfna, type = "nucleotide", model = "HKY85")        
+        x = LEISR(data = self.codonfna, type = "nucleotide", model = "JC69")        
+        x = LEISR(data = self.codonfna, type = "Protein", model = "WAG")        
+        x = LEISR(data = self.codonfna, type = "Protein", model = "LG")        
+
+        kwargs = {"data": self.aafna, "type": "Protein", "model": "GTR"}
+        self.assertRaises(AssertionError, LEISR, **kwargs) 
+        kwargs = {"data": self.aafna, "type": "Nucleotide", "model": "WAG"}
+        self.assertRaises(AssertionError, LEISR, **kwargs) 
+        kwargs = {"data": self.aafna, "type": "Nucleotide", "model": "notamodel"}
+        self.assertRaises(AssertionError, LEISR, **kwargs) 
+        
+    def test_leisr_rv(self):
+        x = LEISR(data = self.codonfna, type = "nucleotide", rate_variation = "Gamma")        
+        x = LEISR(data = self.codonfna, type = "nucleotide", rate_variation = "GDD")        
+        x = LEISR(data = self.codonfna, type = "nucleotide", rate_variation = "gdd")        
+
+        kwargs = {"data": self.codonfna, "type": "Nucleotide", "rate_variation": "notarealrv"}
+        self.assertRaises(AssertionError, LEISR, **kwargs) 
+
+        
+    def test_slac_bootstrap(self):
+        x = SLAC(data = self.codonfna)        
+        self.assertTrue(x.bootstrap_samples == "100", msg = "Bad default SLAC bootstrap")  
+        
+        x = SLAC(data = self.codonfna, bootstrap = 15)        
+        self.assertTrue(x.bootstrap_samples == "15", msg = "Bad SLAC bootstrap")  
+ 
+
+    def test_relax_labels(self):
+        x = RELAX(data = self.codonfna, test_label = "stephanie") ## no error
+        x = RELAX(data = self.codonfna, test_label = "stephanie", reference_label = "steph") ## no error
+
+        kwargs = {"data": self.codonfna, "test_label": "notalabel"}
+        self.assertRaises(AssertionError, RELAX, **kwargs) 
+
+        kwargs = {"data": self.codonfna}
+        self.assertRaises(AssertionError, RELAX, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "reference_label":"stephanie","test_label":"stephanie"}
+        self.assertRaises(AssertionError, RELAX, **kwargs)
+
+
+    def test_relax_type(self):
+        x = RELAX(data = self.codonfna, test_label = "stephanie", analysis_type = "All") ## no error
+        x = RELAX(data = self.codonfna, test_label = "stephanie", analysis_type = "Minimal") ## no error
+
+        kwargs = {"data": self.codonfna, "test_label":"stephanie",  "analysis_type": "notatype"}
+        self.assertRaises(AssertionError, RELAX, **kwargs) 
+        
+    def test_fubar_default(self): 
+
+        x = FUBAR(data = self.codonfna) ## no error
+
+
+    def test_fubar_grid_size(self):    
+        
+        x = FUBAR(data = self.codonfna, grid_size = 15) ## no error
+
+        kwargs = {"data": self.codonfna, "grid_size": 2}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "grid_size": 100}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+
+    def test_fubar_nchains(self):    
             
+        x = FUBAR(data = self.codonfna, nchains = 15) ## no error
+
+        kwargs = {"data": self.codonfna, "nchains": 1}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "nchains": 100}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+    def test_fubar_chain_length(self):    
+            
+        x = FUBAR(data = self.codonfna, chain_length = 4e6) ## no error
+
+        kwargs = {"data": self.codonfna, "chain_length": 1}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "chain_length": 5e10}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+
+    def test_fubar_burnin(self):    
+            
+        x = FUBAR(data = self.codonfna, chain_length = 4e6, burnin = 3e5) ## no error
+
+        kwargs = {"data": self.codonfna, "burnin": 1e6, "chain_length": 10}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "burnin": 9e7, "chain_length": 1e8}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+        
+
+    def test_fubar_samples_per_chain(self):    
+            
+        x = FUBAR(data = self.codonfna, samples_per_chain = 60) ## no error
+
+        kwargs = {"data": self.codonfna, "burnin": 1e6, "chain_length": 3e6, "samples_per_chain": 4e6}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna, "burnin": 1e6, "chain_length": 3e6, "samples_per_chain": 25}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+    
+
+    def test_fubar_alpha(self):    
+            
+        x = FUBAR(data = self.codonfna, alpha = 0.7) ## no error
+
+        kwargs = {"data": self.codonfna, "alpha": 0.000001}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+        kwargs = {"data": self.codonfna,"alpha": 2}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
+
+
+    def test_fubar_cache(self):    
+        
+        cachefile = self.data_path + "cacheymccacheface.cache"
+        x = FUBAR(data = self.codonfna, cache = self.data_path + "cacheymccacheface.cache") ## no error       
+        self.assertTrue(x.cache_path == cachefile, msg = "Bad cache")
+        
+        x = FUBAR(data = self.codonfna, cache = False) ## no error
+        self.assertTrue(x.cache_path == "/dev/null/", msg = "Bad /dev/null cache")
+
+        kwargs = {"data": self.codonfna, "cache": "fake/path/cacheymccacheface.cache"}
+        self.assertRaises(AssertionError, FUBAR, **kwargs) 
