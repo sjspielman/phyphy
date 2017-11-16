@@ -6,9 +6,9 @@
 ##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
 ##############################################################################
 """
-    Unit tests for the phyphy_parser.py module.
+    Unit tests for the extractor.py module.
     
-    !!!!!!!! TEST SUITE IS 2.7 COMPATIBLE ONLY !!!!!!!!!!
+    !!!!!!!! TEST SUITE IS PYTHON2.7 COMPATIBLE ONLY !!!!!!!!!!
 """
 
 import unittest
