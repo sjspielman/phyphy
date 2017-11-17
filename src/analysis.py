@@ -22,7 +22,7 @@ from StringIO import StringIO
 from math import ceil
 
 
-_DEFAULT_PATH = "/usr/local/lib/hyphy/"
+_DEFAULT_LIBPATH = "/usr/local/lib/hyphy/"
 _GENETIC_CODE = {
                   1: "Universal",
                   2: "Vertebrate mtDNA",
@@ -30,85 +30,92 @@ _GENETIC_CODE = {
                   4: "Mold/Protozoan mtDNA",
                   5: "Invertebrate mtDNA",
                   6: "Ciliate Nuclear",
-                  7: "Echinoderm mtDNA",
-                  8: "Euplotid Nuclear",
-                  9: "Alt. Yeast Nuclear",
-                  10: "Ascidian mtDNA",
-                  11: "Flatworm mtDNA",
-                  12: "Blepharisma Nuclear",
-                  13: "Chlorophycean mtDNA",
-                  14: "Trematode mtDNA",
-                  15: "Scenedesmus obliquus mtDNA",
-                  16: "Thraustochytrium mtDNA",
-                  17: "Pterobranchia mtDNA",
-                  18: "SR1 and Gracilibacteria",
-                  19: "Pachysolen Nuclear"
+                  9: "Echinoderm mtDNA",
+                  10: "Euplotid Nuclear",
+                  12: "Alt. Yeast Nuclear",
+                  13: "Ascidian mtDNA",
+                  14: "Flatworm mtDNA",
+                  15: "Blepharisma Nuclear",
+                  16: "Chlorophycean mtDNA",
+                  21: "Trematode mtDNA",
+                  22: "Scenedesmus obliquus mtDNA",
+                  23: "Thraustochytrium mtDNA",
+                  24: "Pterobranchia mtDNA",
+                  25: "SR1 and Gracilibacteria",
+                  26: "Pachysolen Nuclear"
                 }
 
 
 class HyPhy():
     """
-        This class creates a HyPhy instance. Generally this is only a necessary step if any of these applies:
+        This class creates a HyPhy instance. Generally this is only necessary to use if any of these applies:
             + You wish to use a local **build** of HyPhy (not a canonically installed build)
             + You wish to use a local **install** of HyPhy (installed elsewhere from /usr/local)
-            + You wish to use a different HyPhy executable from the default, HYPHYMP
-    
-        Optional keyword arguments to __init__:
-            1. **executable**, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP
-            2. **build_path**, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
-            3. **install_path**, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
-            4. **cpu**, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
-            5. **quiet**, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
-            6. **suppress_log**, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)
+            + You wish to use a different HyPhy executable from the default, which is HYPHYMP
     """
 
     def __init__(self, **kwargs):
+        """
+            Initiliaze a HyPhy() instance.
+        
+            Optional keyword arguments:
+                1. **executable**, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP.
+                2. **build_path**, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
+                3. **install_path**, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
+                4. **cpu**, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
+                5. **quiet**, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
+                6. **suppress_log**, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)
+                7. **mpi_launcher**,  mpi launcher. Default: mpirun. Use this argument if are you specifying `HYPHYMPI` for executable.
+                8. **mpi_options**, options to pass to the mpi launcher. Default: "".
+        """
 
 
-        self.executable    = kwargs.get("executable", "HYPHYMP")
-        self.build_path    = kwargs.get("build_path", None)  
-        self.install_path  = kwargs.get("install_path", None) 
-        self.cpu           = kwargs.get("cpu", None)  ### For use with MP
-        self.mpi           = kwargs.get("mpi", "mpirun") ### environment for mpi
-        self.mpiopts       = kwargs.get("mpiopts", "") ### To pass to mpi environment   
-        self.quiet         = kwargs.get("quiet", False) ### run hyphy quietly
-        self.suppress_log   = kwargs.get("suppress_log", False) ### send messages.log, errors.log to /dev/null
-        
-        
-        
-        ### Sanity checks for a local install ###
+        executable         = kwargs.get("executable", "HYPHYMP")
+        self.build_path    = kwargs.get("build_path", None)         ### path if *built* locally (i.e. make install was NOT RUN)
+        self.install_path  = kwargs.get("install_path", None)       ### path if installed locally (i.e. make install was run to a specified local path)
+        self.cpu           = kwargs.get("cpu", None)                ### For use with MP
+        self.mpi           = kwargs.get("mpi_launcher", "mpirun")   ### launcher for mpi
+        self.mpiopts       = kwargs.get("mpi_options", "")          ### To pass to mpi environment   
+        self.quiet         = kwargs.get("quiet", False)             ### If True, run hyphy quietly (no stdout/err)
+        self.suppress_log  = kwargs.get("suppress_log", False)      ### If True, send messages.log, errors.log to /dev/null
+
+      
+        ### Checks for a local BUILD  ###
         if self.build_path is not None: 
             assert(os.path.exists(self.build_path)), "\n[ERROR] Build path does not exist."
             self.build_path = os.path.abspath(self.build_path) + "/" ## os.path.abspath will strip any trailing "/"
             self.libpath = self.build_path + "res/"
             assert(os.path.exists(self.libpath)), "\n[ERROR]: Build path does not contain a correctly built HyPhy."
-            self.executable = self.build_path + self.executable
+            self.executable = self.build_path + executable
             self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
         
         else: 
-            ## Installed in non-default path
+            ### Checks for a nonstandard (i.e. not in /usr/local/) INSTALL  ###
             if self.install_path is not None:
                 assert(os.path.exists(self.install_path)), "\n[ERROR]: Install path does not exist."
+                self.install_path = os.path.abspath(self.install_path) + "/"
                 self.libpath = self.install_path + "lib/hyphy/"
                 assert(os.path.exists(self.libpath)), "\n[ERROR]: Install path does not contain a correctly built HyPhy."               
-                self.executable = self.build_path + self.executable
+                self.executable = self.install_path + "bin/" + executable
                 self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
             ## Installed in default path
             else:
-                self.libpath = _DEFAULT_PATH
-                self.hyphy_call = deepcopy(self.executable)
-            
+                self.libpath = _DEFAULT_LIBPATH
+                self.executable = executable
+                self.hyphy_call = executable
+        
+        
         ## Ensure executable exists somewhere
         with open("/dev/null", "w") as hushpuppies:
             exit_code = subprocess.call(["which", self.executable], stdout = hushpuppies, stderr = hushpuppies) # If you're reading this, I hope you enjoy reading hushpuppies as much as I enjoyed writing it. --SJS
-            if exit_code == 1:
+            if exit_code != 0:
                 raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed, or in your provided local path.")
         
-        
-        if self.executable == "HYPHYMPI":
-            exit_code = subprocess.call(["which", self.mpi], stdout = hushpuppies, stderr = hushpuppies) 
-            if exit_code == 1:
-                raise AssertionError("\n[ERROR]: Provided MPI environment executable not found. Please ensure it is properly installed and in your PATH.")    
+        if executable == "HYPHYMPI":
+            with open("/dev/null", "w") as hushpuppies:
+                exit_code = subprocess.call(["which", self.mpi], stdout = hushpuppies, stderr = hushpuppies) 
+                if exit_code != 0:
+                    raise AssertionError("\n[ERROR]: MPI launcher not found (the default is `mpirun`).")    
             self.hyphy_call = self.mpi + " " + self.mpiopts + " " + self.hyphy_call
         else:
             if self.cpu is not None:
@@ -166,7 +173,7 @@ class Analysis(object):
             assert( os.path.exists(dirname) ),"\n[ERROR]: Provided output path does not exist."
                     
         self.genetic_code = kwargs.get("genetic_code", "Universal")
-        assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified."
+        assert(self.genetic_code in list(_GENETIC_CODE.values()) or self.genetic_code in list(_GENETIC_CODE.keys())), "\n[ERROR] Incorrect genetic code specified. Consult NCBI for options: https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi. \nNOTE that HyPhy supports only options up to and including 26."
         if self.genetic_code in list(_GENETIC_CODE.keys()):
             for k,v in _GENETIC_CODE.items():
                 if k == self.genetic_code:
@@ -273,22 +280,36 @@ class Analysis(object):
         print("Parent method. Not run.")
 
 
-           
-    def run_analysis(self):
+    def _build_full_command(self):
         """
-            Call HyPhy as a subprocess to run a given analysis. 
+            Construct full command to execute analysis.
         """    
         self._build_analysis_command()
-        full_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
-        
+        self.run_command = " ".join([self.hyphy.hyphy_call, self.analysis_command])
+
+
+    def _execute(self):
+        """
+            Execute HyPhy
+        """
+
         if self.hyphy.quiet:
             quiet = open("/dev/null", "w")
-            check = subprocess.call(full_command, shell = True, stdout = quiet, stderr = subprocess.STDOUT)
+            check = subprocess.call(self.run_command, shell = True, stdout = quiet, stderr = subprocess.STDOUT)
         else:    
-            check = subprocess.call(full_command, shell = True)
+            check = subprocess.call(self.run_command, shell = True)
         assert(check == 0), "\n[ERROR] HyPhy failed to run."
 
-        self._save_output()
+
+    def run_analysis(self):
+        """
+            Execute HyPhy Analysis and save output.
+        """
+        self._execute()
+        self._save_output() 
+
+
+
 
 
     def _save_output(self):
@@ -314,7 +335,7 @@ class FEL(Analysis):
             Optional keyword arguments:
                 1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
                 2. **srv**, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values "Yes"/"No" or True/False accepted. Default: True.
-                3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -331,7 +352,7 @@ class FEL(Analysis):
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
-        
+        self._build_full_command()
 
         
     def _build_analysis_command(self):
@@ -392,7 +413,7 @@ class FUBAR(Analysis):
         self.alpha             = kwargs.get("alpha", 0.5)
         
         self._sanity_fubar()
-    
+        self._build_full_command()
     
     
     
@@ -477,7 +498,7 @@ class MEME(Analysis):
         
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
-    
+        self._build_full_command()
         
     def _build_analysis_command(self):
         """
@@ -524,7 +545,7 @@ class SLAC(Analysis):
         self.range_bootstrap_samples = [0,100000]
         assert(self.bootstrap_samples >= self.range_bootstrap_samples[0] and self.bootstrap_samples <= self.range_bootstrap_samples[1]), "\n [ERROR] Number of samples to assess ASR uncertainty must be in range [0,100000]."
         self.bootstrap_samples = str(self.bootstrap_samples)
-        
+        self._build_full_command()
         
     def _build_analysis_command(self):
         """
@@ -565,6 +586,7 @@ class ABSREL(Analysis):
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection()
+        self._build_full_command()
 
     def _build_analysis_command(self):
         """
@@ -602,7 +624,7 @@ class BUSTED(Analysis):
 
         self.branches = kwargs.get("branches", "All")
         self._sanity_branch_selection() 
-
+        self._build_full_command()
 
     def _build_analysis_command(self):
         """
@@ -660,7 +682,7 @@ class RELAX(Analysis):
         self.allowed_types = ("All", "Minimal")
         self.analysis_type = kwargs.get("analysis_type", self.allowed_types[0]).capitalize()
         assert(self.analysis_type in self.allowed_types), "\n[ERROR] Incorrect analysis type specified. Provide either `All` or `Minimal`."
-
+        self._build_full_command()
 
     def _build_analysis_command(self):
         """
@@ -727,7 +749,8 @@ class LEISR(Analysis):
         elif self.type == self.type_protein:
             self.model = kwargs.get("model", "JC69")
             assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
-                      
+        
+        self._build_full_command()    
          
     def _build_analysis_command(self):
         """
