@@ -743,25 +743,6 @@ class LEISR(Analysis):
                                            self.rv
                                          ])
 
-    def _save_output(self):
-        """
-            Move JSON to final location.
-            This is an override b/c diff default jsons have existed across versions 
-        """        
-        ##
-        self.default_json_path = None
-        for choice in self.default_json_path_choices:
-            if os.path.exists(choice):
-                self.default_json_path = choice
-                break
-        assert(self.default_json_path is not None), "\n[ERROR]: Could not find the default output JSON from LEISR analysis."
-        
-        if self.user_json_path is not None:       
-            self.final_path = self.user_json_path
-        else:
-            self.final_path = self.default_json_path   
-        shutil.move(self.default_json_path, self.final_path)
-
     
 
         
