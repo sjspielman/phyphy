@@ -12,6 +12,13 @@
     Execute a standard HyPhy analysis.
 """
     
+import sys
+if __name__ == "__main__":
+    print("\nThis is the Analysis module in `phyphy`. Please consult docs for `phyphy` usage." )
+    sys.exit()
+
+
+
 import subprocess
 import os
 import shutil
@@ -767,6 +774,7 @@ class LEISR(Analysis):
                                          ])
 
     
+
 
         
         

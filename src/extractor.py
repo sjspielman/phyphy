@@ -9,6 +9,11 @@
     Parse (Extract!) JSON output from a standard HyPhy analysis.
 """
 
+import sys
+if __name__ == "__main__":
+    print("\nThis is the Extractor module in `phyphy`. Please consult docs for `phyphy` usage." )
+    sys.exit()
+    
 import os
 import re
 import json
@@ -896,3 +901,8 @@ class Extractor():
         return ev_ratios
     ###################################################################################################################
     
+
+
+
+
+
