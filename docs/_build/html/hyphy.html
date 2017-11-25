@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>hyphy Module &#8212; phyphy  documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="analysis Module" href="analysis.html" />
+    <link rel="prev" title="Python modules in phyphy" href="modules.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          phyphy</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python modules in <cite>phyphy</cite></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">hyphy</span></code> Module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="modules.html" title="Previous Chapter: Python modules in phyphy"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Python module...</span>
+    </a>
+  </li>
+  <li>
+    <a href="analysis.html" title="Next Chapter: analysis Module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">analysis Module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/hyphy.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-hyphy">
+<span id="hyphy-module"></span><h1><code class="docutils literal"><span class="pre">hyphy</span></code> Module<a class="headerlink" href="#module-hyphy" title="Permalink to this headline">¶</a></h1>
+<p>Define a custom HyPhy build/install.</p>
+<dl class="class">
+<dt id="hyphy.HyPhy">
+<em class="property">class </em><code class="descclassname">hyphy.</code><code class="descname">HyPhy</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hyphy.HyPhy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>This class creates a HyPhy instance. Generally this is only necessary to use if any of these applies:</dt>
+<dd><ul class="first last simple">
+<li>You wish to use a local <strong>build</strong> of HyPhy (not a canonically installed build)</li>
+<li>You wish to use a local <strong>install</strong> of HyPhy (installed elsewhere from /usr/local)</li>
+<li>You wish to use a different HyPhy executable from the default, which is HYPHYMP</li>
+</ul>
+</dd>
+</dl>
+<p>Initiliaze a HyPhy() instance.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>executable</strong>, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP.</li>
+<li><strong>build_path</strong>, the path to a <strong>local hyphy build</strong>. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and <strong>did not run make install</strong></li>
+<li><strong>install_path</strong>, the path to a <strong>hyphy install</strong>. Use this argument if you have specified a different installation path for hyphy, i.e. you provided <cite>-DINSTALL_PREFIX=/other/path/</cite> to cmake.</li>
+<li><strong>cpu</strong>, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.</li>
+<li><strong>quiet</strong>, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False</li>
+<li><strong>suppress_log</strong>, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)</li>
+<li><strong>mpi_launcher</strong>,  mpi launcher. Default: mpirun. Use this argument if are you specifying <cite>HYPHYMPI</cite> for executable.</li>
+<li><strong>mpi_options</strong>, options to pass to the mpi launcher. Default: “”.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Stephanie J. Spielman.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
