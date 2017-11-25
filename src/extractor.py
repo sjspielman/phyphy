@@ -201,9 +201,14 @@ class Extractor():
     def _determine_analysis_from_json(self):
         """
             Private method: Determine the relevant analysis name directly from the JSON description field.
+            
+            NOTE: IN 2.3.7, RELAX IS MISSING THE FIELD. BUT ONLY RELAX.
         """
 
-        json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
+        try:
+            json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
+        except KeyError:
+            json_info = "RELAX" ####### HACK FOR 2.3.7
         
         for name in self.allowed_analyses:
             find_analysis = re.search(name.upper(), json_info)
@@ -213,8 +218,9 @@ class Extractor():
         assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.4."
 
         ### LEISR version error out ###
-        version_field = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_version ]
-        assert( str(version_field) != "0.1alpha" ), "\n[ERROR]: LEISR analysis to parse was produced with HyPhy 2.3.6, which is not supported. Please re-analyze with version >=2.3.7 to use with phyphy."
+        if self.analysis == self.analysis_names.leisr:
+            version_field = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_version ]
+            assert( str(version_field) != "0.1alpha" ), "\n[ERROR]: LEISR analysis to parse was produced with HyPhy 2.3.6, which is not supported. Please re-analyze with version >=2.3.7 to use with phyphy."
 
 
 
@@ -783,6 +789,8 @@ class Extractor():
         """
         
         ### Sanity checks
+        assert(self.analysis == self.analysis_names.absrel), "\n [ERROR]: The method .map_absrel_selection() can only be used with an aBSREL json."
+        
         if labels is None:
             self.selected_labels = ("1", "0")
         else:

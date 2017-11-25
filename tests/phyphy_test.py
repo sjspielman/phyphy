@@ -35,6 +35,7 @@ class test_extractor_init(unittest.TestCase):
         self.leisr_json_depr = self.data_path + "LEISR_deprecated.json"
         self.meme_json = self.data_path + "MEME.json"
         self.slac_json = self.data_path + "SLAC.json"
+        self.relax_json = self.data_path + "RELAX.json"
         
         self.fel_input_tree = {0:"((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);"}
 
@@ -77,6 +78,9 @@ class test_extractor_init(unittest.TestCase):
         p = Extractor(self.slac_json)
         self.assertEqual(p.analysis,self.names.slac, msg = "Could not identify a SLAC json")
             
+    def test_determine_analysis_from_json_relax(self):
+        p = Extractor(self.relax_json)
+        self.assertEqual(p.analysis,self.names.relax, msg = "Could not identify a RELAX json")            
     ######################################################################################
 
 
