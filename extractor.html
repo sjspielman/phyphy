@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>extractor Module &#8212; phyphy  documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="analysis Module" href="analysis.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          phyphy</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python modules in <cite>phyphy</cite></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">extractor</span></code> Module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="analysis.html" title="Previous Chapter: analysis Module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; analysis Module</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/extractor.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-extractor">
+<span id="extractor-module"></span><h1><code class="docutils literal"><span class="pre">extractor</span></code> Module<a class="headerlink" href="#module-extractor" title="Permalink to this headline">¶</a></h1>
+<p>Parse (Extract!) JSON output from a standard HyPhy analysis.</p>
+<dl class="class">
+<dt id="extractor.JSONFields">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">JSONFields</code><a class="headerlink" href="#extractor.JSONFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the strings of relevant JSON keys. 
+Note that these strings correspond precisely to those in the HyPhy distribution. See file: <cite>TemplateBatchFiles/libv3/all-terms.bf</cite> in the <cite>terms.json</cite> namespace.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.AnalysisNames">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">AnalysisNames</code><a class="headerlink" href="#extractor.AnalysisNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the names of analyses which we can parse.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.Genetics">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">Genetics</code><a class="headerlink" href="#extractor.Genetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to define codes used. 
+Primarily (only?) used to extract frequencies as dictionaries.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.Extractor">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">Extractor</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class parses JSON output and contains a variety of methods for pulling out various pieces of information.</p>
+<p>Initialize a Extractor instance.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><dl class="first docutils">
+<dt><strong>content</strong>, The input content to parse. Two types of input may be provided here, EITHER:</dt>
+<dd><ul class="first last">
+<li>The path to a JSON file to parse, provided as a string</li>
+<li>A phyphy <cite>Analysis</cite> (i.e. <cite>BUSTED</cite>, <cite>SLAC</cite>, <cite>FEL</cite>, etc.) object which has been used to execute a HyPhy analysis through the phyphy interface</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+<p>Examples:
+.. code-block:: python</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an Extractor instance with a JSON file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/json.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an Extractor instance with an Analysis object </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">### First, define and run an analysis (FEL, for example)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data.fna&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">myfel</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="extractor.Extractor.reveal_model_names">
+<code class="descname">reveal_model_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_model_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reveal a list of all model names in the <cite>fits</cite> JSON field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_component">
+<code class="descname">extract_model_component</code><span class="sig-paren">(</span><em>model_name</em>, <em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a model component for a given model name found in the <cite>fits</cite> JSON field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+<li><strong>component</strong>, the component of the model to return.</li>
+</ol>
+</dd>
+<dt>Note there are a variety of convenience methods which wrap this function to extract all components (note that not all analyses will have all of these components):</dt>
+<dd><ul class="first last simple">
+<li>.extract_model_logl(model_name) returns the log likelihood of a given model fit</li>
+<li>.extract_model_estimated_parameters(model_name) returns the number of estimated parameters in a given model fit</li>
+<li>.extract_model_aicc(model_name) returns the small-sample AIC (AIC-c) for a given model fit</li>
+<li>.extract_model_rate_distributions(model_name) returns rate distributions for a given model fit</li>
+<li>.extract_model_frequencies(model_name) returns the equilibrium frequencies for the given model fit</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_logl">
+<code class="descname">extract_model_logl</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_logl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return log likelihood (as a float) for a given model that appears in the the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_estimated_parameters">
+<code class="descname">extract_model_estimated_parameters</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_estimated_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return estimated parameters (as an int) for a given model that appears in the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_aicc">
+<code class="descname">extract_model_aicc</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_aicc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return AICc (as a float) for a given model that appears in the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_rate_distributions">
+<code class="descname">extract_model_rate_distributions</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_rate_distributions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rate distributions, as a reformatted dictionary, for a given model that appears in the <cite>fits</cite> field.            
+NOTE: Currently assumes dS = 1 for all initial MG94xREV fits, as in the current HyPhy implementation (True in &lt;=2.3.4).</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_frequencies">
+<code class="descname">extract_model_frequencies</code><span class="sig-paren">(</span><em>model_name</em>, <em>as_dict=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_frequencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of equilibrium frequencies (in alphabetical order) for a given model that appears in the field <cite>fits</cite>.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>as_dict</strong>, Boolean to indicate if the frequencies should be returned as a dictionary. Default: False.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_branch_sets">
+<code class="descname">extract_branch_sets</code><span class="sig-paren">(</span><em>by_set=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_branch_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return branch set designations as a dictionary for all nodes. 
+By default, this function will return the branch sets “as is” is the JSON field <cite>tested</cite>, where keys are node and values are the branch set to which the given node belongs
+NOTE: Assumes that all partitions share the same branch sets.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>by_set</strong>, Boolean to indicate if the returned dictionary should use <em>branch sets</em> as keys, and values are a <em>list</em> of nodes in that branch set. Default: False.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.reveal_branch_attributes">
+<code class="descname">reveal_branch_attributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_branch_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of all the attributes in the <cite>branch attributes</cite> field and their attribute type (node label or branch label).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_input_tree">
+<code class="descname">extract_input_tree</code><span class="sig-paren">(</span><em>partition=None</em>, <em>original_names=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
+For analyses with a single partition OR for a request for a specific partition’s tree, returns a string.
+For analyses with multiple partitions (and hence multiple trees), returns a <em>dictionary</em> of trees.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, Boolean (Default: False) if should update with original names before returning</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_branch_attribute">
+<code class="descname">extract_branch_attribute</code><span class="sig-paren">(</span><em>attribute_name</em>, <em>partition=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_branch_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary of attributes for given attribute, where keys are nodes and values are attributes.
+If there are multiple partitions, default returns a dictionary with all partitions. 
+If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.</p>
+<p>Importantly, the values for all returned dictionaries will be <strong>strings</strong>, except for the extraction of rate distributions .</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>attribute_name</strong>, the name of the attribute to obtain. Attribute names available can be revealed with the method <cite>.reveal_branch_attributes()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.map_branch_attribute">
+<code class="descname">map_branch_attribute</code><span class="sig-paren">(</span><em>attribute_name</em>, <em>partition=None</em>, <em>original_names=False</em>, <em>as_label=False</em>, <em>update_branch_lengths=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.map_branch_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the newick phylogeny with specified attribute mapped into the phylogeny.
+If there are multiple partitions, default returns a dictionary of mapped trees for all partitions. 
+If partition is specified, only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>attribute_name</strong>, the name of the attribute to obtain. Attribute names available can be revealed with the method <cite>.reveal_branch_attributes()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+<li><strong>as_label</strong>, attributes should be added as labels onto the tree, as opposed to replacing the branch lengths. <strong>This means that tips will have no information</strong>  Default: False</li>
+<li><strong>update_branch_lengths</strong>, string model name, indicting that branch lengths should be replaced with the given model fit’s optimized lengths. Default: None. Note that this argument is ONLY USED when as_label = True.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_tree">
+<code class="descname">extract_model_tree</code><span class="sig-paren">(</span><em>model</em>, <em>partition=None</em>, <em>original_names=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return newick phylogeny fitted to a certain model, i.e. with branch lengths optimized for specified model.
+This is just a special case of map_branch_attribute.</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model</strong>, the name of the model whose optimized tree you wish to obtain. Models names available can be revealed with the method <cite>.reveal_model_names()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.map_absrel_selection">
+<code class="descname">map_absrel_selection</code><span class="sig-paren">(</span><em>original_names=False</em>, <em>update_branch_lengths=None</em>, <em>p=0.05</em>, <em>labels=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.map_absrel_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return newick phylogeny with <em>node labels</em> as selection <em>indicators</em> (Default is 0 for not selected, 1 for selected, at the specified p). aBSREL only.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+<li><strong>update_branch_lengths</strong>, string model name, indicting that branch lengths should be replaced with the given model fit’s optimized lengths. Default: None.</li>
+<li><strong>p</strong>, the p-value threshold for calling selection. Default: 0.05</li>
+<li><strong>labels</strong>: A tuple of labels to use for (selected, not selected). Default is (1,0)</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.reveal_fields">
+<code class="descname">reveal_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of top-level JSON fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_csv">
+<code class="descname">extract_csv</code><span class="sig-paren">(</span><em>csv</em>, <em>delim='</em>, <em>'</em>, <em>original_names=True</em>, <em>slac_ancestral_type='AVERAGED'</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_csv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Extract a CSV from JSON, for certain methods:</dt>
+<dd><ul class="first last simple">
+<li>FEL</li>
+<li>SLAC</li>
+<li>MEME</li>
+<li>FUBAR</li>
+<li>LEISR</li>
+<li>aBSREL</li>
+</ul>
+</dd>
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>csv</strong>, File name for output CSV</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>delim</strong>, A different delimitor for the output, e.g. ”      ” for tab</li>
+<li><strong>original_names</strong>, An <em>ABSREL</em> specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True</li>
+<li><strong>slac_ancestral_type</strong>, A <em>SLAC</em> specific argument, either “AVERAGED” (Default) or “RESOLVED” (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_timers">
+<code class="descname">extract_timers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_timers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract dictionary of timers, with display order removed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_site_logl">
+<code class="descname">extract_site_logl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_site_logl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract BUSTED site log likelihoods, as dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_evidence_ratios">
+<code class="descname">extract_evidence_ratios</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_evidence_ratios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract BUSTED ERs, as dictionary</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Stephanie J. Spielman.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

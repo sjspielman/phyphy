@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>analysis Module &#8212; phyphy  documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="extractor Module" href="extractor.html" />
+    <link rel="prev" title="hyphy Module" href="hyphy.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          phyphy</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python modules in <cite>phyphy</cite></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">analysis</span></code> Module</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="hyphy.html" title="Previous Chapter: hyphy Module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; hyphy Module</span>
+    </a>
+  </li>
+  <li>
+    <a href="extractor.html" title="Next Chapter: extractor Module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">extractor Module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/analysis.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-analysis">
+<span id="analysis-module"></span><h1><code class="docutils literal"><span class="pre">analysis</span></code> Module<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h1>
+<p>Execute a standard HyPhy analysis.</p>
+<dl class="class">
+<dt id="analysis.Analysis">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">Analysis</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Parent class for all analysis methods, which include the following children:</p>
+<ul class="simple">
+<li>ABSREL</li>
+<li>BUSTED</li>
+<li>FEL</li>
+<li>FUBAR</li>
+<li>LEISR</li>
+<li>MEME</li>
+<li>RELAX</li>
+<li>SLAC</li>
+</ul>
+<p>Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.</p>
+<dl class="method">
+<dt id="analysis.Analysis.run_analysis">
+<code class="descname">run_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Analysis.run_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an Analysis and save output.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a default FEL analysis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>         
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.FEL">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">FEL</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.FEL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<p>Initialize and execute a FEL analysis.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a <cite>HyPhy()</cite> instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>srv</strong>, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values “Yes”/”No” or True/False accepted. Default: True.</li>
+<li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> in your tree are accepted</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FEL analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FEL analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a specified path to output JSON</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;/path/to/json/output.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">srv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define FEL analysis, specifying only to use internal branches to test for selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined FEL instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.FUBAR">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">FUBAR</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.FUBAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<p>Initialize and execute a FUBAR analysis.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a <cite>HyPhy()</cite> instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data.</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>grid_size</strong>, Number of grid points per rate grid dimension (Default: 20, allowed [5,50])</li>
+<li><strong>nchains</strong>, Number of MCMC chains to run (Default: 5, allowed [2,20])</li>
+<li><strong>chain_length</strong>, The length of each chain (Default: 2e6, allowed [5e5,5e7])</li>
+<li><strong>burnin</strong>, Number of samples to consider as burn-in (Default 1e6, allowed [ceil(chain_length/20),ceil(95*chain_length/100)])</li>
+<li><strong>samples_per_chain</strong>, Number of samples to draw per chain (Default 100, allowed [50,chain_length-burnin])</li>
+<li><strong>alpha</strong>, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])</li>
+<li><strong>cache</strong>, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument <strong>False</strong> to not save the cache (this argument simply sends it to /dev/null)</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a specified path to output JSON</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;/path/to/json/output.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">srv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define FEL analysis, specifying only to use internal branches to test for selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined FUBAR instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.MEME">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">MEME</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.MEME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively selected. Default: 0.1</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.SLAC">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">SLAC</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.SLAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively selected. Default: 0.1</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>bootstrap</strong>, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.ABSREL">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">ABSREL</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.ABSREL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.BUSTED">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">BUSTED</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.BUSTED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.RELAX">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">RELAX</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.RELAX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>test_label</strong>, The label (must be found in your tree) corresponding to the <strong>test</strong> branch set</li>
+<li><strong>reference_label</strong>, The label f(must be found in your tree) corresponding to the <strong>reference</strong> branch set. <strong>Only provide this argument if your tree has multiple labels in it.</strong></li>
+<li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
+<li><strong>analysis_type</strong>, “All” (run hypothesis test and fit descriptive models) or “Minimal” (only run hypothesis test). Default: “All”.</li>
+<li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.LEISR">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">LEISR</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.LEISR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#analysis.Analysis" title="analysis.Analysis"><code class="xref py py-class docutils literal"><span class="pre">analysis.Analysis</span></code></a></p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>type</strong>, either “nucleotide” or “protein” indicating the type of data being analyzed</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>model</strong>, The model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, mtMAM, and JC69 for Protein (Default JC69).</li>
+<li><strong>rate_variation</strong>, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD (Default No). Note that Gamma and GDD will use four categories each.</li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Stephanie J. Spielman.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
