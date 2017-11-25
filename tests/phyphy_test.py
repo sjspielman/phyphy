@@ -603,7 +603,7 @@ class test_analysis(unittest.TestCase):
 
     def test_fubar_cache(self):    
         
-        cachefile = self.data_path + "cacheymccacheface.cache"
+        cachefile = self.data_path + "cacheymccacheface.cache" ## Boaty McBoatface get it! I have fun.
         x = FUBAR(data = self.codonfna, cache = self.data_path + "cacheymccacheface.cache") ## no error       
         self.assertTrue(x.cache_path == cachefile, msg = "Bad cache")
         
