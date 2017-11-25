@@ -23,7 +23,6 @@ Future functionality will allow users to define and fit custom HyPhy models.
 + RELAX
 + SLAC
 
-Note that the forthcoming `2.3.7` release lives in the `beta` branch in [the HyPhy repository](https://github.com/veg/hyphy).
 
 ## Get help
 
@@ -46,7 +45,7 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 1. Download the master branch and `cd` in. 
 2. **Build** the package with `python setup.py build` (with a `sudo` as needed)
 3. Optionally, run tests with `python setup.py test`  (with a `sudo` as needed). 
-	+ NOTE: the test suite is `python2.7` compatible only (do not attempt with a `python3` interpretter, or tests will fail). 
+	+ NOTE: the test suite is `python2.7` compatible only (do not attempt with a `python3` interpretter, or some tests will fail). 
 4. **Install** per your own adventure:
 	> To specify a different install directory, add the argument `--prefix=/path/to/my/favorite/directory` to the install line.
 
@@ -56,6 +55,7 @@ Until release, you must download `phyphy` from source, with the usual `setuptool
 
 ## Sparknotes usage
 
+Coming soon!
 
 
 <!--
