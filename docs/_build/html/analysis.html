@@ -170,11 +170,11 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a <cite>HyPhy()</cite> instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>srv</strong>, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values “Yes”/”No” or True/False accepted. Default: True.</li>
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> in your tree are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
-<li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
 </ol>
 </dd>
@@ -219,7 +219,7 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a <cite>HyPhy()</cite> instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data.</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
 <li><strong>grid_size</strong>, Number of grid points per rate grid dimension (Default: 20, allowed [5,50])</li>
@@ -238,23 +238,11 @@
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where alignment and tree are in separate files </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a specified path to output JSON</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;/path/to/json/output.json&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">srv</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define FEL analysis, specifying only to use internal branches to test for selection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined FUBAR instance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -271,10 +259,10 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
-<li><strong>alpha</strong>, The p-value threshold for calling sites as positively selected. Default: 0.1</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
 </ol>
 </dd>
@@ -293,10 +281,10 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
-<li><strong>alpha</strong>, The p-value threshold for calling sites as positively selected. Default: 0.1</li>
+<li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
 <li><strong>bootstrap</strong>, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.</li>
 </ol>
@@ -316,7 +304,7 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
@@ -337,7 +325,7 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
@@ -358,7 +346,7 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>test_label</strong>, The label (must be found in your tree) corresponding to the <strong>test</strong> branch set</li>
 <li><strong>reference_label</strong>, The label f(must be found in your tree) corresponding to the <strong>reference</strong> branch set. <strong>Only provide this argument if your tree has multiple labels in it.</strong></li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
@@ -382,9 +370,9 @@
 </dd>
 <dt>Optional keyword arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>hyphy</strong>, a HyPhy() instance. Default: Assumes canonical HyPhy install.</li>
-<li><strong>model</strong>, The model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, mtMAM, and JC69 for Protein (Default JC69).</li>
-<li><strong>rate_variation</strong>, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD (Default No). Note that Gamma and GDD will use four categories each.</li>
+<li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
+<li><strong>model</strong>, The model to use to fit relative rates, i.e. GTR for nucleotides or LG for amino acids. For full options, please see HyPhy. Default: JC69.</li>
+<li><strong>rate_variation</strong>, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD. Note that Gamma and GDD will use four categories each. Default: No</li>
 </ol>
 </dd>
 </dl>

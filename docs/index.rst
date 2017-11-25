@@ -3,14 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to phyphy's documentation!
+phyphy documentation
 ===================================
 
-TEXT TEXT TEXT 
+`phyphy <http://github.com/sjspielman/phyphy>`_ is a Python package for facilitating `HyPhy <http://hyphy.org/>`_ analysis execution and parsing. Phyphy is compatible with HyPhy version >= 2.3.7. 
 
 --------------------------
 
-phyphy is freely available under a TBD license. The easiest way to install phyphy is using `pip` or `easy_install`:
+phyphy is freely available under a FreeBSD license. The easiest way to install phyphy is using `pip` or `easy_install`:
 
 .. code-block:: bash
 
@@ -61,8 +61,8 @@ Citation
 Forthcoming
 
 
-Contents
------------
+API Documentation
+---------------------
 
 .. toctree::
    :maxdepth: 2

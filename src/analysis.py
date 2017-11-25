@@ -259,11 +259,11 @@ class FEL(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a `HyPhy()` instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **srv**, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values "Yes"/"No" or True/False accepted. Default: True.
                 3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
-                5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1
+                5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
 
 
@@ -335,7 +335,7 @@ class FUBAR(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a `HyPhy()` instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data. 
                 3. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 4. **grid_size**, Number of grid points per rate grid dimension (Default: 20, allowed [5,50])
@@ -353,20 +353,10 @@ class FUBAR(Analysis):
                >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat")
 
                >>> ### Define a default FUBAR analysis, where alignment and tree are in separate files 
-               >>> myfel = FUBAR(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
-
-               >>> ### Define a FEL analysis, with a specified path to output JSON
-               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", output="/path/to/json/output.json")
-               
-               >>> ### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) 
-               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", srv=False)
-
-               >>> ### Define FEL analysis, specifying only to use internal branches to test for selection
-               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", branches="Internal")
+               >>> myfubar = FUBAR(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
                >>> ### Execute a defined FUBAR instance
-               >>> myfel.run_analysis()
-
+               >>> myfubar.run_analysis()
 
         """                
 
@@ -455,10 +445,10 @@ class MEME(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
-                4. **alpha**, The p-value threshold for calling sites as positively selected. Default: 0.1
+                4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
         """                
 
@@ -496,10 +486,10 @@ class SLAC(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
-                4. **alpha**, The p-value threshold for calling sites as positively selected. Default: 0.1
+                4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 6. **bootstrap**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
         """                
@@ -546,7 +536,7 @@ class ABSREL(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -584,7 +574,7 @@ class BUSTED(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -623,7 +613,7 @@ class RELAX(Analysis):
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **test_label**, The label (must be found in your tree) corresponding to the **test** branch set
                 3. **reference_label**, The label f(must be found in your tree) corresponding to the **reference** branch set. **Only provide this argument if your tree has multiple labels in it.**
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
@@ -691,9 +681,9 @@ class LEISR(Analysis):
                 2. **type**, either "nucleotide" or "protein" indicating the type of data being analyzed
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **model**, The model to use to fit relative rates. Options include GTR, HKY85, or JC69 for Nucleotide (Default GTR), and LG, WAG, JTT, mtMAM, and JC69 for Protein (Default JC69).
-                3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD (Default No). Note that Gamma and GDD will use four categories each.
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
+                2. **model**, The model to use to fit relative rates, i.e. GTR for nucleotides or LG for amino acids. For full options, please see HyPhy. Default: JC69.
+                3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD. Note that Gamma and GDD will use four categories each. Default: No
             
          """                
         super(LEISR, self).__init__(**kwargs)
