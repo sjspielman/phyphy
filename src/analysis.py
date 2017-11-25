@@ -451,12 +451,12 @@ class FUBAR(Analysis):
                                            self.genetic_code ,
                                            self.hyphy_alignment ,
                                            self.hyphy_tree ,
-                                           self.grid_size,
-                                           self.nchains, 
-                                           self.chain_length,
-                                           self.burnin,
-                                           self.samples_per_chain,
-                                           self.alpha ])
+                                           str(self.grid_size),
+                                           str(self.nchains), 
+                                           str(self.chain_length),
+                                           str(self.burnin),
+                                           str(self.samples_per_chain),
+                                           str(self.alpha) ])
 
 
         

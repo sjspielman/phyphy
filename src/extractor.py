@@ -13,6 +13,7 @@ import os
 import re
 import json
 import dendropy
+import pprint
 from .analysis import *
 from copy import deepcopy
 
@@ -80,7 +81,11 @@ class JSONFields():
         self.display_order = "display order"
         
         self.slac_by_site = "by-site"
-
+        
+        
+        ########## BELOW ARE FIELDS WHICH I ADD IN PHYPHY, NOT FOUND IN HYPHY ITSELF ###############
+        self.selected = "Selected"
+        self.phyphy_label = "phyphy label"
         
 
 
@@ -90,6 +95,7 @@ class AnalysisNames():
     """
         This class defines the names of analyses which we can parse.
     """
+    
     def __init__(self):
         self.absrel   = "ABSREL"
         self.busted   = "BUSTED"
@@ -134,9 +140,22 @@ class Extractor():
             Initialize a Extractor instance.
             
             Required arguments:
-                1. **content**, The input content to parse. Two types of input may be provided here:
+                1. **content**, The input content to parse. Two types of input may be provided here, EITHER:
                     + The path to a JSON file to parse, provided as a string
                     + A phyphy `Analysis` (i.e. `BUSTED`, `SLAC`, `FEL`, etc.) object which has been used to execute a HyPhy analysis through the phyphy interface
+        
+            Examples:
+            .. code-block:: python
+               
+               >>> ### Define an Extractor instance with a JSON file
+               >>> e = Extractor("/path/to/json.json")
+               
+               
+               >>> ### Define an Extractor instance with an Analysis object 
+               >>> ### First, define and run an analysis (FEL, for example)
+               >>> myfel = FEL(data = "/path/to/data.fna")
+               >>> myfel.run_analysis()
+               >>> e = Extractor(myfel)
         """
         self.fields = JSONFields()
         self.genetics = Genetics()
@@ -165,7 +184,7 @@ class Extractor():
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
         """
-            Unpack JSON into dictionary
+            Private method: Unpack JSON into dictionary.
         """ 
         self.json = None
         with open (self.json_path, "rU") as f:
@@ -175,7 +194,7 @@ class Extractor():
     
     def _determine_analysis_from_json(self):
         """
-            Determine the relevant analysis name directly from the JSON description field.
+            Private method: Determine the relevant analysis name directly from the JSON description field.
         """
 
         json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
@@ -196,7 +215,7 @@ class Extractor():
 
     def _count_partitions(self):
         """
-            Define self.npartitions, the number of partitions in analysis.
+            Privaate method: Define self.npartitions, the number of partitions in analysis.
         """
         if self.analysis in self.analysis_names.single_partition_analyses:
             self.npartitions = 1
@@ -206,7 +225,7 @@ class Extractor():
 
     def _obtain_input_tree(self):
         """
-            Save the input tree(s) as either a string (single partition analysis), or as a dictionary (multiple partition analysis).
+            Private method: Save the input tree(s) as either a string (single partition analysis), or as a dictionary (multiple partition analysis).
         """
         tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
         self.input_tree = {}
@@ -218,14 +237,14 @@ class Extractor():
 
     def _obtain_fitted_models(self):
         """
-            Obtain list of all models in fits/attributes.
+            Private method: Obtain list of all models in fits/attributes.
         """
         self.fitted_models = list( self.json[ self.fields.model_fits ].keys())      
 
 
     def _obtain_original_names(self):
         """
-            Obtain original names dictionary, selecting only 0th partition.
+            Private method: Obtain original names dictionary, selecting only 0th partition.
         """
         self.original_names = self.extract_branch_attribute(self.fields.original_name, partition = 0)
 
@@ -233,7 +252,7 @@ class Extractor():
 
     def _obtain_branch_attributes(self):
         """
-            Obtain two things:
+            Private method: Obtain two things:
                 - the full branch attributes dictionary (sans attributes part), self.branch_attributes
                 - dictionary of attribute names, as attributes:attribute_type, self.attribute_names
         """
@@ -255,7 +274,7 @@ class Extractor():
 
     def _extract_slac_sitetable(self, raw):
         """
-            Extract the specific SLAC tables of interest for parsing to CSV.
+            Private method: Extract the specific SLAC tables of interest for parsing to CSV.
         """
         final = {}
         for x in range(self.npartitions):
@@ -268,6 +287,7 @@ class Extractor():
     
     def _clean_meme_html_header(self, raw_header):
         """
+            Private method: 
             MEME has html tags all over it and this has to go.
             THIS IS VERY VERY HARDCODED, but flexible enough to not hurt much if someone changes the headers one day.
         """
@@ -291,7 +311,7 @@ class Extractor():
 
     def _parse_sitemethod_to_csv(self, delim):
         """
-            Extract a CSV from a **site-level** method JSON, including FEL, SLAC, MEME, FUBAR, LEISR.
+            Private method: Extract a CSV from a **site-level** method JSON, including FEL, SLAC, MEME, FUBAR, LEISR.
         """
         site_block =  self.json[ self.fields.MLE ]
         raw_header = site_block[ self.fields.MLE_headers ]
@@ -327,7 +347,7 @@ class Extractor():
 
     def _parse_absrel_to_csv(self, delim, original_names):
         """
-            Extract a CSV from an aBSREL JSON. 
+            Private method: Extract a CSV from an aBSREL JSON. 
             CSV contents:
                 Node name, Baseline MG94 omega, Number of inferred rate classes, Tested (bool), Proportion of selected sites, LRT, uncorrected P, bonferroni-holm P
         """
@@ -382,7 +402,7 @@ class Extractor():
     
     def _reform_rate_phrase(self, phrase):
         """
-            Convert rate phrase to simpler key, i.e. "Substitution rate from nucleotide A to nucleotide C" returns simply "AC"
+            Private method: Convert rate phrase to simpler key, i.e. "Substitution rate from nucleotide A to nucleotide C" returns simply "AC"
                 
             Required arguments:
                 1. **phrase**, the key to reform
@@ -400,6 +420,7 @@ class Extractor():
 
     def _replace_tree_branch_length(self, dtree, bl_dict):
         """
+            Private method: 
             Replacing the branch length for a given node with the provided value (ie, replace <stuff> in :Node<stuff>)
                             
             Required arguments:
@@ -420,6 +441,7 @@ class Extractor():
 
     def _replace_node_labels(self, dtree, label_dict):
         """
+            Private method: 
             For a leaf, tack _<label> onto the name
             For an internal node, replace the node name with the label entirely
                             
@@ -439,6 +461,7 @@ class Extractor():
 
     def _tree_to_original_names(self, dtree):
         """
+            Private method: 
             Convert node names in a tree to original names
             
             Required arguments:
@@ -739,6 +762,40 @@ class Extractor():
 
         """
         return self.map_branch_attribute(model, partition = partition, original_names = original_names)
+
+
+
+    def map_absrel_selection(self, original_names = False, update_branch_lengths = None, p = 0.05, labels = None):
+        """
+            Return newick phylogeny with *node labels* as selection *indicators* (Default is 0 for not selected, 1 for selected, at the specified p). aBSREL only.
+        
+            Optional keyword arguments:
+                1. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
+                2. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None.
+                3. **p**, the p-value threshold for calling selection. Default: 0.05
+                4. **labels**: A tuple of labels to use for (selected, not selected). Default is (1,0)
+        """
+        
+        ### Sanity checks
+        if labels is None:
+            self.selected_labels = ("1", "0")
+        else:
+            assert(len(labels) == 2), "\n [ERROR]: Improper labels suppled to map_absrel_selection. Must be a list or tuple of length two, for [selected, not selected]"
+            self.selected_labels = tuple([str(x) for x in labels])
+        assert( p >= 0 and p <= 1), "\n [ERROR]: Argument `p` must be a float between 0-1, for calling selection."
+        self.p_selected = p
+        
+        ### ADD ATTRIBUTE TO THE ATTRIBUTES!!
+        self.attribute_names[self.fields.selected] = self.fields.phyphy_label
+        for part in self.branch_attributes:
+            for node in self.branch_attributes[part]:               
+                if float(self.branch_attributes[part][node][self.fields.corrected_p]) <= self.p_selected:
+                    self.branch_attributes[part][node][self.fields.selected] = self.selected_labels[0]
+                else:
+                    self.branch_attributes[part][node][self.fields.selected] = self.selected_labels[1]
+
+        ## Send to mapper
+        return self.map_branch_attribute(self.fields.selected, original_names = original_names, as_label = True, update_branch_lengths = update_branch_lengths)       
     ############################################################################################################################
 
 
