@@ -5,6 +5,8 @@ Python modules
 ----------------
 The package consists of the following Python modules:
 
+* hyphy.py
+
 * analysis.py
 
 * extractor.py
@@ -13,6 +15,7 @@ The package consists of the following Python modules:
 
 """
 __version__ = '0.1'
+from .hyphy import *
 from .analysis import *
 from .extractor import *
 

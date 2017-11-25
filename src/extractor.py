@@ -10,17 +10,18 @@
 """
 
 import sys
-if __name__ == "__main__":
-    print("\nThis is the Extractor module in `phyphy`. Please consult docs for `phyphy` usage." )
-    sys.exit()
-    
 import os
 import re
 import json
 import dendropy
-import pprint
-from .analysis import *
 from copy import deepcopy
+
+if __name__ == "__main__":
+    print("\nThis is the Extractor module in `phyphy`. Please consult docs for `phyphy` usage." )
+    sys.exit()
+    
+from .analysis import *
+
 
 class JSONFields():
     """

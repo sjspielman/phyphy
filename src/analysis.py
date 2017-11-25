@@ -13,12 +13,6 @@
 """
     
 import sys
-if __name__ == "__main__":
-    print("\nThis is the Analysis module in `phyphy`. Please consult docs for `phyphy` usage." )
-    sys.exit()
-
-
-
 import subprocess
 import os
 import shutil
@@ -28,8 +22,13 @@ from copy import deepcopy
 from StringIO import StringIO
 from math import ceil
 
+if __name__ == "__main__":
+    print("\nThis is the Analysis module in `phyphy`. Please consult docs for `phyphy` usage." )
+    sys.exit()
 
-_DEFAULT_LIBPATH = "/usr/local/lib/hyphy/"
+from .hyphy import *
+
+
 _GENETIC_CODE = {
                   1: "Universal",
                   2: "Vertebrate mtDNA",
@@ -53,92 +52,15 @@ _GENETIC_CODE = {
                 }
 
 
-class HyPhy():
-    """
-        This class creates a HyPhy instance. Generally this is only necessary to use if any of these applies:
-            + You wish to use a local **build** of HyPhy (not a canonically installed build)
-            + You wish to use a local **install** of HyPhy (installed elsewhere from /usr/local)
-            + You wish to use a different HyPhy executable from the default, which is HYPHYMP
-    """
-
-    def __init__(self, **kwargs):
-        """
-            Initiliaze a HyPhy() instance.
-        
-            Optional keyword arguments:
-                1. **executable**, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP.
-                2. **build_path**, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
-                3. **install_path**, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
-                4. **cpu**, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
-                5. **quiet**, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
-                6. **suppress_log**, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)
-                7. **mpi_launcher**,  mpi launcher. Default: mpirun. Use this argument if are you specifying `HYPHYMPI` for executable.
-                8. **mpi_options**, options to pass to the mpi launcher. Default: "".
-        """
-
-
-        executable         = kwargs.get("executable", "HYPHYMP")
-        self.build_path    = kwargs.get("build_path", None)         ### path if *built* locally (i.e. make install was NOT RUN)
-        self.install_path  = kwargs.get("install_path", None)       ### path if installed locally (i.e. make install was run to a specified local path)
-        self.cpu           = kwargs.get("cpu", None)                ### For use with MP
-        self.mpi           = kwargs.get("mpi_launcher", "mpirun")   ### launcher for mpi
-        self.mpiopts       = kwargs.get("mpi_options", "")          ### To pass to mpi environment   
-        self.quiet         = kwargs.get("quiet", False)             ### If True, run hyphy quietly (no stdout/err)
-        self.suppress_log  = kwargs.get("suppress_log", False)      ### If True, send messages.log, errors.log to /dev/null
-
-      
-        ### Checks for a local BUILD  ###
-        if self.build_path is not None: 
-            assert(os.path.exists(self.build_path)), "\n[ERROR] Build path does not exist."
-            self.build_path = os.path.abspath(self.build_path) + "/" ## os.path.abspath will strip any trailing "/"
-            self.libpath = self.build_path + "res/"
-            assert(os.path.exists(self.libpath)), "\n[ERROR]: Build path does not contain a correctly built HyPhy."
-            self.executable = self.build_path + executable
-            self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
-        
-        else: 
-            ### Checks for a nonstandard (i.e. not in /usr/local/) INSTALL  ###
-            if self.install_path is not None:
-                assert(os.path.exists(self.install_path)), "\n[ERROR]: Install path does not exist."
-                self.install_path = os.path.abspath(self.install_path) + "/"
-                self.libpath = self.install_path + "lib/hyphy/"
-                assert(os.path.exists(self.libpath)), "\n[ERROR]: Install path does not contain a correctly built HyPhy."               
-                self.executable = self.install_path + "bin/" + executable
-                self.hyphy_call = self.executable + " LIBPATH=" + self.libpath
-            ## Installed in default path
-            else:
-                self.libpath = _DEFAULT_LIBPATH
-                self.executable = executable
-                self.hyphy_call = executable
-        
-        
-        ## Ensure executable exists somewhere
-        with open("/dev/null", "w") as hushpuppies:
-            exit_code = subprocess.call(["which", self.executable], stdout = hushpuppies, stderr = hushpuppies) # If you're reading this, I hope you enjoy reading hushpuppies as much as I enjoyed writing it. --SJS
-            if exit_code != 0:
-                raise AssertionError("\n[ERROR]: HyPhy executable not found. Please ensure it is properly installed, or in your provided local path.")
-        
-        if executable == "HYPHYMPI":
-            with open("/dev/null", "w") as hushpuppies:
-                exit_code = subprocess.call(["which", self.mpi], stdout = hushpuppies, stderr = hushpuppies) 
-                if exit_code != 0:
-                    raise AssertionError("\n[ERROR]: MPI launcher not found (the default is `mpirun`).")    
-            self.hyphy_call = self.mpi + " " + self.mpiopts + " " + self.hyphy_call
-        else:
-            if self.cpu is not None:
-                self.hyphy_call += " CPU=" + str(self.cpu)
-        
-        if self.suppress_log is True:
-            self.hyphy_call += " USEPATH=/dev/null/"
-
-        
-        
         
 
 class Analysis(object):
-    """
-        Parent class for all analysis methods. 
-        Child classes:
+       
+            
+    def __init__(self, **kwargs):
+        """
+            Parent class for all analysis methods, which include the following children:
+        
             + ABSREL
             + BUSTED
             + FEL
@@ -147,23 +69,11 @@ class Analysis(object):
             + MEME
             + RELAX
             + SLAC                        
-    """
-        
-            
-    def __init__(self, **kwargs):
-        """
-            Initialize a HyPhy analysis. 
-            
-            Required arguments:
-                1. **alignment** _and_ **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
-                           
-            Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
-                2. **output**, name (and path to) to final output JSON file. Default: Goes to same directory as provided data
-            
-            See children classes for analysis-specific arguments.
-        """
 
+            Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.
+
+        """
+    
         self.hyphy = kwargs.get("hyphy", None)
         if self.hyphy is None:
             self.hyphy = HyPhy()
@@ -310,7 +220,13 @@ class Analysis(object):
 
     def run_analysis(self):
         """
-            Execute HyPhy Analysis and save output.
+            Execute an Analysis and save output.
+
+            **Examples:**
+               
+               >>> ### Execute a default FEL analysis
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat")
+               >>> myfel.run_analysis()         
         """
         self._execute()
         self._save_output() 
@@ -336,16 +252,40 @@ class FEL(Analysis):
 
     def __init__(self, **kwargs):
         """
+            
+            Initialize and execute a FEL analysis.
+            
             Required arguments:
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a `HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **srv**, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values "Yes"/"No" or True/False accepted. Default: True.
                 3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+
+
+            **Examples:**
+               
+               >>> ### Define a default FEL analysis, where data is contained in a single file
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default FEL analysis, where alignment and tree are in separate files 
+               >>> myfel = FEL(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+
+               >>> ### Define a FEL analysis, with a specified path to output JSON
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", output="/path/to/json/output.json")
+               
+               >>> ### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) 
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", srv=False)
+
+               >>> ### Define FEL analysis, specifying only to use internal branches to test for selection
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", branches="Internal")
+               
+               >>> ### Execute a defined FEL instance
+               >>> myfel.run_analysis()
         """                
         
         super(FEL, self).__init__(**kwargs)
@@ -388,11 +328,14 @@ class FUBAR(Analysis):
         
     def __init__(self, **kwargs):
         """
+
+            Initialize and execute a FUBAR analysis.
+
             Required arguments:
                 1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
 
             Optional keyword arguments:
-                1. **hyphy**, a HyPhy() instance. Default: Assumes canonical HyPhy install.
+                1. **hyphy**, a `HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data. 
                 3. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 4. **grid_size**, Number of grid points per rate grid dimension (Default: 20, allowed [5,50])
@@ -402,6 +345,29 @@ class FUBAR(Analysis):
                 8. **samples_per_chain**, Number of samples to draw per chain (Default 100, allowed [50,chain_length-burnin])
                 9. **alpha**, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])
                 10. **cache**, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument **False** to not save the cache (this argument simply sends it to /dev/null)
+
+
+            **Examples:**
+               
+               >>> ### Define a default FUBAR analysis, where data is contained in a single file
+               >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default FUBAR analysis, where alignment and tree are in separate files 
+               >>> myfel = FUBAR(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+
+               >>> ### Define a FEL analysis, with a specified path to output JSON
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", output="/path/to/json/output.json")
+               
+               >>> ### Define a FEL analysis, with a one-rate approach (i.e. synonymous rate variation turned off) 
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", srv=False)
+
+               >>> ### Define FEL analysis, specifying only to use internal branches to test for selection
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", branches="Internal")
+               
+               >>> ### Execute a defined FUBAR instance
+               >>> myfel.run_analysis()
+
+
         """                
 
 
