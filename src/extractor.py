@@ -193,7 +193,7 @@ class Extractor():
             Private method: Unpack JSON into dictionary.
         """ 
         self.json = None
-        with open (self.json_path, "rU") as f:
+        with open (self.json_path, "r") as f:
             self.json = json.load(f)
         assert(self.json is not None and len(self.json)!=0), "\n[ERROR]: Unable to obtain JSON contents."
 

@@ -19,7 +19,10 @@ import shutil
 import re
 from Bio import Phylo
 from copy import deepcopy
-from StringIO import StringIO
+try:
+    from io import StringIO
+except:
+    from StringIO import StringIO
 from math import ceil
 
 if __name__ == "__main__":
