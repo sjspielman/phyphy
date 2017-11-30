@@ -13,7 +13,7 @@ import sys
 import os
 import re
 import json
-import dendropy
+from ete3 import Tree
 from copy import deepcopy
 
 if __name__ == "__main__":
@@ -183,7 +183,7 @@ class Extractor():
         
         ## These are generally useful to have around ##
         self._count_partitions()          ### ---> self.npartitions        
-        self._obtain_input_tree()         ### ---> self.input_tree, self.input_tree_dendropy
+        self._obtain_input_tree()         ### ---> self.input_tree, self.input_tree_ete
         self._obtain_fitted_models()      ### ---> self.fitted_models
         self._obtain_branch_attributes()  ### ---> self.branch_attributes, self.attribute_names
         self._obtain_original_names()     ### ---> self.original_names
@@ -241,10 +241,10 @@ class Extractor():
         """
         tree_field = self.json[ self.fields.input ][ self.fields.input_trees ]
         self.input_tree = {}
-        self.input_tree_dendropy = {}
+        self.input_tree_ete = {}
         for i in range(len(tree_field)):
             self.input_tree[i] = str(tree_field[str(i)]) + ";"
-            self.input_tree_dendropy[i] = dendropy.Tree.get(data = self.input_tree[i], schema = "newick", preserve_underscores=True)     
+            self.input_tree_ete[i] = Tree(self.input_tree[i], format = 1)     
 
 
     def _obtain_fitted_models(self):
@@ -430,60 +430,36 @@ class Extractor():
 
 
 
-    def _replace_tree_branch_length(self, dtree, bl_dict):
+
+    def _replace_tree_branch_length(self, etree, bl_dict):
         """
             Private method: 
             Replacing the branch length for a given node with the provided value (ie, replace <stuff> in :Node<stuff>)
                             
             Required arguments:
-                1. **dtree**, the single dendropy tree to manipulate
+                1. **etree**, the single ete tree to manipulate
                 2. **bl_dict**, dictionary of new branch lengths
         """
-        for node in dtree.preorder_node_iter():
-            if node.parent_node is None:
-                continue
-            if node.is_internal():
-                node.edge.length = bl_dict[node.label]
-            else:
-                node.edge.length = bl_dict[node.taxon.label]
-        return dtree
+        for node in etree.traverse("postorder"):
+            if not node.is_root():
+                node.dist = bl_dict[node.name]     
+        return etree
         
-
-       
-
-    def _replace_node_labels(self, dtree, label_dict):
-        """
-            Private method: 
-            For a leaf, tack _<label> onto the name
-            For an internal node, replace the node name with the label entirely
-                            
-            Required arguments:
-                1. **dtree**, the single dendropy tree to manipulate
-                2. **label_dict**, the dictionary of node:newthing
-        """
-        for node in dtree.preorder_node_iter():
-            if node.parent_node is None:
-                continue
-            if node.is_internal():
-                node.label = label_dict[node.label]
-        return dtree
-                
-                
                 
 
-    def _tree_to_original_names(self, dtree):
+    def _tree_to_original_names(self, etree):
         """
             Private method: 
             Convert node names in a tree to original names
             
             Required arguments:
-                1. **dtree**, the single dendropy tree to manipulate
+                1. **etree**, the single ete tree to manipulate
 
         """
-        for node in self.original_names:
-            itsme = dtree.find_node_with_taxon_label(node)
-            itsme.taxon.label = self.original_names[node]
-        return dtree
+        for name in self.original_names:
+            itsme = etree.search_nodes(name=name)[0]
+            itsme.name = self.original_names[name]
+        return etree
     ############################################## PUBLIC FUNCTIONS ################################################### 
 
 
@@ -645,7 +621,7 @@ class Extractor():
 
         
 
-    def extract_input_tree(self, partition = None, original_names = False):
+    def extract_input_tree(self, partition = None, original_names = False, node_labels=False):
         """
             Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
             For analyses with a single partition OR for a request for a specific partition's tree, returns a string.
@@ -658,10 +634,11 @@ class Extractor():
         
         if original_names is True:
             original_tree = {}
-            for key in self.input_tree_dendropy:
-                t = deepcopy(self.input_tree_dendropy[key])
-                original_tree[key] = self._tree_to_original_names(t).as_string("newick", unquoted_underscores=True).strip()
-        else:
+            for key in self.input_tree_ete:
+                t = deepcopy(self.input_tree_ete[key])
+                t = self._tree_to_original_names(t)
+                original_tree[key] = t.write(format = 1).strip()
+        else:      
             original_tree = self.input_tree
         if partition is None:
             if self.npartitions == 1:
@@ -713,9 +690,9 @@ class Extractor():
         
         
         
-    def map_branch_attribute(self, attribute_name, partition = None, original_names = False, as_label = False, update_branch_lengths = None):
+    def map_branch_attribute(self, attribute_name, original_names = False, partition = None):
         """
-            Return the newick phylogeny with specified attribute mapped into the phylogeny.
+            Return the newick phylogeny with specified attribute mapped into the phylogeny **as branch lengths**.
             If there are multiple partitions, default returns a dictionary of mapped trees for all partitions. 
             If partition is specified, only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.            
 
@@ -725,31 +702,20 @@ class Extractor():
             Optional keyword arguments:
                 1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
                 2. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
-                3. **as_label**, attributes should be added as labels onto the tree, as opposed to replacing the branch lengths. **This means that tips will have no information**  Default: False
-                4. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None. Note that this argument is ONLY USED when as_label = True.
 
         """
         assert(attribute_name != self.fields.rate_distributions), "\n[ERROR]: Cannot map rate distributions onto a tree."
-        
-        bl_dict = None
-        if update_branch_lengths is not None:
-            assert(update_branch_lengths in self.fitted_models and update_branch_lengths in self.reveal_branch_attributes()), "\n [ERROR]: Model with which to update branch length is not available."
-            bl_dict = self.extract_branch_attribute(update_branch_lengths, partition = partition)
-        dtree = deepcopy( self.input_tree_dendropy )
+        assert(attribute_name in self.attribute_names), "\n [ERROR]: Attribute name provided is not available."
+        etree = deepcopy( self.input_tree_ete )
         
         mapped_trees = {}
-        for key in dtree:
-            t = dtree[key]
+        for key in etree:
+            t = etree[key]
             attr_dict = self.extract_branch_attribute(attribute_name, partition = key)
-            if as_label:
-                if bl_dict is not None:   
-                    t = self._replace_tree_branch_length( t, bl_dict )
-                t = self._replace_node_labels( t, attr_dict )
-            else: 
-                t = self._replace_tree_branch_length( t, attr_dict )
+            t = self._replace_tree_branch_length( t, attr_dict )
             if original_names is True:
                 t = self._tree_to_original_names(t)
-            mapped_trees[key] = t.as_string("newick", unquoted_underscores=True).strip()    
+            mapped_trees[key] = t.write(format=1).strip()
         if self.npartitions == 1:
             return mapped_trees[0]
         else:
@@ -777,29 +743,30 @@ class Extractor():
 
 
 
-    def map_absrel_selection(self, original_names = False, update_branch_lengths = None, p = 0.05, labels = None):
+    def extract_absrel_tree(self, original_names = False, update_branch_lengths = None, p = 0.05, labels = None, ggtree = False):
         """
-            Return newick phylogeny with *node labels* as selection *indicators* (Default is 0 for not selected, 1 for selected, at the specified p). aBSREL only.
+            Return newick phylogeny with ete-style features as selection *indicators* (Default is 0 for not selected, 1 for selected) at the specified p. aBSREL only.
         
             Optional keyword arguments:
                 1. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
                 2. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None.
                 3. **p**, the p-value threshold for calling selection. Default: 0.05
                 4. **labels**: A tuple of labels to use for (selected, not selected). Default is (1,0)
+                5. **ggtree**, Make output compatible with input to the R package `ggtree`, with the function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
         """
         
         ### Sanity checks
-        assert(self.analysis == self.analysis_names.absrel), "\n [ERROR]: The method .map_absrel_selection() can only be used with an aBSREL json."
+        assert(self.analysis == self.analysis_names.absrel), "\n [ERROR]: The method .extract_absrel_tree() can only be used with an aBSREL JSON."
         
         if labels is None:
             self.selected_labels = ("1", "0")
         else:
-            assert(len(labels) == 2), "\n [ERROR]: Improper labels suppled to map_absrel_selection. Must be a list or tuple of length two, for [selected, not selected]"
+            assert(len(labels) == 2), "\n [ERROR]: Improper labels suppled to extract_absrel_tree. Must be a list or tuple of length two, for [selected, not selected]"
             self.selected_labels = tuple([str(x) for x in labels])
         assert( p >= 0 and p <= 1), "\n [ERROR]: Argument `p` must be a float between 0-1, for calling selection."
         self.p_selected = p
         
-        ### ADD ATTRIBUTE TO THE ATTRIBUTES!!
+        ### Add selection to attributes with value based on p and labels.
         self.attribute_names[self.fields.selected] = self.fields.phyphy_label
         for part in self.branch_attributes:
             for node in self.branch_attributes[part]:               
@@ -808,8 +775,64 @@ class Extractor():
                 else:
                     self.branch_attributes[part][node][self.fields.selected] = self.selected_labels[1]
 
-        ## Send to mapper
-        return self.map_branch_attribute(self.fields.selected, original_names = original_names, as_label = True, update_branch_lengths = update_branch_lengths)       
+        ## Send to feature extractor
+        return self.extract_feature_tree(self.fields.selected, original_names = original_names, update_branch_lengths = update_branch_lengths, ggtree = ggtree)
+
+
+
+    def extract_feature_tree(self, feature, original_names = False, update_branch_lengths = None, partition = None, ggtree = False):
+        """
+            Extract a tree with ete-style feature(s) included.
+            
+            Required positional arguments:
+                1. **feature**, The feature(s) to be included the final newick tree. This is either a string of a feature, or a list of features. Features are taken from attributes.
+
+            Optional keyword arguments:
+                1. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None.
+                2. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+                3. **ggtree**, Make output compatible with input to the R package `ggtree`, with the function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
+        """
+        if type(feature) is str:
+            feature = [feature]
+
+        if update_branch_lengths is not None:
+            assert(update_branch_lengths in self.fitted_models and update_branch_lengths in self.reveal_branch_attributes()), "\n [ERROR]: Specified model for updating branch lengths is not available."
+            bl_dict = self.extract_branch_attribute(update_branch_lengths, partition = partition)
+
+        etree = deepcopy( self.input_tree_ete )
+        
+        feature_trees = {}
+        for key in etree:
+            t = etree[key]
+            if update_branch_lengths is not None:
+                t = self._replace_tree_branch_length( t, bl_dict )
+            if original_names is True:
+                t = self._tree_to_original_names(t) 
+                
+            out_features = []
+            for feat in feature:
+                outfeat = re.sub("\s+", "", feat) ## Remove all whitespace from features.
+                out_features.append(outfeat)
+                assert(feat in self.attribute_names), "\n[ERROR]: Specified feature is not an available attribute."
+                
+                feat_dict = self.extract_branch_attribute(feat, partition = partition)
+                for node in t.traverse("postorder"):
+                    if not node.is_root():
+                        node.add_feature(outfeat, feat_dict[node.name])        
+               
+            treestring = t.write(format=1, features = out_features).strip()
+            ## For some reason, ete won't add feature to root, so manually for ggtree here:
+            if ggtree:
+                ggstring = ":".join( [x + "=0" for x in out_features] )
+                treestring = treestring.strip(";") + "[&&NHX:" + ggstring + "];"
+            feature_trees[key] = treestring
+        if self.npartitions == 1:
+            return feature_trees[0]
+        else:
+            if partition is None:
+                return feature_trees
+            else:
+                return feature_trees[int(partition)]
     ############################################################################################################################
 
 

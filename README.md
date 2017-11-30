@@ -38,7 +38,7 @@ You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
 Dependencies:
 
 + `Biopython`
-+ `dendropy >=4.3`
++ `ete3 >=3.1`
 
 Until release, you must download `phyphy` from source, with the usual `setuptools` procedure. Briefly:
 
