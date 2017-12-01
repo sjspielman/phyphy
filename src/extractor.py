@@ -150,9 +150,8 @@ class Extractor():
                     + The path to a JSON file to parse, provided as a string
                     + A phyphy `Analysis` (i.e. `BUSTED`, `SLAC`, `FEL`, etc.) object which has been used to execute a HyPhy analysis through the phyphy interface
         
-            Examples:
-            .. code-block:: python
-               
+            **Examples:**
+
                >>> ### Define an Extractor instance with a JSON file
                >>> e = Extractor("/path/to/json.json")
                
@@ -227,7 +226,7 @@ class Extractor():
 
     def _count_partitions(self):
         """
-            Privaate method: Define self.npartitions, the number of partitions in analysis.
+            Private method: Define self.npartitions, the number of partitions in analysis.
         """
         if self.analysis in self.analysis_names.single_partition_analyses:
             self.npartitions = 1
@@ -466,7 +465,19 @@ class Extractor():
     ################################################ MODEL FITS #######################################################
     def reveal_fitted_models(self):
         """
-            Reveal a list of all model names in the `fits` JSON field.
+            Return a list of all model names in the `fits` JSON field.
+            
+            No arguments are required.
+            
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.reveal_fitted_models()
+               ['Nucleotide GTR', 'Global MG94xREV]
+               
+               >>> e = Extractor("/path/to/aBSREL.json") ## Define an aBSREL Extractor, for example
+               >>> e.reveal_fitted_models()
+               ['Nucleotide GTR', 'Full adaptive model', 'Baseline MG94xREV']     
         """
         return [str(x) for x in self.fitted_models]
         
@@ -479,12 +490,14 @@ class Extractor():
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
                 2. **component**, the component of the model to return. 
 
-            Note there are a variety of convenience methods which wrap this function to extract all components (note that not all analyses will have all of these components):
-                + .extract_model_logl(model_name) returns the log likelihood of a given model fit
-                + .extract_model_estimated_parameters(model_name) returns the number of estimated parameters in a given model fit
-                + .extract_model_aicc(model_name) returns the small-sample AIC (AIC-c) for a given model fit
-                + .extract_model_rate_distributions(model_name) returns rate distributions for a given model fit 
-                + .extract_model_frequencies(model_name) returns the equilibrium frequencies for the given model fit
+            **Recommended use:** Note there are a variety of convenience methods which wrap this function to extract all components (note that not all analyses will have all of these components):
+                + :code:`.extract_model_logl(model_name)` returns the log likelihood of a given model fit
+                + :code:`.extract_model_estimated_parameters(model_name)` returns the number of estimated parameters in a given model fit
+                + :code:`.extract_model_aicc(model_name)` returns the small-sample AIC (AIC-c) for a given model fit
+                + :code:`.extract_model_rate_distributions(model_name)` returns rate distributions for a given model fit 
+                + :code:`.extract_model_frequencies(model_name)` returns the equilibrium frequencies for the given model fit
+            
+            See one of these other methods for example(s).
         """            
         assert(model_name in self.fitted_models), "\n[ERROR]: Invalid model name."
         model_fit = self.json[ self.fields.model_fits ][ model_name ]
@@ -502,7 +515,14 @@ class Extractor():
 
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_model_logl("Nucleotide GTR")
+               -3531.96378073
         """
+
         return float( self.extract_model_component(model_name, self.fields.log_likelihood) )
 
 
@@ -512,6 +532,12 @@ class Extractor():
 
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+            
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_model_estimated_parameters("Nucleotide GTR")
+               24
         """
         return int( self.extract_model_component(model_name, self.fields.estimated_parameters) )
 
@@ -522,7 +548,13 @@ class Extractor():
             
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
-        """
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_model_aicc("Nucleotide GTR")
+               7112.57796796
+            """
         return float( self.extract_model_component(model_name, self.fields.aicc) )
 
 
@@ -533,13 +565,22 @@ class Extractor():
 
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.reveal_fitted_models()`
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_model_rate_distributions("Nucleotide GTR")
+               {'AC': 0.5472216942647106, 'GT': 0.3027127947903878, 'AG': 1, 'CG': 0.4864956075134169, 'AT': 0.2645767737218761, 'CT': 1.017388348535757}
+               
+               >>> e.extract_model_rate_distributions("Global MG94xREV")
+               {'test': {'proportion': 1.0, 'omega': 0.9860796476982517}}
         """
         rawrates = self.extract_model_component(model_name, self.fields.rate_distributions)
         rates = {}
         
         if model_name == self.fields.nucleotide_gtr: 
             for k,v in rawrates.items():
-                rates[ self._reform_rate_phrase(k) ] = v       
+                rates[ str(self._reform_rate_phrase(k)) ] = v       
         
         elif self.fields.generic_mg94xrev in model_name:
             if self.analysis == self.analysis_names.absrel:
@@ -549,9 +590,9 @@ class Extractor():
                 for k,v in rawrates.items():
                     find = re.search(r""+self.fields.nonsyn_syn_ratio_for +" \*(\w+)\*", k)
                     if find:
-                        rates[find.group(1)] = {self.fields.omega: v[0][0], self.fields.proportion: 1.0}
+                        rates[str(find.group(1))] = {self.fields.omega: v[0][0], self.fields.proportion: 1.0}
                     else:
-                        rates[self.fields.omega] = v[0][0]  
+                        rates[str(self.fields.omega)] = v[0][0]  
         else:
             for rr in rawrates:
                 rates[str(rr)] = rawrates[rr]
@@ -568,6 +609,16 @@ class Extractor():
             
             Optional keyword arguments:
                 1. **as_dict**, Boolean to indicate if the frequencies should be returned as a dictionary. Default: False.
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_model_frequencies("Nucleotide GTR")
+               [0.3563279857397504, 0.1837789661319073, 0.2402852049910873, 0.2196078431372549]
+
+               >>> ### Return dictionary instead of list
+               >>> e.extract_model_frequencies("Nucleotide GTR", as_dict = True)
+               {'A': 0.3563279857397504, 'C': 0.1837789661319073, 'T': 0.2196078431372549, 'G': 0.2402852049910873}
         """
         try:
             fraw = self.extract_model_component(model_name, self.fields.frequencies)
@@ -597,22 +648,32 @@ class Extractor():
             
             Optional keyword arguments:
                 1. **by_set**, Boolean to indicate if the returned dictionary should use *branch sets* as keys, and values are a *list* of nodes in that branch set. Default: False.
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/BUSTED.json") ## Define a BUSTED Extractor, for example
+               >>> e.extract_branch_sets()
+               {'Node12': 'test', 'GOR': 'test', 'HUM': 'test', 'PON': 'test', 'MAC': 'test', 'MAR': 'test', 'BAB': 'test', 'GIB': 'test', 'BUS': 'test', 'Node3': 'test', 'Node2': 'test', 'Node5': 'test', 'Node4': 'test', 'PAN': 'test', 'Node6': 'test'}
+
+               >>> ### Return dictionary of lists per set instead of default
+               >>> e.extract_branch_sets(by_set = True)
+               {'test': ['Node12', 'HUM', 'PON', 'MAC', 'MAR', 'BAB', 'GIB', 'Node2', 'BUS', 'Node3', 'Node6', 'Node5', 'Node4', 'PAN', 'GOR']}
         """
         try:
             branch_sets = self.json[ self.fields.tested ]["0"]
         except:
             raise KeyError("\n[ERROR]: Provided JSON has no branch set designations")
-            
+        final_branch_sets = {}
         if not by_set:
-            return branch_sets
-        else:
-            branch_sets2 = {}
             for k,v in branch_sets.items():
-                if v in branch_sets2:
-                    branch_sets2[v].append(k)
+                final_branch_sets[str(k)] = str(v)
+        else:
+            for k,v in branch_sets.items():
+                if v in final_branch_sets:
+                    final_branch_sets[str(v)].append(str(k))
                 else:
-                    branch_sets2[v] = [k]
-            return branch_sets2
+                    final_branch_sets[str(v)] = [str(k)]
+        return final_branch_sets
      ###################################################################################################################
 
 
@@ -621,6 +682,12 @@ class Extractor():
     def reveal_branch_attributes(self):
         """
             Return a dictionary of all the attributes in the `branch attributes` field and their attribute type (node label or branch label).
+            
+            **Examples:**
+
+               >>> e = Extractor("/path/to/BUSTED.json") ## Define a BUSTED Extractor, for example
+               >>> e.reveal_branch_attributes()
+               {'Nucleotide GTR': 'branch length', 'unconstrained': 'branch length', 'constrained': 'branch length', 'MG94xREV with separate rates for branch sets': 'branch length', 'original name': 'node label'}
         """
         str_attributes = {}
         for key in self.attribute_names:
@@ -638,6 +705,23 @@ class Extractor():
             Optional keyword arguments:
                 1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.
                 2. **original_names**, Boolean (Default: False) if should update with original names before returning
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_input_tree()
+               ((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);
+
+               >>> ### Use original names
+               >>> e.extract_input_tree(original_names = True)
+               ((((Pig~gy:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);
+
+               >>> e = Extractor("/path/to/FEL_mulitpart.json") ## Define a FEL Extractor, from an analysis with multiple partitions, for example
+               >>> e.extract_input_tree() ## All partitions
+               {0: '((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);', 1: '(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);', 2: '(AF231119:0.00208218,AF231117:1e-10,((AF082576:1e-10,AF231113:0.00433775)Node4:0.00208919,((((AF186242:0.00216055,AF186243:0.00437974)Node10:0.00214339,((AF186241:1e-10,AF187824:0.00215048)Node14:0.00214528,AF231116:1e-10)Node13:1e-10)Node9:0.0112142,(AF231118:0.0244917,AF234767:0.0835686)Node18:0.0280857)Node8:0.0021073,(AF231115:1e-10,AF231114:0.00868934)Node21:0.00639388)Node7:1e-10)Node3:1e-10);', 3: '((AF231119:0.000939531,AF082576:0.00182425)Node1:1e-10,(((AF231117:0.00499646,(AF231116:1e-10,(AF187824:0.00453171,AF231113:0.0180629)Node10:0.00923609)Node8:0.00581275)Node6:0.00383552,(AF231115:1e-10,AF231114:0.0100664)Node13:0.00401088)Node5:0.00102177,((AF186242:0.00171504,AF186243:0.00438135)Node17:0.00180763,AF186241:0.0044495)Node16:0.00408249)Node4:0.000197413,(AF231118:0.032062,AF234767:0.0409599)Node21:0.0228604);'}
+               
+               >>> e.extract_input_tree(partition = 1) ## Single specified partitions
+               (((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);
         """
         
         if original_names is True:
@@ -670,7 +754,18 @@ class Extractor():
                 1. **attribute_name**, the name of the attribute to obtain. Attribute names available can be revealed with the method `.reveal_branch_attributes()`.
                 
             Optional keyword arguments:
-                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is **ignored** for single-partitioned analyses.      
+
+
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FEL.json") ## Define a FEL Extractor, for example
+               >>> e.extract_branch_attribute("Nucleotide GTR") ## branches lengths
+               {'Horse': '0.209139911487', 'Node12': '0.0178341148216', 'Cow': '0.248286674829', 'Chimp': '0.00181779097957', 'RhMonkey': '0.00377365885129', 'Pig': '0.187127383086', 'Node9': '0.0256769899145', 'Node8': '0.106120848179', 'Rat': '0.0666961080592', 'Node3': '0.0989071298032', 'Human': '0', 'Node1': '0.277289433172', 'Cat': '0.266103366998', 'Node2': '0.0661858336662', 'Mouse': '0.118170595693', 'Baboon': '0.0016809649281'}
+
+               >>> e = Extractor("/path/to/ABSREL.json") ## Define an ABSREL Extractor, for example
+               >>> e.extract_branch_attribute("Rate classes") ## Number of inferred rate classes per node
+              {'0557_7': '1', '0557_4': '1', 'Node29': '1', '0564_13': '1', 'Node25': '1', 'Node20': '1', 'Node23': '1', '0557_11': '1', '0557_12': '1', '0557_13': '1', '0564_22': '1', '0564_21': '1', '0564_15': '2', 'Node9': '1', '0564_1': '1', '0564_3': '2', 'Separator': '2', '0564_5': '1', '0564_6': '1', '0564_7': '1', '0564_9': '1', '0557_24': '1', 'Node7': '1', 'Node6': '1', '0557_9': '1', 'Node17': '1', 'Node16': '1', 'Node19': '1', 'Node32': '1', 'Node30': '1', '0557_6': '1', 'Node36': '1', 'Node35': '2', '0557_5': '1', '0557_2': '1', '0564_11': '2', '0564_17': '1', 'Node18': '1', '0557_25': '1', '0564_4': '2', 'Node8': '1', '0557_26': '1', '0557_21': '1', 'Node53': '1'}
         """        
         assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
         if self.npartitions == 1:

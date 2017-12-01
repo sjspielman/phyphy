@@ -1,4 +1,4 @@
-"""``phyphy`` package for automating and parsing HyPhy (>=2.3.7) standard analyses.
+"""``phyphy`` package for automating executation and parsing HyPhy (>=2.3.7) standard analyses.
 Written by Stephanie J. Spielman.
 
 Python modules
