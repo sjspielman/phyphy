@@ -464,11 +464,11 @@ class Extractor():
 
 
     ################################################ MODEL FITS #######################################################
-    def reveal_model_names(self):
+    def reveal_fitted_models(self):
         """
             Reveal a list of all model names in the `fits` JSON field.
         """
-        return self.fitted_models
+        return [str(x) for x in self.fitted_models]
         
 
     def extract_model_component(self, model_name, component):
@@ -532,7 +532,7 @@ class Extractor():
             NOTE: Currently assumes dS = 1 for all initial MG94xREV fits, as in the current HyPhy implementation (True in <=2.3.4).
 
             Required arguments:
-                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+                1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.reveal_fitted_models()`
         """
         rawrates = self.extract_model_component(model_name, self.fields.rate_distributions)
         rates = {}
@@ -553,7 +553,8 @@ class Extractor():
                     else:
                         rates[self.fields.omega] = v[0][0]  
         else:
-            rates = rawrates
+            for rr in rawrates:
+                rates[str(rr)] = rawrates[rr]
         return rates
 
 
@@ -564,10 +565,14 @@ class Extractor():
             
             Required arguments:
                 1. **model_name**, the name of the model of interest. Note that all model names can be revealed with the method `.extract_model_names()`
+            
             Optional keyword arguments:
                 1. **as_dict**, Boolean to indicate if the frequencies should be returned as a dictionary. Default: False.
         """
-        fraw = self.extract_model_component(model_name, self.fields.frequencies)
+        try:
+            fraw = self.extract_model_component(model_name, self.fields.frequencies)
+        except:
+            fraw = self.extract_model_component(model_name, "EFV")  ### Bug in LEISR 2.3.7
         f = [float(x[0]) for x in fraw]
         
         if as_dict:
@@ -617,7 +622,10 @@ class Extractor():
         """
             Return a dictionary of all the attributes in the `branch attributes` field and their attribute type (node label or branch label).
         """
-        return self.attribute_names
+        str_attributes = {}
+        for key in self.attribute_names:
+            str_attributes[str(key)] = str(self.attribute_names[key])
+        return str_attributes
 
         
 
@@ -732,7 +740,7 @@ class Extractor():
             This is just a special case of map_branch_attribute.
 
             Required positional arguments:
-                1. **model**, the name of the model whose optimized tree you wish to obtain. Models names available can be revealed with the method `.reveal_model_names()`.
+                1. **model**, the name of the model whose optimized tree you wish to obtain. Models names available can be revealed with the method `.reveal_fitted_models()`.
                 
             Optional keyword arguments:
                 1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
