@@ -320,12 +320,6 @@ class FEL(Analysis):
                                            self.alpha ])
 
         
-        
-        
-        
-      
-      
-      
       
 class FUBAR(Analysis):       
         
@@ -358,9 +352,11 @@ class FUBAR(Analysis):
                >>> ### Define a default FUBAR analysis, where alignment and tree are in separate files 
                >>> myfubar = FUBAR(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
+               >>> ### Define a FUBAR analysis using a 10x10 grid and alpha parameter of 0.75
+               >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat", grid_size = 10, alpha = 0.75 )
+
                >>> ### Execute a defined FUBAR instance
                >>> myfubar.run_analysis()
-
         """                
 
 
@@ -453,6 +449,24 @@ class MEME(Analysis):
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+
+
+            **Examples:**
+               
+               >>> ### Define a default MEME analysis, where data is contained in a single file
+               >>> mymeme = MEME(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default MEME analysis, where alignment and tree are in separate files 
+               >>> mymeme = MEME(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+               
+               >>> ### Define a MEME analysis, specifying that selection be tested only on leaves
+               >>> mymeme = MEME(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
+
+               >>> ### Define a MEME analysis, specifying a custom JSON output file
+               >>> mymeme = MEME(data = "/path/to/data_with_tree.dat", output = "meme.json" )
+
+               >>> ### Execute a defined MEME instance
+               >>> mymeme.run_analysis()
         """                
 
         super(MEME, self).__init__(**kwargs)
@@ -495,6 +509,26 @@ class SLAC(Analysis):
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 6. **bootstrap**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
+            
+            **Examples:**
+               
+               >>> ### Define a default SLAC analysis, where data is contained in a single file
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default SLAC analysis, where alignment and tree are in separate files 
+               >>> myslac = SLAC(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+               
+               >>> ### Define a SLAC analysis, specifying that selection be tested only on leaves
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
+
+               >>> ### Define a SLAC analysis, specifying 150 bootstrap replicates be used for ASR uncertainty
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.dat", bootstrap = 150 )
+               
+               >>> ### Define a SLAC analysis, specifying a custom JSON output file
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.dat", output = "slac.json" )
+
+               >>> ### Execute a defined SLAC instance
+               >>> myslac.run_analysis()
         """                
 
         super(SLAC, self).__init__(**kwargs)
@@ -543,6 +577,21 @@ class ABSREL(Analysis):
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+
+            **Examples:**
+               
+               >>> ### Define a default ABSREL analysis, where data is contained in a single file
+               >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default ABSREL analysis, where alignment and tree are in separate files 
+               >>> myabsrel = ABSREL(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+               
+               >>> ### Define a ABSREL analysis, specifying that selection be tested only on leaves
+               >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
+               
+               >>> ### Execute a defined ABSREL instance
+               >>> myabsrel.run_analysis()
+
         """                
                 
         super(ABSREL, self).__init__(**kwargs)
@@ -581,6 +630,20 @@ class BUSTED(Analysis):
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+
+            **Examples:**
+               
+               >>> ### Define a default BUSTED analysis, where data is contained in a single file
+               >>> mybusted = BUSTED(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default BUSTED analysis, where alignment and tree are in separate files 
+               >>> mybusted = BUSTED(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+               
+               >>> ### Define a BUSTED analysis, specifying that selection be tested only on leaves
+               >>> mybusted = BUSTED(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
+               
+               >>> ### Execute a defined BUSTED instance
+               >>> mybusted.run_analysis()
         """                
                 
         super(BUSTED, self).__init__(**kwargs)
@@ -622,6 +685,24 @@ class RELAX(Analysis):
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **analysis_type**, "All" (run hypothesis test and fit descriptive models) or "Minimal" (only run hypothesis test). Default: "All".
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+
+
+            **Examples:**
+               
+               >>> ### Define a default RELAX analysis, where data is contained in a single file and test branches are labeled "test"
+               >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", test_label = "test")
+
+               >>> ### Define a default RELAX analysis, where alignment and tree are in separate files and test branches are labeled "test"
+               >>> myrelax = RELAX(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre", test_label = "test")
+               
+               >>> ### Define a default RELAX analysis, where data is contained in a single file, test branches are labeled "test", and reference branches are labeled "ref"
+               >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", test_label = "test", reference_label = "ref")
+
+               >>> ### Define a default RELAX analysis, where data is contained in a single file, test branches are labeled "test", and the Minimal analysis is run
+               >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", test_label = "test", analysis_type = "Minimal")
+               
+               >>> ### Execute a defined RELAX instance
+               >>> myrelax.run_analysis()
         """                
                 
         super(RELAX, self).__init__(**kwargs)
@@ -688,7 +769,22 @@ class LEISR(Analysis):
                 2. **model**, The model to use to fit relative rates, i.e. GTR for nucleotides or LG for amino acids. For full options, please see HyPhy. Default: JC69.
                 3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD. Note that Gamma and GDD will use four categories each. Default: No
             
+
+            **Examples:**
+               
+               >>> ### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with no rate variation is used
+               >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "protein", model = "WAG")
+
+               >>> ### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with Gamma rate variation is used
+               >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "protein", model = "WAG", rate_variation = "Gamma")
+
+               >>> ### Define a LEISR Nucleotide analysis, where data is contained in a single file and the HKY85 model with GDD rate variation is used
+               >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "nucleotide", model = "HKY85", rate_variation = "GDD")
+
+               >>> ### Execute a defined LEISR instance
+               >>> myleisr.run_analysis()
          """                
+
         super(LEISR, self).__init__(**kwargs)
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"

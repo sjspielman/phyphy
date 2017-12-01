@@ -34,19 +34,37 @@ class HyPhy():
 
     def __init__(self, **kwargs):
         """
-            Initiliaze a HyPhy() instance.
+            Initiliaze a :code:`HyPhy()` instance.
         
             Optional keyword arguments:
                 1. **executable**, the desired executable to use (ie HYPHYMPI). Default: HYPHYMP.
                 2. **build_path**, the path to a **local hyphy build**. Use this argument if you have compiled hyphy in the downloaded hyphy/ directory and **did not run make install**
                 3. **install_path**, the path to a **hyphy install**. Use this argument if you have specified a different installation path for hyphy, i.e. you provided `-DINSTALL_PREFIX=/other/path/` to cmake.
-                4. **cpu**, the maximum number of CPUs per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum.
+                4. **cpu**, the maximum number of processes per analysis. By default, HyPhy will take as many CPUs as it can/requires. This argument will limit the maximum. Default: None
                 5. **quiet**, suppress screen output (Note, HyPhy will still creates messages.log and errors.log files, when applicable). Default: False
-                6. **suppress_log**, suppress messages.log and errors.log files. Default: False. (If True, redirects to /dev/null/)
-                7. **mpi_launcher**,  mpi launcher. Default: mpirun. Use this argument if are you specifying `HYPHYMPI` for executable.
+                6. **suppress_log**, suppress messages.log and errors.log files. Default: False. 
+                7. **mpi_launcher**, mpi launcher. Default: :code:`mpirun`. Use this argument if are you specifying `HYPHYMPI` for executable.
                 8. **mpi_options**, options to pass to the mpi launcher. Default: "".
-        """
+                
 
+            **Examples:**
+               
+               >>> ### Define a HyPhy() object, specifying a quiet analysis (no console output) with no log files output
+               >>> my_hyphy = HyPhy(quiet = True, suppress_log = True)
+
+               >>> ### Define a HyPhy() object, specifying that a maximum of 4 processes be used (for the default executable HYPHYMP)
+               >>> my_hyphy = HyPhy(CPU = 4)
+               
+               >>> ### Define a HyPhy() object, specifying a specific *build path*
+               >>> my_hyphy = HyPhy(build_path = "/path/to/local/build/hyphy/")
+
+               >>> ### Define a HyPhy() object, specifying a specific *install path*
+               >>> my_hyphy = HyPhy(install_path = "/path/to/local/install/hyphy/")               
+
+               >>> ### Define a HyPhy() object, specifying that HYPHYMPI be used, with associated arguments for mpirun to use 32 processes
+               >>> my_hyphy = HyPhy(executable = "HYPHYMPI", mpi_launcher = "mpirun", mpi_options = "-np 32")   
+        """                                
+                
 
         executable         = kwargs.get("executable", "HYPHYMP")
         self.build_path    = kwargs.get("build_path", None)         ### path if *built* locally (i.e. make install was NOT RUN)
