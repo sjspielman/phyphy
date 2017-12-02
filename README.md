@@ -74,17 +74,19 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 
 ### Jupyter notebooks
 
-The follow Jupyter notebooks show various example of `phyphy` usage:
+[FORTHCOMING] These Jupyter notebooks show various example of `phyphy` usage:
 
-
-
-
++ Execute analyses
++ Parse trees from analyses
++ Parse non-tree information from analyses
 
 ### Examples
 
 #### Defining HyPhy instances
 
-Full API documentation is [here](http://sjspielman.org/phyphy/hyphy.html). Some brief examples are shown below.
+Full API documentation is [here](http://sjspielman.org/phyphy/hyphy.html). 
+
+Some brief examples are shown below.
 
 ```python
 import phyphy
@@ -115,7 +117,9 @@ myfel = FEL(hyphy = myhyphy, data = "/path/to/data.nex")	myfel.run_analysis()
 		
 #### Executing HyPhy Analyses
 
-Full API documentation is [here](http://sjspielman.org/phyphy/analysis.html). Each analysis will have its own optional arguments, as detailed in the API. However, *at a mininum*, you must provide path(s) to input data. There are two mutually exclusive (but one is necessary) strategies for this:
+Full API documentation is [here](http://sjspielman.org/phyphy/analysis.html). 
+
+Each analysis will have its own optional arguments, as detailed in the API. However, *at a mininum*, you must provide path(s) to input data. There are two mutually exclusive (but one is necessary) strategies for this:
 
 + When alignment and tree are in a single file, use the single keyword argument `data`. 
 + When alignment and tree are in separate files, use the two respective keyword arguments `alignment` and `tree`.
@@ -155,10 +159,11 @@ myfel.run_analysis()
 
 #### Parsing HyPhy output JSON
 
-Full API documentation is [here](http://sjspielman.org/phyphy/extractor.html). Again, [this PDF](examples/json-fields.pdf) describes the contents JSON fields in standard analyses available here. 
+Full API documentation is available [here](http://sjspielman.org/phyphy/extractor.html). 
+
+Again, [this PDF](examples/json-fields.pdf) describes the contents JSON fields in standard analyses. 
 
 An `Extractor` instance should be defined using a single argument, **either** an executed `Analysis` instance or a specific JSON file:
-
 ```python
 
 import phyphy
@@ -173,10 +178,13 @@ myext = phyphy.Extractor(myfel)
 ## Alternatively, create an Extractor instance with a JSON directly
 myext = Extractor("path/to/json.json")
 ```
+<!--
+Please see either of these Jupyter notebooks for examples. 
+-->
 
-A Jupyter notebook demonstrating usage of the `Extractor` class will be available shortly. 
+#### Parsing annotated trees from HyPhy output JSON
 
-Of interest, `phyphy` uses the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools:
+Of specific interest, `phyphy` uses the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools:
 
 + The method `.extract_model_tree()` allows you to obtain the fitted phylogeny for a given model (i.e., branch lengths will be updated). This will be output in standard newick format
 + The method `.extract_feature_tree()` allows you to obtain an **annotated** tree in Newick eXtended format (NHX), where nodes are annotated with the provided feature (i.e., attribute). 
@@ -184,4 +192,8 @@ Of interest, `phyphy` uses the powerful Python package `ete3` to assist in tree 
 + Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
 
 Any NHX tree can be visualized with a variety of programmatic platforms, including [`ete3`](http://etetoolkit.org/) in Python3 or [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html) in R/Bioconductor. Examples of creating such trees and visualizing them with either of these two platforms are available in [`examples/visualize_feature_tree_ete3.py`](./examples/visualize_feature_tree_ete3.py) and [`examples/visualize_feature_tree_ggtree.R`](./examples/visualize_feature_tree_ggtree.R), respectively.  
+
+<!--
+A jupyter notebook detailing how to deal with trees is here.
+-->
 
