@@ -9,3 +9,4 @@ data/*.json
 dist/*
 build/*
 phyphy.egg-info/*
+.eggs/
