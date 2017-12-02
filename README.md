@@ -1,15 +1,10 @@
 # phyphy
 
-**IN DEVELOPMENT. NOT NECESSARILY EXPECTED TO WORK.**
-
 `phyphy` aims to facilitate HyPhy usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
 `phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for increased pronunciation enjoyment. ``phyphy`` is compatible with either Python2.7 or Python3.
-
-
-## Available Analyses
 
 `phyphy` is compatible with HyPhy version >=2.3.7 and supports the following analyses (in alphabetical order):
 
@@ -22,19 +17,26 @@
 + RELAX
 + SLAC
 
+Full API documentation, including some code examples, is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy).
 
-## Get help
 
-+ Full documentation is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy)
+## Table of contents
+=================
 
-+ Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
-
-+ [This PDF](examples/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
+  * [Installation](#installation)
+  * [Sparknotes usage](#sparknotes-usage)
+  	* [Overview](#overview)
+  	* [Jupyter Notebook examples](#jupyter-notebooks)
+  	* [Examples: Defining HyPhy instances](#defining-hyphy-instances)
+  	* [Examples: Executing HyPhy Analyses](#executing-hyphy-analyses)
+	* [Examples: Parsing HyPhy output JSON](#parsing-hyphy-output-json)
+	* [Examples: Parsing annotated trees from HyPhy output JSON](#parsing-annotated-tree-from-hyphy-output)
+  * [Get help](#get-help)
 
 
 ## Installation
 
-You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
+[FORTHCOMING] You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
 
 Note `phyphy` has the following dependencies (pip will take care of these for you, if necessary):
 
@@ -197,3 +199,13 @@ Any NHX tree can be visualized with a variety of programmatic platforms, includi
 A jupyter notebook detailing how to deal with trees is here.
 -->
 
+
+
+
+## Get help
+
++ Full documentation is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy)
+
++ Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
+
++ [This PDF](examples/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
