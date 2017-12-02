@@ -1,35 +1,35 @@
 # phyphy
 
-`phyphy` aims to facilitate HyPhy usage in two primary ways:
+[`phyphy`](http://sjspielman.org/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
-`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for increased pronunciation enjoyment. ``phyphy`` is compatible with either Python2.7 or Python3.
+`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for increased pronunciation enjoyment. `phyphy` is compatible with either Python2.7 or Python3.
 
-`phyphy` is compatible with HyPhy version >=2.3.7 and supports the following analyses (in alphabetical order):
+`phyphy` is compatible with [**HyPhy version >=2.3.7**](https://github.com/veg/hyphy/releases) and supports the following analyses (in alphabetical order):
 
-+ aBSREL
-+ BUSTED
-+ FEL
-+ FUBAR
-+ LEISR
-+ MEME
-+ RELAX
-+ SLAC
++ [`FEL` (Fixed Effects Likelihood)](http://hyphy.org/methods/selection-methods/#fel): Infer pervasive selection at individual sites using maximum likelihood
++ [`MEME` (Mixed Effects Model of Evolution)](http://hyphy.org/methods/selection-methods/#meme): Infer episodic selection at individual sites
++ [`SLAC` (Single-Likelihood Ancestor Counting)](http://hyphy.org/methods/selection-methods/#slac): Infer pervasive selection at individual sites using a counting-based approach
++ [`FUBAR` (Fast, Unconstrained Bayesian AppRoximation)](http://hyphy.org/methods/selection-methods/#fubar): Infer pervasive selection at individual sites using a Bayesian approach
++ [`aBSREL` (adaptive Branch-Site Random Effects Likelihood)](http://hyphy.org/methods/selection-methods/#absrel): Branch-site model of lineage-specific selection
++ [`BUSTED` (Branch-Site Unrestricted Statistical Test for Episodic Diversification)](http://hyphy.org/methods/selection-methods/#busted): Branch-site model of whole-gene selection
++ [`RELAX` (Test for selection RELAXation)](http://hyphy.org/methods/selection-methods/#relax): Test for relaxed or intensified selection on a specified branch set
++ [`LEISR` (Likelihood Estimation of Individual Site Rates)](https://doi.org/10.1101/206011): Infer relative evolutionary rates from protein or nucleotide data
 
 Full API documentation, including some code examples, is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy).
 
 
-## Table of contents
+# Table of contents
 
   * [Installation](#installation)
   * [Sparknotes usage](#sparknotes-usage)
   	* [Overview](#overview)
   	* [Jupyter Notebook examples](#jupyter-notebooks)
-  	* [Examples: Defining HyPhy instances](#defining-hyphy-instances)
-  	* [Examples: Executing HyPhy Analyses](#executing-hyphy-analyses)
-	* [Examples: Parsing HyPhy output JSON](#parsing-hyphy-output-json)
-	* [Examples: Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
+  	* [Defining HyPhy instances](#defining-hyphy-instances)
+  	* [Executing HyPhy Analyses](#executing-hyphy-analyses)
+	* [Parsing HyPhy output JSON](#parsing-hyphy-output-json)
+	* [Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
 
 
