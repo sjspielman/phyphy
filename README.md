@@ -29,7 +29,7 @@
 
 + Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues) or contact `stephanie.spielman@temple.edu`.
 
-+ [This PDF](data/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
++ [This PDF](examples/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
 
 
 ## Installation
@@ -155,7 +155,7 @@ myfel.run_analysis()
 
 #### Parsing HyPhy output JSON
 
-Full API documentation is [here](http://sjspielman.org/phyphy/extractor.html). Again, [this PDF](data/json-fields.pdf) describes the contents JSON fields in standard analyses available here. 
+Full API documentation is [here](http://sjspielman.org/phyphy/extractor.html). Again, [this PDF](examples/json-fields.pdf) describes the contents JSON fields in standard analyses available here. 
 
 An `Extractor` instance should be defined using a single argument, **either** an executed `Analysis` instance or a specific JSON file:
 
