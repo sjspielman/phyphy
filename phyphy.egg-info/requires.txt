@@ -1,0 +1,2 @@
+Biopython
+ete3>=3.1

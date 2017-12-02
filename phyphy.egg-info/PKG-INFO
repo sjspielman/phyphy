@@ -1,0 +1,11 @@
+Metadata-Version: 1.1
+Name: phyphy
+Version: 0.1
+Summary: Facilitating the execution and parsing of standard HyPhy (>=2.3.7) analyses
+Home-page: https://github.com/sjspielman/phyphy
+Author: Stephanie J. Spielman
+Author-email: stephanie.spielman@temple.edu
+License: UNKNOWN
+Download-URL: https://github.com/sjspielman/phyphy/tarball/0.1
+Description: UNKNOWN
+Platform: Tested on Mac OS X.

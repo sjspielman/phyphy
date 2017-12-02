@@ -1,0 +1,677 @@
+
+Loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded 'libv3/IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Loaded 'libv3/stats.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/stats.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/tasks/ancestral.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/ancestral.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'libv3/tasks/alignments.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/alignments.bf
+Already loaded '../IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/tasks/estimators.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/estimators.bf
+Loaded '../models/model_functions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/model_functions.bf
+Loaded 'DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Loaded 'frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Loaded 'GrabBag' from /usr/local/lib/hyphy/TemplateBatchFiles/Utility/GrabBag.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'model_functions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/model_functions.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded 'parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded 'frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Loaded '../models/DNA/GTR.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA/GTR.bf
+Already loaded '../DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/tasks/trees.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/trees.bf
+Already loaded '../IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded '../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'TreeTools' from /usr/local/lib/hyphy/TemplateBatchFiles/TreeTools.ibf
+Loaded 'libv3/tasks/mpi.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/tasks/mpi.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded '../models/parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Loaded 'libv3/convenience/math.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/math.bf
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'libv3/models/rate_variation.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/rate_variation.bf
+Already loaded 'parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded 'libv3/models/DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded 'libv3/models/DNA/GTR.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA/GTR.bf
+Loaded 'libv3/models/DNA/HKY85.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA/HKY85.bf
+Already loaded '../DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Loaded 'libv3/models/DNA/JC69.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA/JC69.bf
+Already loaded '../DNA.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/DNA.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'libv3/models/protein.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/protein.bf
+Already loaded '../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Already loaded 'frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Loaded 'libv3/models/protein/empirical.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/protein/empirical.bf
+Already loaded '../protein.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/protein.bf
+Already loaded '../parameters.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/parameters.bf
+Already loaded '../frequencies.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/models/frequencies.bf
+Already loaded '../../UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded '../../all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Loaded 'SelectionAnalyses/modules/io_functions.ibf' from /usr/local/lib/hyphy/TemplateBatchFiles/SelectionAnalyses/modules/io_functions.ibf
+Already loaded 'libv3/UtilityFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/UtilityFunctions.bf
+Already loaded 'libv3/IOFunctions.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/IOFunctions.bf
+Already loaded 'libv3/convenience/regexp.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/convenience/regexp.bf
+Already loaded 'libv3/all-terms.bf' from /usr/local/lib/hyphy/TemplateBatchFiles/libv3/all-terms.bf
+Variable 'utility.ToggleEnvVariable.cache' was not initialized prior to being used
+Variable 'NORMALIZE_SEQUENCE_NAMES' was not initialized prior to being used
+Variable 'NEXUS_FILE_TREE_MATRIX' was not initialized prior to being used
+Variable 'TREE_NODE_NAME_MAPPING' was not initialized prior to being used
+Variable 'END_OF_FILE' was not initialized prior to being used
+Variable '_DO_TREE_REBALANCE_' was not initialized prior to being used
+Variable '_KEEP_I_LABELS_' was not initialized prior to being used
+Rooted topology. Removing one branch - the left root child has been promoted to be the new root
+Variable 'INCLUDE_MODEL_SPECS' was not initialized prior to being used
+Variable 'cyhTwyom.cache' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+Variable 'COUNT_GAPS_IN_FREQUENCIES' was not initialized prior to being used
+Variable 'utility.ForEachPair.warn_non_rentrant' was not initialized prior to being used
+Variable AdkeOsiO.model.rv_gdd_weights_0 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_weights_1 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_weights_2 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_rates_0 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_rates_1 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_rates_2 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_rates_3 mapped to class {1,1,1,1}
+Variable AdkeOsiO.model.rv_gdd_norm mapped to class {1,1,1,1}
+Variable 'AdkeOsiO.model_pi' was not initialized prior to being used
+Model AdkeOsiO.model assigned to t8
+Model AdkeOsiO.model assigned to t13
+Model AdkeOsiO.model assigned to t4
+Model AdkeOsiO.model assigned to Node5
+Model AdkeOsiO.model assigned to Node3
+Model AdkeOsiO.model assigned to t1
+Model AdkeOsiO.model assigned to t7
+Model AdkeOsiO.model assigned to t15
+Model AdkeOsiO.model assigned to Node10
+Model AdkeOsiO.model assigned to Node8
+Model AdkeOsiO.model assigned to Node2
+Model AdkeOsiO.model assigned to t5
+Model AdkeOsiO.model assigned to t14
+Model AdkeOsiO.model assigned to Node13
+Model AdkeOsiO.model assigned to t9
+Model AdkeOsiO.model assigned to t6
+Model AdkeOsiO.model assigned to Node18
+Model AdkeOsiO.model assigned to t12
+Model AdkeOsiO.model assigned to t11
+Model AdkeOsiO.model assigned to Node21
+Model AdkeOsiO.model assigned to Node17
+Model AdkeOsiO.model assigned to t2
+Model AdkeOsiO.model assigned to t3
+Model AdkeOsiO.model assigned to t10
+Model AdkeOsiO.model assigned to Node26
+Model AdkeOsiO.model assigned to Node24
+Model AdkeOsiO.model assigned to Node16
+The tips of the tree:AdkeOsiO.tree_0 were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+
+Pseudo-optimal path's cost 461 vs 497 for 1..k=> a 1.07809 x improvement
+Variable 't' was not initialized prior to being used
+Variable 'AdkeOsiO.model.rv_gdd' was not initialized prior to being used
+Partition 0 reversible model flag computed as 1
+Variable 'AdkeOsiO.AdkeOsiO.likelihoodFunction' was not initialized prior to being used
+Variable 'SAVE_OPT_STATUS_TO' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t8.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t13.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t4.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t1.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t7.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t15.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t5.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t14.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t9.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t6.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t12.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t11.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t2.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t3.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.t10.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node5.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node3.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node10.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node8.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node2.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node13.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node18.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node21.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node17.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node26.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node24.t' was not initialized prior to being used
+Variable 'AdkeOsiO.tree_0.Node16.t' was not initialized prior to being used
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 159-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+AdkeOsiO.model.rv_gdd_rates_1 = 1
+AdkeOsiO.model.rv_gdd_rates_2 = 1
+AdkeOsiO.model.rv_gdd_rates_3 = 1
+AdkeOsiO.model.rv_gdd_rates_0 = 1
+AdkeOsiO.model.rv_gdd_weights_0 = 0.25
+AdkeOsiO.model.rv_gdd_weights_1 = 0.333333
+AdkeOsiO.model.rv_gdd_weights_2 = 0.5
+AdkeOsiO.tree_0.t8.t = 0.1
+AdkeOsiO.tree_0.t13.t = 0.1
+AdkeOsiO.tree_0.t4.t = 0.1
+AdkeOsiO.tree_0.Node5.t = 0.1
+AdkeOsiO.tree_0.Node3.t = 0.1
+AdkeOsiO.tree_0.t1.t = 0.1
+AdkeOsiO.tree_0.t7.t = 0.1
+AdkeOsiO.tree_0.t15.t = 0.1
+AdkeOsiO.tree_0.Node10.t = 0.1
+AdkeOsiO.tree_0.Node8.t = 0.1
+AdkeOsiO.tree_0.Node2.t = 0.1
+AdkeOsiO.tree_0.t5.t = 0.1
+AdkeOsiO.tree_0.t14.t = 0.1
+AdkeOsiO.tree_0.Node13.t = 0.1
+AdkeOsiO.tree_0.t9.t = 0.1
+AdkeOsiO.tree_0.t6.t = 0.1
+AdkeOsiO.tree_0.Node18.t = 0.1
+AdkeOsiO.tree_0.t12.t = 0.1
+AdkeOsiO.tree_0.t11.t = 0.1
+AdkeOsiO.tree_0.Node21.t = 0.1
+AdkeOsiO.tree_0.Node17.t = 0.1
+AdkeOsiO.tree_0.t2.t = 0.1
+AdkeOsiO.tree_0.t3.t = 0.1
+AdkeOsiO.tree_0.t10.t = 0.1
+AdkeOsiO.tree_0.Node26.t = 0.1
+AdkeOsiO.tree_0.Node24.t = 0.1
+AdkeOsiO.tree_0.Node16.t = 0.1
+Optimization finished in 9 loop passes.
+1082 likelihood evaluation calls and 30112 matrix exponentiations calls were made
+
+Variable 'BRANCH_LENGTH_STENCIL' was not initialized prior to being used
+Variable 'AdkeOsiO.option' was not initialized prior to being used
+Variable 'Unknown' was not initialized prior to being used
+Variable 'utility.ForEachPair.r' was not initialized prior to being used
+Variable 'relative_rates_site_model_instance_pi' was not initialized prior to being used
+Model relative_rates_site_model_instance assigned to t8
+Model relative_rates_site_model_instance assigned to t13
+Model relative_rates_site_model_instance assigned to t4
+Model relative_rates_site_model_instance assigned to Node5
+Model relative_rates_site_model_instance assigned to Node3
+Model relative_rates_site_model_instance assigned to t1
+Model relative_rates_site_model_instance assigned to t7
+Model relative_rates_site_model_instance assigned to t15
+Model relative_rates_site_model_instance assigned to Node10
+Model relative_rates_site_model_instance assigned to Node8
+Model relative_rates_site_model_instance assigned to Node2
+Model relative_rates_site_model_instance assigned to t5
+Model relative_rates_site_model_instance assigned to t14
+Model relative_rates_site_model_instance assigned to Node13
+Model relative_rates_site_model_instance assigned to t9
+Model relative_rates_site_model_instance assigned to t6
+Model relative_rates_site_model_instance assigned to Node18
+Model relative_rates_site_model_instance assigned to t12
+Model relative_rates_site_model_instance assigned to t11
+Model relative_rates_site_model_instance assigned to Node21
+Model relative_rates_site_model_instance assigned to Node17
+Model relative_rates_site_model_instance assigned to t2
+Model relative_rates_site_model_instance assigned to t3
+Model relative_rates_site_model_instance assigned to t10
+Model relative_rates_site_model_instance assigned to Node26
+Model relative_rates_site_model_instance assigned to Node24
+Model relative_rates_site_model_instance assigned to Node16
+Variable 'DATA_FILE_PRINT_FORMAT' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Partition 0 reversible model flag computed as 1
+Variable 'leisr.site_tree.t8.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t8.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.t13.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t13.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.t4.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t4.t:=(leisr.site_rate_estimate)*0.04987934069028371
+
+Variable 'leisr.site_tree.Node5.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node5.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.Node3.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node3.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.t1.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t1.t:=(leisr.site_rate_estimate)*0.2076145565003401
+
+Variable 'leisr.site_tree.t7.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t7.t:=(leisr.site_rate_estimate)*0.1054920903835304
+
+Variable 'leisr.site_tree.t15.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t15.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.Node10.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node10.t:=(leisr.site_rate_estimate)*0.1787193768514631
+
+Variable 'leisr.site_tree.Node8.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node8.t:=(leisr.site_rate_estimate)*0.1102775317412716
+
+Variable 'leisr.site_tree.Node2.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node2.t:=(leisr.site_rate_estimate)*0.04276905623726533
+
+Variable 'leisr.site_tree.t5.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t5.t:=(leisr.site_rate_estimate)*0.2607139889178193
+
+Variable 'leisr.site_tree.t14.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t14.t:=(leisr.site_rate_estimate)*0.3849144828307101
+
+Variable 'leisr.site_tree.Node13.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node13.t:=(leisr.site_rate_estimate)*0.04940386622641691
+
+Variable 'leisr.site_tree.t9.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t9.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.t6.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t6.t:=(leisr.site_rate_estimate)*0.2943841400994166
+
+Variable 'leisr.site_tree.Node18.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node18.t:=(leisr.site_rate_estimate)*0.7913114735968492
+
+Variable 'leisr.site_tree.t12.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t12.t:=(leisr.site_rate_estimate)*0.05827454437591343
+
+Variable 'leisr.site_tree.t11.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t11.t:=(leisr.site_rate_estimate)*0.2083061605905291
+
+Variable 'leisr.site_tree.Node21.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node21.t:=(leisr.site_rate_estimate)*0.6329894836892328
+
+Variable 'leisr.site_tree.Node17.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node17.t:=(leisr.site_rate_estimate)*0.1028066311121591
+
+Variable 'leisr.site_tree.t2.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t2.t:=(leisr.site_rate_estimate)*0.06613527539893489
+
+Variable 'leisr.site_tree.t3.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t3.t:=(leisr.site_rate_estimate)*0.1974783203163265
+
+Variable 'leisr.site_tree.t10.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.t10.t:=(leisr.site_rate_estimate)*0.1847072308373212
+
+Variable 'leisr.site_tree.Node26.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node26.t:=(leisr.site_rate_estimate)*0
+
+Variable 'leisr.site_tree.Node24.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node24.t:=(leisr.site_rate_estimate)*0.143653124715146
+
+Variable 'leisr.site_tree.Node16.t' was not initialized prior to being usedmodels.generic.SetBranchLength: leisr.site_tree.Node16.t:=(leisr.site_rate_estimate)*0.3799366643890965
+
+Variable 'MPI_NODE_COUNT' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Variable 'USE_LAST_RESULTS' was not initialized prior to being used
+Variable 'r_bIJwfZ.leisr.site_likelihood' was not initialized prior to being used
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 771-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 7 loop passes.
+38 likelihood evaluation calls and 767 matrix exponentiations calls were made
+
+Variable 'COVARIANCE_PRECISION' was not initialized prior to being used
+Variable 'COVARIANCE_PARAMETER' was not initialized prior to being used
+Variable 'leisr.site_likelihood' was not initialized prior to being used
+_profileFit(4.64343,0)--(29.6972589476)=0 failed to converge to sufficient precision in 100 iterates.
+Variable 'zS_EdNjQ.rate_statistics' was not initialized prior to being used
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (4) of threads.
+Set GUI update interval to every 828-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+67 likelihood evaluation calls and 1247 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(2.88134,0)--(22.911764449278)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 778-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 6 loop passes.
+34 likelihood evaluation calls and 687 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Site 1 evaluated to a 0 probability in ComputeTreeBlockByBranch
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (4) of threads.
+Set GUI update interval to every 849-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 6 loop passes.
+33 likelihood evaluation calls and 667 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(0.492883,0)--(19.067699413941)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 784-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+25 likelihood evaluation calls and 507 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 708-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+28 likelihood evaluation calls and 567 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(0.435653,0)--(22.246505256143)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 776-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 6 loop passes.
+125 likelihood evaluation calls and 2267 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 802-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+106 likelihood evaluation calls and 1827 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 790-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 4 loop passes.
+56 likelihood evaluation calls and 1047 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (4) of threads.
+Set GUI update interval to every 683-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+25 likelihood evaluation calls and 507 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(0.243226,0)--(22.311936421878)=0 failed to converge to sufficient precision in 100 iterates.
+_profileFit(2.02291,0)--(22.311936421878)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 685-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 6 loop passes.
+41 likelihood evaluation calls and 747 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (4) of threads.
+Set GUI update interval to every 840-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+24 likelihood evaluation calls and 487 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(2.84744,0)--(22.407259062806)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 773-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+37 likelihood evaluation calls and 587 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 775-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+54 likelihood evaluation calls and 987 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 753-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+29 likelihood evaluation calls and 587 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(1.44016,0)--(36.78340154873)=0 failed to converge to sufficient precision in 100 iterates.
+_profileFit(16.2814,0)--(36.78340154873)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 794-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 6 loop passes.
+32 likelihood evaluation calls and 647 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 814-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 4 loop passes.
+53 likelihood evaluation calls and 967 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(0.195333,0)--(24.568847708519)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (3) of threads.
+Set GUI update interval to every 788-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+102 likelihood evaluation calls and 1847 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+_profileFit(0.292193,0)--(23.187187399341)=0 failed to converge to sufficient precision in 100 iterates.
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (2) of threads.
+Set GUI update interval to every 699-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+25 likelihood evaluation calls and 507 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Row and/or column partition is empty. All the data will be used by default.
+Overwritten previously defined function:'r_bIJwfZ.__make_filter'
+Row and/or column partition is empty. All the data will be used by default.
+The tips of the tree:leisr.site_tree were matched with the species names from the data in the following numeric order (0-based) {0,14,4,8,3,10,5,9,1,2,13,12,6,7,11}
+Auto-benchmarked an optimal number (4) of threads.
+Set GUI update interval to every 823-th LF evaluation.
+Optimization settings:
+	OPTIMIZATION_METHOD = 4
+	OPTIMIZATION_PRECISION = 0.001
+	MAXIMUM_ITERATIONS_PER_VARIABLE = 5000
+
+Initial parameter values
+
+leisr.site_rate_estimate = 1
+Optimization finished in 5 loop passes.
+26 likelihood evaluation calls and 527 matrix exponentiations calls were made
+
+Overwritten previously defined function:'_profileFit'
+Variable 'USE_JSON_FOR_MATRIX' was not initialized prior to being used
