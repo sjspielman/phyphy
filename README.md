@@ -172,4 +172,5 @@ Of interest, `phyphy` the powerful Python package `ete3` to assist in tree manip
 
 All outputted trees will have labeled internal nodes that HyPhy applies.
 
-Briefly, these are the main methods of interest (although there are more!)
+Briefly, these are the main methods of interest (although there are more!):
+
