@@ -21,7 +21,6 @@ Full API documentation, including some code examples, is available from [http://
 
 
 ## Table of contents
-=================
 
   * [Installation](#installation)
   * [Sparknotes usage](#sparknotes-usage)
@@ -30,7 +29,7 @@ Full API documentation, including some code examples, is available from [http://
   	* [Examples: Defining HyPhy instances](#defining-hyphy-instances)
   	* [Examples: Executing HyPhy Analyses](#executing-hyphy-analyses)
 	* [Examples: Parsing HyPhy output JSON](#parsing-hyphy-output-json)
-	* [Examples: Parsing annotated trees from HyPhy output JSON](#parsing-annotated-tree-from-hyphy-output)
+	* [Examples: Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
 
 
