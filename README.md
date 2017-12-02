@@ -87,29 +87,30 @@ The follow Jupyter notebooks show various example of `phyphy` usage:
 Full API documentation is [here](http://sjspielman.org/phyphy/hyphy.html). Some brief examples are shown below.
 
 ```python
-	import phyphy
+import phyphy
 	
-	## Use canonical install, but suppress creation of messages.log and errors.log
-	myhyphy = phyphy.HyPhy(suppress_log = True)
-	
-	## Use canonical install, but suppress markdown output	myhyphy = phyphy.HyPhy(quiet = True)	
-	
-	## Use a **local build**
-	myhyphy = phyphy.HyPhy(build_path = /path/to/build/of/hyphy/)
-		
-	## Use a **local install**
-	myhyphy = phyphy.HyPhy(build_path = /path/to/install/of/hyphy/)
-	
-	## Specify that <=3 processes should be used by the default executable
-	myhyphy = phyphy.HyPhy(CPU=3)
-	
-	## Specify that the MPI executable should be used, with the launcher mpirun and the given mpirun arguments (32 processes)
-	myhyphy = phyphy.HyPhy(executable   = "HYPHYMPI",
-	                       mpi_launcher = "mpirun",
-	                       mpi_options  = "-np 32")
+## Use canonical install, but suppress creation of messages.log and errors.log
+myhyphy = phyphy.HyPhy(suppress_log = True)
 
-	## Once defined,the HyPhy instance can be passed to an analysis, for example this default FEL inference:
-	myfel = FEL(hyphy = myhyphy, data = "/path/to/data.nex")	myfel.run_analysis()
+## Use canonical install, but suppress markdown output	
+myhyphy = phyphy.HyPhy(quiet = True)	
+
+## Use a **local build**
+myhyphy = phyphy.HyPhy(build_path = /path/to/build/of/hyphy/)
+		
+## Use a **local install**
+myhyphy = phyphy.HyPhy(build_path = /path/to/install/of/hyphy/)
+
+## Specify that <=3 processes should be used by the default executable
+myhyphy = phyphy.HyPhy(CPU=3)
+
+## Specify that the MPI executable should be used, with the launcher mpirun and the given mpirun arguments (32 processes)
+myhyphy = phyphy.HyPhy(executable   = "HYPHYMPI",
+                       mpi_launcher = "mpirun",
+                       mpi_options  = "-np 32")
+
+## Once defined,the HyPhy instance can be passed to an analysis, for example this default FEL inference:
+myfel = FEL(hyphy = myhyphy, data = "/path/to/data.nex")	myfel.run_analysis()
 ```	
 		
 #### Executing HyPhy Analyses
@@ -132,24 +133,23 @@ Possible analyses to define include the following:
 
 
 ```python
-	import phyphy
-	
-	
-	### Run a FEL analysis, for example, with data in a single file
-	myfel = phyphy.FEL(data = "path/to/data.nex")
-	myfel.run_analysis()
-	
-	### Run a FEL analysis, for example, with data in two files
-	myfel = phyphy.FEL(alignment = "path/to/aln.fasta", tree = "path/to/tree/tree.txt")
-	myfel.run_analysis()
-	
-	### Run a FEL analysis, specifying the vertebrate mtDNA genetic code (NIH code #2)
-	myfel = phyphy.FEL(data = "path/to/data.nex", genetic_code = 2)
-	myfel.run_analysis()	
+import phyphy
 
-	### Run a FEL analysis, specifying a custom-named output JSON
-	myfel = phyphy.FEL(data = "path/to/data.nex", output = "customname.json")
-	myfel.run_analysis()		
+### Run a FEL analysis, for example, with data in a single file
+myfel = phyphy.FEL(data = "path/to/data.nex")
+myfel.run_analysis()
+
+### Run a FEL analysis, for example, with data in two files
+myfel = phyphy.FEL(alignment = "path/to/aln.fasta", tree = "path/to/tree/tree.txt")
+myfel.run_analysis()
+
+### Run a FEL analysis, specifying the vertebrate mtDNA genetic code (NIH code #2)
+myfel = phyphy.FEL(data = "path/to/data.nex", genetic_code = 2)
+myfel.run_analysis()	
+
+### Run a FEL analysis, specifying a custom-named output JSON	
+myfel = phyphy.FEL(data = "path/to/data.nex", output = "customname.json")
+myfel.run_analysis()		
 ```
 
 
@@ -160,18 +160,18 @@ Full API documentation is [here](http://sjspielman.org/phyphy/extractor.html). A
 An `Extractor` instance should be defined using a single argument, **either** an executed `Analysis` instance or a specific JSON file:
 
 ```python
-	import phyphy
+
+import phyphy
 	
+### Run a FEL analysis, for example, with data in a single file
+myfel = phyphy.FEL(data = "path/to/data.nex")
+myfel.run_analysis()
 	
-	### Run a FEL analysis, for example, with data in a single file
-	myfel = phyphy.FEL(data = "path/to/data.nex")
-	myfel.run_analysis()
+### Create an Extractor instance to parse JSON produced by `myfel`
+myext = phyphy.Extractor(myfel)
 	
-	### Create an Extractor instance to parse JSON produced by `myfel`
-	myext = phyphy.Extractor(myfel)
-	
-	## Alternatively, create an Extractor instance with a JSON directly
-	myext = Extractor("path/to/json.json")
+## Alternatively, create an Extractor instance with a JSON directly
+myext = Extractor("path/to/json.json")
 ```
 
 A Jupyter notebook demonstrating usage of the `Extractor` class will be available shortly. 
@@ -182,5 +182,5 @@ Of interest, `phyphy` uses the powerful Python package `ete3` to assist in tree 
 	+ The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found evidence for selection, at a given P-value threshold
 	+ Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
 
-Any NHX tree can be visualized with a variety of programmatic platforms, including [`ete3`](http://etetoolkit.org/) in Python3 or [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html) in R/Bioconductor. Examples of creating such trees and visualizing them with either of these two platforms are available in `examples/` (FORTHCOMING).  
+Any NHX tree can be visualized with a variety of programmatic platforms, including [`ete3`](http://etetoolkit.org/) in Python3 or [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html) in R/Bioconductor. Examples of creating such trees and visualizing them with either of these two platforms are available in `examples/visualize_feature_tree_ete3.py` and `examples/visualize_feature_tree_ggtree.R`, respectively.  
 
