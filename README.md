@@ -72,6 +72,14 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 	   + [Newick-extended format](https://home.cc.umanitoba.ca/~psgendb/doc/atv/NHX.pdf) phylogenies with branch features for downstream visualization in tools like the Python package [`ete3`](http://etetoolkit.org/) or the R package [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html)
 	   + CSV files, for methods FEL, MEME, SLAC, FUBAR, LEISR, aBSREL
 
+### Jupyter notebooks
+
+The follow Jupyter notebooks show various example of `phyphy` usage:
+
+
+
+
+
 ### Examples
 
 #### Defining HyPhy instances
@@ -168,9 +176,11 @@ An `Extractor` instance should be defined using a single argument, **either** an
 
 A Jupyter notebook demonstrating usage of the `Extractor` class will be available shortly. 
 
-Of interest, `phyphy` the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools. You can obtain the tree fitted for any model in the JSON (updated branch lengths). You can also obtain **annotated** trees in NHX format, where nodes have annotation(s) that can be visualized programmatically using tools like `ete3` in Python or `ggtree` in R/Bioconductor. 
+Of interest, `phyphy` uses the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools:
+	+ The method `.extract_model_tree()` allows you to obtain the fitted phylogeny for a given model (i.e., branch lengths will be updated). This will be output in standard newick format
+	+ The method `.extract_feature_tree()` allows you to obtain an **annotated** tree in Newick eXtended format (NHX), where nodes are annotated with the provided feature (i.e., attribute). 
+	+ The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found evidence for selection, at a given P-value threshold
+	+ Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
 
-All outputted trees will have labeled internal nodes that HyPhy applies.
-
-Briefly, these are the main methods of interest (although there are more!):
+Any NHX tree can be visualized with a variety of programmatic platforms, including [`ete3`](http://etetoolkit.org/) in Python3 or [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html) in R/Bioconductor. Examples of creating such trees and visualizing them with either of these two platforms are available in `examples/` (FORTHCOMING).  
 
