@@ -177,10 +177,11 @@ myext = Extractor("path/to/json.json")
 A Jupyter notebook demonstrating usage of the `Extractor` class will be available shortly. 
 
 Of interest, `phyphy` uses the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools:
-	+ The method `.extract_model_tree()` allows you to obtain the fitted phylogeny for a given model (i.e., branch lengths will be updated). This will be output in standard newick format
-	+ The method `.extract_feature_tree()` allows you to obtain an **annotated** tree in Newick eXtended format (NHX), where nodes are annotated with the provided feature (i.e., attribute). 
-	+ The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found evidence for selection, at a given P-value threshold
-	+ Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
+
++ The method `.extract_model_tree()` allows you to obtain the fitted phylogeny for a given model (i.e., branch lengths will be updated). This will be output in standard newick format
++ The method `.extract_feature_tree()` allows you to obtain an **annotated** tree in Newick eXtended format (NHX), where nodes are annotated with the provided feature (i.e., attribute). 
++ The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found evidence for selection, at a given P-value threshold
++ Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
 
 Any NHX tree can be visualized with a variety of programmatic platforms, including [`ete3`](http://etetoolkit.org/) in Python3 or [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html) in R/Bioconductor. Examples of creating such trees and visualizing them with either of these two platforms are available in `examples/visualize_feature_tree_ete3.py` and `examples/visualize_feature_tree_ggtree.R`, respectively.  
 
