@@ -126,15 +126,16 @@ Each analysis will have its own optional arguments, as detailed in the API. Howe
 + When alignment and tree are in separate files, use the two respective keyword arguments `alignment` and `tree`.
 	
 Possible analyses to define include the following:
-	+ aBSREL
-	+ BUSTED
-	+ FEL
-	+ FUBAR
-	+ LEISR
-	+ MEME
-	+ RELAX
-		+ Note that this analysis has one other required argument, the label in the tree corresponding to test branches.
-	+ SLAC
+
++ aBSREL
++ BUSTED
++ FEL
++ FUBAR
++ LEISR
++ MEME
++ RELAX
+   + Note that this analysis has one other required argument, the label in the tree corresponding to test branches.
++ SLAC
 
 
 ```python
