@@ -765,8 +765,10 @@ class Extractor():
 
                >>> e = Extractor("/path/to/ABSREL.json") ## Define an ABSREL Extractor, for example
                >>> e.extract_branch_attribute("Rate classes") ## Number of inferred rate classes per node
-              {'0557_7': '1', '0557_4': '1', 'Node29': '1', '0564_13': '1', 'Node25': '1', 'Node20': '1', 'Node23': '1', '0557_11': '1', '0557_12': '1', '0557_13': '1', '0564_22': '1', '0564_21': '1', '0564_15': '2', 'Node9': '1', '0564_1': '1', '0564_3': '2', 'Separator': '2', '0564_5': '1', '0564_6': '1', '0564_7': '1', '0564_9': '1', '0557_24': '1', 'Node7': '1', 'Node6': '1', '0557_9': '1', 'Node17': '1', 'Node16': '1', 'Node19': '1', 'Node32': '1', 'Node30': '1', '0557_6': '1', 'Node36': '1', 'Node35': '2', '0557_5': '1', '0557_2': '1', '0564_11': '2', '0564_17': '1', 'Node18': '1', '0557_25': '1', '0564_4': '2', 'Node8': '1', '0557_26': '1', '0557_21': '1', 'Node53': '1'}
-        """        
+               {'0557_7': '1', '0557_4': '1', 'Node29': '1', '0564_13': '1', 'Node25': '1', 'Node20': '1', 'Node23': '1', '0557_11': '1', '0557_12': '1', '0557_13': '1', '0564_22': '1', '0564_21': '1', '0564_15': '2', 'Node9': '1', '0564_1': '1', '0564_3': '2', 'Separator': '2', '0564_5': '1', '0564_6': '1', '0564_7': '1', '0564_9': '1', '0557_24': '1', 'Node7': '1', 'Node6': '1', '0557_9': '1', 'Node17': '1', 'Node16': '1', 'Node19': '1', 'Node32': '1', 'Node30': '1', '0557_6': '1', 'Node36': '1', 'Node35': '2', '0557_5': '1', '0557_2': '1', '0564_11': '2', '0564_17': '1', 'Node18': '1', '0557_25': '1', '0564_4': '2', 'Node8': '1', '0557_26': '1', '0557_21': '1', 'Node53': '1'}
+
+        """
+              
         assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
         if self.npartitions == 1:
             partition = 0
@@ -806,6 +808,12 @@ class Extractor():
                 1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
                 2. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
 
+            **Examples:**
+
+               >>> e = Extractor("/path/to/ABSREL.json") ## Define an aBSREL Extractor, for example
+               >>> e.map_branch_atttribute("Rate classes") ## number of inferred rate classes, as branch lengths
+               (0564_7:1,(((((0564_11:2,0564_4:2)Node20:1,(0564_1:1,(0564_21:1,0564_5:1)Node25:1)Node23:1)Node19:1,0564_17:1)Node18:1,((0564_13:1,(0564_15:2)Node32:1)Node30:1,((0564_22:1,0564_6:1)Node36:1,0564_3:2)Node35:2)Node29:1)Node17:1,0564_9:1)Node16:1,(((0557_24:1,0557_4:1,0557_2:1)Node9:1,0557_12:1)Node8:1,((0557_21:1,0557_6:1,0557_9:1,0557_11:1,0557_13:1,0557_26:1,(0557_5:1,0557_7:1)Node53:1)Node6:1,0557_25:1)Node7:1)Separator:2);
+
         """
         assert(attribute_name != self.fields.rate_distributions), "\n[ERROR]: Cannot map rate distributions onto a tree."
         assert(attribute_name in self.attribute_names), "\n [ERROR]: Attribute name provided is not available."
@@ -841,6 +849,22 @@ class Extractor():
                 1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
                 2. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
 
+            **Examples:**
+                
+               >>> ### Define a FEL Extractor, for example 
+               >>> e = Extractor("/path/to/FEL.json") 
+               >>> e.extract_model_tree("Global MG94xREV) 
+               ((((Pig:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);"
+
+               >>> ### Use original names rather than HyPhy-reformatted names 
+               >>> e.extract_model_tree("Global MG94xREV") 
+               ((((Pig~gy:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);
+               
+               >>> ### Define a FEL Extractor, from an analysis with multiple partitions, for example
+               >>> e = Extractor("/path/to/FEL_mulitpart.json") 
+               >>> e.extract_model_tree("Global MG94xREV", partition = 1) ## specify only one partition 
+               (((((AF231119:0.00272571804934,AF231115:0)Node4:0,((AF082576:0.00274243126371,AF231113:0)Node8:0.0027139677452,AF231114:0.011078118042)Node7:0.00276605108624)Node3:0.00271644261188,(AF231117:0.00298921107219,AF231118:0.0505182782033)Node12:0.00258521327296)Node2:0.00550172127052,(AF186242:0,(AF186243:0,AF234767:0.0224059556982)Node17:0.00273365779956)Node15:0.00270941747926)Node1:0,(AF186241:0.00270936341991,AF231116:0)Node20:0,AF187824:0.00546772497238);
+
         """
         return self.map_branch_attribute(model, partition = partition, original_names = original_names)
 
@@ -848,14 +872,41 @@ class Extractor():
 
     def extract_absrel_tree(self, original_names = False, update_branch_lengths = None, p = 0.05, labels = None, ggtree = False):
         """
-            Return newick phylogeny with ete-style features as selection *indicators* (Default is 0 for not selected, 1 for selected) at the specified p. aBSREL only.
+            Return newick phylogeny in **Extended Newick Format** (:code:`ete`-style features) as selection *indicators* (Default is 0 for not selected, 1 for selected) at the specified p threshold. **aBSREL only.**
         
             Optional keyword arguments:
                 1. **original_names**, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.
                 2. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None.
                 3. **p**, the p-value threshold for calling selection. Default: 0.05
                 4. **labels**: A tuple of labels to use for (selected, not selected). Default is (1,0)
-                5. **ggtree**, Make output compatible with input to the R package `ggtree`, with the function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
+                5. **ggtree**, Format output to use as input to the R package `ggtree`, using their function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
+
+
+            **Examples:**
+                
+               >>> ### Define an ABSREL Extractor
+               >>> e = Extractor("/path/to/ABSREL.json") 
+               
+               >>> ### Add extended-newick format labels of selection with default labels.
+               >>> ### Note this example happens not to have branch lengths in the input tree.
+               >>> e.extract_absrel_tree() 
+               (0564_7:1[&&NHX:Selected=0],(((((0564_11:1[&&NHX:Selected=0],0564_4:1[&&NHX:Selected=0])Node20:1[&&NHX:Selected=0],(0564_1:1[&&NHX:Selected=0],(0564_21:1[&&NHX:Selected=0],0564_5:1[&&NHX:Selected=0])Node25:1[&&NHX:Selected=0])Node23:1[&&NHX:Selected=0])Node19:1[&&NHX:Selected=0],0564_17:1[&&NHX:Selected=0])Node18:1[&&NHX:Selected=0],((0564_13:1[&&NHX:Selected=0],(0564_15:1[&&NHX:Selected=0])Node32:1[&&NHX:Selected=0])Node30:1[&&NHX:Selected=0],((0564_22:1[&&NHX:Selected=0],0564_6:1[&&NHX:Selected=0])Node36:1[&&NHX:Selected=0],0564_3:1[&&NHX:Selected=1])Node35:1[&&NHX:Selected=1])Node29:1[&&NHX:Selected=0])Node17:1[&&NHX:Selected=0],0564_9:1[&&NHX:Selected=0])Node16:1[&&NHX:Selected=0],(((0557_24:1[&&NHX:Selected=0],0557_4:1[&&NHX:Selected=0],0557_2:1[&&NHX:Selected=0])Node9:1[&&NHX:Selected=0],0557_12:1[&&NHX:Selected=0])Node8:1[&&NHX:Selected=0],((0557_21:1[&&NHX:Selected=0],0557_6:1[&&NHX:Selected=0],0557_9:1[&&NHX:Selected=0],0557_11:1[&&NHX:Selected=0],0557_13:1[&&NHX:Selected=0],0557_26:1[&&NHX:Selected=0],(0557_5:1[&&NHX:Selected=0],0557_7:1[&&NHX:Selected=0])Node53:1[&&NHX:Selected=0])Node6:1[&&NHX:Selected=0],0557_25:1[&&NHX:Selected=0])Node7:1[&&NHX:Selected=0])Separator:1[&&NHX:Selected=1]);
+               
+               >>> ### Add extended-newick format labels of selection with default labels, with branch lengths updated as the adaptive model 
+               >>> e.extract_absrel_tree(update_branch_lengths="Full adaptive model") 
+               (0564_7:0.00708844[&&NHX:Selected=0],(((((0564_11:0.00527268[&&NHX:Selected=0],0564_4:0.00714182[&&NHX:Selected=0])Node20:0.0022574[&&NHX:Selected=0],(0564_1:0.00583239[&&NHX:Selected=0],(0564_21:0.00121537[&&NHX:Selected=0],0564_5:0.00266921[&&NHX:Selected=0])Node25:0.000797211[&&NHX:Selected=0])Node23:0.00142056[&&NHX:Selected=0])Node19:0.0019147[&&NHX:Selected=0],0564_17:0.00605582[&&NHX:Selected=0])Node18:0.00100178[&&NHX:Selected=0],((0564_13:0.0053066[&&NHX:Selected=0],(0564_15:0.00346989[&&NHX:Selected=0])Node32:0.000752206[&&NHX:Selected=0])Node30:0.00188243[&&NHX:Selected=0],((0564_22:0.00686981[&&NHX:Selected=0],0564_6:0.00581523[&&NHX:Selected=0])Node36:0.00125905[&&NHX:Selected=0],0564_3:0.00791919[&&NHX:Selected=1])Node35:0.0174886[&&NHX:Selected=1])Node29:0.0010489[&&NHX:Selected=0])Node17:0.00156911[&&NHX:Selected=0],0564_9:0.00551506[&&NHX:Selected=0])Node16:0.000783733[&&NHX:Selected=0],(((0557_24:0.00078793[&&NHX:Selected=0],0557_4:0.000787896[&&NHX:Selected=0],0557_2:0.000399166[&&NHX:Selected=0])Node9:0.00206483[&&NHX:Selected=0],0557_12:0.00267531[&&NHX:Selected=0])Node8:0.00118205[&&NHX:Selected=0],((0557_21:0[&&NHX:Selected=0],0557_6:0.000391941[&&NHX:Selected=0],0557_9:0.000402021[&&NHX:Selected=0],0557_11:0.00156985[&&NHX:Selected=0],0557_13:0.000401742[&&NHX:Selected=0],0557_26:0.00079377[&&NHX:Selected=0],(0557_5:0.00117641[&&NHX:Selected=0],0557_7:0[&&NHX:Selected=0])Node53:0.000391973[&&NHX:Selected=0])Node6:0.00118062[&&NHX:Selected=0],0557_25:0.00220372[&&NHX:Selected=0])Node7:0.00103489[&&NHX:Selected=0])Separator:0.00822051[&&NHX:Selected=1]);               
+
+               >>> ### Add extended-newick format labels of selection with *custom* labels, with branch lengths updated as the adaptive model 
+               >>> e.extract_absrel_tree(update_branch_lengths="Full adaptive model", labels=["no", "yes"]) 
+               (0564_7:0.00708844[&&NHX:Selected=yes],(((((0564_11:0.00527268[&&NHX:Selected=yes],0564_4:0.00714182[&&NHX:Selected=yes])Node20:0.0022574[&&NHX:Selected=yes],(0564_1:0.00583239[&&NHX:Selected=yes],(0564_21:0.00121537[&&NHX:Selected=yes],0564_5:0.00266921[&&NHX:Selected=yes])Node25:0.000797211[&&NHX:Selected=yes])Node23:0.00142056[&&NHX:Selected=yes])Node19:0.0019147[&&NHX:Selected=yes],0564_17:0.00605582[&&NHX:Selected=yes])Node18:0.00100178[&&NHX:Selected=yes],((0564_13:0.0053066[&&NHX:Selected=yes],(0564_15:0.00346989[&&NHX:Selected=yes])Node32:0.000752206[&&NHX:Selected=yes])Node30:0.00188243[&&NHX:Selected=yes],((0564_22:0.00686981[&&NHX:Selected=yes],0564_6:0.00581523[&&NHX:Selected=yes])Node36:0.00125905[&&NHX:Selected=yes],0564_3:0.00791919[&&NHX:Selected=no])Node35:0.0174886[&&NHX:Selected=no])Node29:0.0010489[&&NHX:Selected=yes])Node17:0.00156911[&&NHX:Selected=yes],0564_9:0.00551506[&&NHX:Selected=yes])Node16:0.000783733[&&NHX:Selected=yes],(((0557_24:0.00078793[&&NHX:Selected=yes],0557_4:0.000787896[&&NHX:Selected=yes],0557_2:0.000399166[&&NHX:Selected=yes])Node9:0.00206483[&&NHX:Selected=yes],0557_12:0.00267531[&&NHX:Selected=yes])Node8:0.00118205[&&NHX:Selected=yes],((0557_21:0[&&NHX:Selected=yes],0557_6:0.000391941[&&NHX:Selected=yes],0557_9:0.000402021[&&NHX:Selected=yes],0557_11:0.00156985[&&NHX:Selected=yes],0557_13:0.000401742[&&NHX:Selected=yes],0557_26:0.00079377[&&NHX:Selected=yes],(0557_5:0.00117641[&&NHX:Selected=yes],0557_7:0[&&NHX:Selected=yes])Node53:0.000391973[&&NHX:Selected=yes])Node6:0.00118062[&&NHX:Selected=yes],0557_25:0.00220372[&&NHX:Selected=yes])Node7:0.00103489[&&NHX:Selected=yes])Separator:0.00822051[&&NHX:Selected=no]);
+
+               >>> ### Add extended-newick format labels of selection with default labels, **formated** for `ggtree` R package input
+               >>> e.extract_absrel_tree(ggtree = True) 
+               (0564_7:1[&&NHX:Selected=0],(((((0564_11:1[&&NHX:Selected=0],0564_4:1[&&NHX:Selected=0])Node20:1[&&NHX:Selected=0],(0564_1:1[&&NHX:Selected=0],(0564_21:1[&&NHX:Selected=0],0564_5:1[&&NHX:Selected=0])Node25:1[&&NHX:Selected=0])Node23:1[&&NHX:Selected=0])Node19:1[&&NHX:Selected=0],0564_17:1[&&NHX:Selected=0])Node18:1[&&NHX:Selected=0],((0564_13:1[&&NHX:Selected=0],(0564_15:1[&&NHX:Selected=0])Node32:1[&&NHX:Selected=0])Node30:1[&&NHX:Selected=0],((0564_22:1[&&NHX:Selected=0],0564_6:1[&&NHX:Selected=0])Node36:1[&&NHX:Selected=0],0564_3:1[&&NHX:Selected=1])Node35:1[&&NHX:Selected=1])Node29:1[&&NHX:Selected=0])Node17:1[&&NHX:Selected=0],0564_9:1[&&NHX:Selected=0])Node16:1[&&NHX:Selected=0],(((0557_24:1[&&NHX:Selected=0],0557_4:1[&&NHX:Selected=0],0557_2:1[&&NHX:Selected=0])Node9:1[&&NHX:Selected=0],0557_12:1[&&NHX:Selected=0])Node8:1[&&NHX:Selected=0],((0557_21:1[&&NHX:Selected=0],0557_6:1[&&NHX:Selected=0],0557_9:1[&&NHX:Selected=0],0557_11:1[&&NHX:Selected=0],0557_13:1[&&NHX:Selected=0],0557_26:1[&&NHX:Selected=0],(0557_5:1[&&NHX:Selected=0],0557_7:1[&&NHX:Selected=0])Node53:1[&&NHX:Selected=0])Node6:1[&&NHX:Selected=0],0557_25:1[&&NHX:Selected=0])Node7:1[&&NHX:Selected=0])Separator:1[&&NHX:Selected=1])[&&NHX:Selected=0];
+
+               >>> ### Add extended-newick format labels of selection with default labels, using a P-threshold of 0.3 
+               >>> e.extract_absrel_tree(p=0.3) 
+               (0564_7:1[&&NHX:Selected=1],(((((0564_11:1[&&NHX:Selected=0],0564_4:1[&&NHX:Selected=0])Node20:1[&&NHX:Selected=0],(0564_1:1[&&NHX:Selected=0],(0564_21:1[&&NHX:Selected=0],0564_5:1[&&NHX:Selected=0])Node25:1[&&NHX:Selected=0])Node23:1[&&NHX:Selected=0])Node19:1[&&NHX:Selected=0],0564_17:1[&&NHX:Selected=0])Node18:1[&&NHX:Selected=0],((0564_13:1[&&NHX:Selected=0],(0564_15:1[&&NHX:Selected=0])Node32:1[&&NHX:Selected=0])Node30:1[&&NHX:Selected=0],((0564_22:1[&&NHX:Selected=0],0564_6:1[&&NHX:Selected=0])Node36:1[&&NHX:Selected=0],0564_3:1[&&NHX:Selected=1])Node35:1[&&NHX:Selected=1])Node29:1[&&NHX:Selected=0])Node17:1[&&NHX:Selected=0],0564_9:1[&&NHX:Selected=0])Node16:1[&&NHX:Selected=0],(((0557_24:1[&&NHX:Selected=0],0557_4:1[&&NHX:Selected=0],0557_2:1[&&NHX:Selected=0])Node9:1[&&NHX:Selected=0],0557_12:1[&&NHX:Selected=0])Node8:1[&&NHX:Selected=0],((0557_21:1[&&NHX:Selected=0],0557_6:1[&&NHX:Selected=0],0557_9:1[&&NHX:Selected=0],0557_11:1[&&NHX:Selected=0],0557_13:1[&&NHX:Selected=0],0557_26:1[&&NHX:Selected=0],(0557_5:1[&&NHX:Selected=0],0557_7:1[&&NHX:Selected=0])Node53:1[&&NHX:Selected=0])Node6:1[&&NHX:Selected=0],0557_25:1[&&NHX:Selected=0])Node7:1[&&NHX:Selected=0])Separator:1[&&NHX:Selected=1]);
         """
         
         ### Sanity checks
@@ -885,16 +936,42 @@ class Extractor():
 
     def extract_feature_tree(self, feature, original_names = False, update_branch_lengths = None, partition = None, ggtree = False):
         """
-            Extract a tree with ete-style feature(s) included.
+            Return newick phylogeny in **Extended Newick Format** (:code:`ete`-style features) with specified feature(s).
             
             Required positional arguments:
-                1. **feature**, The feature(s) to be included the final newick tree. This is either a string of a feature, or a list of features. Features are taken from attributes.
+                1. **feature**, The feature(s) to be included the final tree. This is either a string of a feature, or a list of features. Features are taken from attributes. Note that the exported feature label will have all spaces removed.
 
             Optional keyword arguments:
                 1. **update_branch_lengths**, string model name, indicting that branch lengths should be replaced with the given model fit's optimized lengths. Default: None.
                 2. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
-                3. **ggtree**, Make output compatible with input to the R package `ggtree`, with the function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
+                3. **ggtree**, Format output to use as input to the R package `ggtree`, using their function `read.nhx()`. The key difference is that ggtree requires the *root* to also have the feature included, while ete does not. Default: False.
+
+
+            **Examples:**
+
+               >>> ### Define an ABSREL Extractor
+               >>> e = Extractor("/path/to/ABSREL.json") 
+               
+               >>> ### Add a single feature, rate classes
+               >>> ### Note this example happens to have no branch lengths
+               >>> e.extract_feature_tree("Rate classes") 
+               (0564_7:1[&&NHX:Rateclasses=1],(((((0564_11:1[&&NHX:Rateclasses=2],0564_4:1[&&NHX:Rateclasses=2])Node20:1[&&NHX:Rateclasses=1],(0564_1:1[&&NHX:Rateclasses=1],(0564_21:1[&&NHX:Rateclasses=1],0564_5:1[&&NHX:Rateclasses=1])Node25:1[&&NHX:Rateclasses=1])Node23:1[&&NHX:Rateclasses=1])Node19:1[&&NHX:Rateclasses=1],0564_17:1[&&NHX:Rateclasses=1])Node18:1[&&NHX:Rateclasses=1],((0564_13:1[&&NHX:Rateclasses=1],(0564_15:1[&&NHX:Rateclasses=2])Node32:1[&&NHX:Rateclasses=1])Node30:1[&&NHX:Rateclasses=1],((0564_22:1[&&NHX:Rateclasses=1],0564_6:1[&&NHX:Rateclasses=1])Node36:1[&&NHX:Rateclasses=1],0564_3:1[&&NHX:Rateclasses=2])Node35:1[&&NHX:Rateclasses=2])Node29:1[&&NHX:Rateclasses=1])Node17:1[&&NHX:Rateclasses=1],0564_9:1[&&NHX:Rateclasses=1])Node16:1[&&NHX:Rateclasses=1],(((0557_24:1[&&NHX:Rateclasses=1],0557_4:1[&&NHX:Rateclasses=1],0557_2:1[&&NHX:Rateclasses=1])Node9:1[&&NHX:Rateclasses=1],0557_12:1[&&NHX:Rateclasses=1])Node8:1[&&NHX:Rateclasses=1],((0557_21:1[&&NHX:Rateclasses=1],0557_6:1[&&NHX:Rateclasses=1],0557_9:1[&&NHX:Rateclasses=1],0557_11:1[&&NHX:Rateclasses=1],0557_13:1[&&NHX:Rateclasses=1],0557_26:1[&&NHX:Rateclasses=1],(0557_5:1[&&NHX:Rateclasses=1],0557_7:1[&&NHX:Rateclasses=1])Node53:1[&&NHX:Rateclasses=1])Node6:1[&&NHX:Rateclasses=1],0557_25:1[&&NHX:Rateclasses=1])Node7:1[&&NHX:Rateclasses=1])Separator:1[&&NHX:Rateclasses=2]);
+
+               >>> ### Add a single feature, rate classes, with updated branch lengths 
+               >>> e.extract_feature_tree("Rate classes",update_branch_lengths = "Nucleotide GTR") 
+               (0564_7:0.00664844[&&NHX:Rateclasses=1],(((((0564_11:0.00434881[&&NHX:Rateclasses=2],0564_4:0.00593219[&&NHX:Rateclasses=2])Node20:0.0026739[&&NHX:Rateclasses=1],(0564_1:0.00559179[&&NHX:Rateclasses=1],(0564_21:0.00124334[&&NHX:Rateclasses=1],0564_5:0.00259957[&&NHX:Rateclasses=1])Node25:0.000863062[&&NHX:Rateclasses=1])Node23:0.00149918[&&NHX:Rateclasses=1])Node19:0.00164262[&&NHX:Rateclasses=1],0564_17:0.00600417[&&NHX:Rateclasses=1])Node18:0.00100639[&&NHX:Rateclasses=1],((0564_13:0.00534732[&&NHX:Rateclasses=1],(0564_15:0.00278489[&&NHX:Rateclasses=2])Node32:0.000565591[&&NHX:Rateclasses=1])Node30:0.00196314[&&NHX:Rateclasses=1],((0564_22:0.00686685[&&NHX:Rateclasses=1],0564_6:0.00554135[&&NHX:Rateclasses=1])Node36:0.000954793[&&NHX:Rateclasses=1],0564_3:0.00652918[&&NHX:Rateclasses=2])Node35:0.00195507[&&NHX:Rateclasses=2])Node29:0.001029[&&NHX:Rateclasses=1])Node17:0.00155756[&&NHX:Rateclasses=1],0564_9:0.00533212[&&NHX:Rateclasses=1])Node16:0.000567283[&&NHX:Rateclasses=1],(((0557_24:0.000770978[&&NHX:Rateclasses=1],0557_4:0.000770929[&&NHX:Rateclasses=1],0557_2:0.000385454[&&NHX:Rateclasses=1])Node9:0.00199212[&&NHX:Rateclasses=1],0557_12:0.00265769[&&NHX:Rateclasses=1])Node8:0.00119139[&&NHX:Rateclasses=1],((0557_21:0[&&NHX:Rateclasses=1],0557_6:0.000388349[&&NHX:Rateclasses=1],0557_9:0.000388411[&&NHX:Rateclasses=1],0557_11:0.00155424[&&NHX:Rateclasses=1],0557_13:0.000388353[&&NHX:Rateclasses=1],0557_26:0.000776809[&&NHX:Rateclasses=1],(0557_5:0.00116512[&&NHX:Rateclasses=1],0557_7:0[&&NHX:Rateclasses=1])Node53:0.000388349[&&NHX:Rateclasses=1])Node6:0.00118273[&&NHX:Rateclasses=1],0557_25:0.00219124[&&NHX:Rateclasses=1])Node7:0.000940406[&&NHX:Rateclasses=1])Separator:0.00689203[&&NHX:Rateclasses=2]);"
+
+               >>> ### Add a single feature, rate classes, with updated branch lengths, formatted for ggtree
+               >>> e.extract_feature_tree("Rate classes") 
+               (0564_7:0.00664844[&&NHX:Rateclasses=1],(((((0564_11:0.00434881[&&NHX:Rateclasses=2],0564_4:0.00593219[&&NHX:Rateclasses=2])Node20:0.0026739[&&NHX:Rateclasses=1],(0564_1:0.00559179[&&NHX:Rateclasses=1],(0564_21:0.00124334[&&NHX:Rateclasses=1],0564_5:0.00259957[&&NHX:Rateclasses=1])Node25:0.000863062[&&NHX:Rateclasses=1])Node23:0.00149918[&&NHX:Rateclasses=1])Node19:0.00164262[&&NHX:Rateclasses=1],0564_17:0.00600417[&&NHX:Rateclasses=1])Node18:0.00100639[&&NHX:Rateclasses=1],((0564_13:0.00534732[&&NHX:Rateclasses=1],(0564_15:0.00278489[&&NHX:Rateclasses=2])Node32:0.000565591[&&NHX:Rateclasses=1])Node30:0.00196314[&&NHX:Rateclasses=1],((0564_22:0.00686685[&&NHX:Rateclasses=1],0564_6:0.00554135[&&NHX:Rateclasses=1])Node36:0.000954793[&&NHX:Rateclasses=1],0564_3:0.00652918[&&NHX:Rateclasses=2])Node35:0.00195507[&&NHX:Rateclasses=2])Node29:0.001029[&&NHX:Rateclasses=1])Node17:0.00155756[&&NHX:Rateclasses=1],0564_9:0.00533212[&&NHX:Rateclasses=1])Node16:0.000567283[&&NHX:Rateclasses=1],(((0557_24:0.000770978[&&NHX:Rateclasses=1],0557_4:0.000770929[&&NHX:Rateclasses=1],0557_2:0.000385454[&&NHX:Rateclasses=1])Node9:0.00199212[&&NHX:Rateclasses=1],0557_12:0.00265769[&&NHX:Rateclasses=1])Node8:0.00119139[&&NHX:Rateclasses=1],((0557_21:0[&&NHX:Rateclasses=1],0557_6:0.000388349[&&NHX:Rateclasses=1],0557_9:0.000388411[&&NHX:Rateclasses=1],0557_11:0.00155424[&&NHX:Rateclasses=1],0557_13:0.000388353[&&NHX:Rateclasses=1],0557_26:0.000776809[&&NHX:Rateclasses=1],(0557_5:0.00116512[&&NHX:Rateclasses=1],0557_7:0[&&NHX:Rateclasses=1])Node53:0.000388349[&&NHX:Rateclasses=1])Node6:0.00118273[&&NHX:Rateclasses=1],0557_25:0.00219124[&&NHX:Rateclasses=1])Node7:0.000940406[&&NHX:Rateclasses=1])Separator:0.00689203[&&NHX:Rateclasses=2])[&&NHX:Rateclasses=0];
+               
+               >>> ### Add a multiple features with updated branch lengths 
+               >>> e.extract_feature_tree(["Rate classes", "LRT", update_branch_lengths = "Nucleotide GTR") 
+               (0564_7:0.00664844[&&NHX:Rateclasses=1:LRT=0],(((((0564_11:0.00434881[&&NHX:Rateclasses=2:LRT=3.96048976951],0564_4:0.00593219[&&NHX:Rateclasses=2:LRT=4.80587881259])Node20:0.0026739[&&NHX:Rateclasses=1:LRT=3.30060030447],(0564_1:0.00559179[&&NHX:Rateclasses=1:LRT=0.0105269546166],(0564_21:0.00124334[&&NHX:Rateclasses=1:LRT=0],0564_5:0.00259957[&&NHX:Rateclasses=1:LRT=4.51927751707])Node25:0.000863062[&&NHX:Rateclasses=1:LRT=0])Node23:0.00149918[&&NHX:Rateclasses=1:LRT=0])Node19:0.00164262[&&NHX:Rateclasses=1:LRT=0.153859379099],0564_17:0.00600417[&&NHX:Rateclasses=1:LRT=0])Node18:0.00100639[&&NHX:Rateclasses=1:LRT=1.64667962972],((0564_13:0.00534732[&&NHX:Rateclasses=1:LRT=0],(0564_15:0.00278489[&&NHX:Rateclasses=2:LRT=4.97443221859])Node32:0.000565591[&&NHX:Rateclasses=1:LRT=0])Node30:0.00196314[&&NHX:Rateclasses=1:LRT=2.86518293899],((0564_22:0.00686685[&&NHX:Rateclasses=1:LRT=0.114986865638],0564_6:0.00554135[&&NHX:Rateclasses=1:LRT=0])Node36:0.000954793[&&NHX:Rateclasses=1:LRT=0],0564_3:0.00652918[&&NHX:Rateclasses=2:LRT=14.0568340492])Node35:0.00195507[&&NHX:Rateclasses=2:LRT=22.65142315])Node29:0.001029[&&NHX:Rateclasses=1:LRT=1.50723222708])Node17:0.00155756[&&NHX:Rateclasses=1:LRT=2.63431127725],0564_9:0.00533212[&&NHX:Rateclasses=1:LRT=0])Node16:0.000567283[&&NHX:Rateclasses=1:LRT=0],(((0557_24:0.000770978[&&NHX:Rateclasses=1:LRT=0],0557_4:0.000770929[&&NHX:Rateclasses=1:LRT=0],0557_2:0.000385454[&&NHX:Rateclasses=1:LRT=0])Node9:0.00199212[&&NHX:Rateclasses=1:LRT=0],0557_12:0.00265769[&&NHX:Rateclasses=1:LRT=0])Node8:0.00119139[&&NHX:Rateclasses=1:LRT=1.99177154715],((0557_21:0[&&NHX:Rateclasses=1:LRT=0],0557_6:0.000388349[&&NHX:Rateclasses=1:LRT=0.662153642024],0557_9:0.000388411[&&NHX:Rateclasses=1:LRT=0],0557_11:0.00155424[&&NHX:Rateclasses=1:LRT=2.65063418443],0557_13:0.000388353[&&NHX:Rateclasses=1:LRT=0],0557_26:0.000776809[&&NHX:Rateclasses=1:LRT=0],(0557_5:0.00116512[&&NHX:Rateclasses=1:LRT=1.98893541781],0557_7:0[&&NHX:Rateclasses=1:LRT=0])Node53:0.000388349[&&NHX:Rateclasses=1:LRT=0.660753167251])Node6:0.00118273[&&NHX:Rateclasses=1:LRT=0],0557_25:0.00219124[&&NHX:Rateclasses=1:LRT=0])Node7:0.000940406[&&NHX:Rateclasses=1:LRT=1.69045394756])Separator:0.00689203[&&NHX:Rateclasses=2:LRT=14.127483568]);
+
         """
+        
+        
         if type(feature) is str:
             feature = [feature]
 
@@ -947,6 +1024,17 @@ class Extractor():
     def reveal_fields(self):
         """
             Return list of top-level JSON fields.
+
+
+            **Examples:**
+
+               >>> ### Define an ABSREL Extractor
+               >>> e = Extractor("/path/to/ABSREL.json") 
+               
+               >>> ### Reveal all fields
+               >>> e.reveal_fields()
+               ['branch attributes', 'analysis', 'tested', 'data partitions', 'timers', 'fits', 'input', 'test results']
+
         """
         return [str(x) for x in list( self.json.keys() )]
         
@@ -963,14 +1051,96 @@ class Extractor():
                 + LEISR
                 + aBSREL
                 
+            Output for each:
+                + **FEL** 
+                    + :code:`site`, the site of interest
+                    + :code:`alpha`, Synonymous substitution rate at a site
+                    + :code:`beta`, Non-synonymous substitution rate at a site
+                    + :code:`alpha=beta`,The rate estimate under the neutral model
+                    + :code:`LRT`, Likelihood ratio test statistic for :code:`beta = alpha`, vs. alternative :code:`beta != alpha`
+                    + :code:`p-value`, P-value from the  Likelihood ratio test
+                    + :code:`Total branch length`, The total length of branches contributing to inference at this site
+                + **SLAC**
+                    + :code:`site`, the site of interest
+                    + :code:`ES`, Expected synonymous sites
+                    + :code:`EN`, Expected non-synonymous sites
+                    + :code:`S`, Inferred synonymous substitutions
+                    + :code:`N`, Inferred non-synonymous substitutions
+                    + :code:`P[S]`, Expected proportion of synonymous sites
+                    + :code:`dS`, Inferred synonymous susbsitution rate
+                    + :code:`dN`, Inferred non-synonymous susbsitution rate
+                    + :code:`dN-dS`, Scaled by the length of the tested branches
+                    + :code:`P_[dN/dS_>_1]`, Binomial probability that S is no greater than the observed value, with P<sub>s</sub> probability of success
+                    + :code:`P_[dN/dS_<_1]`, Binomial probability that S is no less than the observed value, with P<sub>s</sub> probability of success
+                    + :code:`Total branch length`, The total length of branches contributing to inference at this site, and used to scale dN-dS};
+                + **MEME**
+                    + :code:`site`, the site of interest
+                    + :code:`alpha`, Synonymous substitution rate at a site
+                    + :code:`beta_neg>`, Non-synonymous substitution rate at a site for the negative/neutral evolution component
+                    + :code:`prop_beta_neg`, Mixture distribution weight allocated to beta_neg; loosely -- the proportion of the tree evolving neutrally or under negative selection
+                    + :code:`beta_pos`, Non-synonymous substitution rate at a site for the positive/neutral evolution component
+                    + :code:`prop_beta_pos`, Mixture distribution weight allocated to beta_pos; loosely -- the proportion of the tree evolving neutrally or under positive selection
+                    + :code:`LRT`, Likelihood ratio test statistic for episodic diversification
+                    + :code:`p-value`, Asymptotic p-value for episodic diversification
+                    + :code:`num_branches_under_selection`, The (very approximate and rough) estimate of how many branches may have been under selection at this site, i.e., had an empirical Bayes factor of 100 or more for the beta_pos rate
+                    + :code:`Total_branch_length`, The total length of branches contributing to inference at this site
+                + **FUBAR**
+                    + :code:`site`, the site of interest
+                    + :code:`alpha`, Mean posterior synonymous substitution rate at a site
+                    + :code:`beta`, Mean posterior non-synonymous substitution rate at a site
+                    + :code:`beta-alpha`, Mean posterior beta-alpha
+                    + :code:`Prob[alpha>beta]`, Posterior probability of negative selection at a site
+                    + :code:`Prob[alpha<beta]`, Posterior probability of positive selection at a site
+                    + :code:`BayesFactor[alpha<beta]`, Empiricial Bayes Factor for positive selection at a site
+                    + :code:`PSRF`, Potential scale reduction factor - an MCMC mixing measure
+                    + :code:`Neff`, Estimated effective sample site for Prob [alpha<beta]};
+                + **LEISR**
+                    + :code:`site`, the site of interest
+                    + :code:`MLE`, Relative rate estimate at a site
+                    + :code:`Lower`, Lower bound of 95% profile likelihood CI
+                    + :code:`Upper`, Upper bound of 95% profile likelihood CI
+                + **aBSREL**
+                    + :code:`node`, Node name of interest
+                    + :code:`baseline_omega`, Baseline omega estimate under the MG94xREV model
+                    + :code:`number_rate_classes`, Number of final rate classes inferred by the adaptive model
+                    + :code:`tested`, Was this branch tested for selected? 0/1
+                    + :code:`prop_sites_selected`, Proportion of selected sites along the branch
+                    + :code:`LRT`,  Likelihood ratio test statistic
+                    + :code:`uncorrected_P`, Uncorrected P-value associated with LRT
+                    + :code:`corrected_P`, FDR-corrected P-value for selection along this branch
+             
+                
+                
+            
             Required positional arguments:
                 1. **csv**, File name for output CSV
                 
             Optional keyword arguments:
                 1. **delim**, A different delimitor for the output, e.g. "\t" for tab
-                2. **original_names**, An *ABSREL* specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True
-                3. **slac_ancestral_type**, A *SLAC* specific argument, either "AVERAGED" (Default) or "RESOLVED" (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.
+                2. **original_names**, An **ABSREL** specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True
+                3. **slac_ancestral_type**, A **SLAC** specific argument, either "AVERAGED" (Default) or "RESOLVED" (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.
 
+
+            **Examples:**
+
+               >>> ### Define an ABSREL Extractor, for example
+               >>> e = Extractor("/path/to/ABSREL.json") 
+               >>> e.extract_csv("absrel.csv")
+               >>> ## With original names
+               >>> e.extract_csv("absrel.csv", original_names=True)
+               >>> ## As tsv
+               >>> e.extract_csv("absrel.csv", delim="\\t")
+               
+               >>> ### Define a FEL Extractor, for example
+               >>> e = Extractor("/path/to/FEL.json") 
+               >>> e.extract_csv("fel.csv")  
+               
+                                                       
+               >>> ### Define a SLAC Extractor, for example
+               >>> e = Extractor("/path/to/SLAC.json") 
+               >>> e.extract_csv("slac.csv")
+               >>> ### Specify to export ancestral RESOLVED inferences  
+               >>> e.extract_csv("slac.csv", slac_ancestral_type = "RESOLVED")
         """       
         
         self.csv = csv
@@ -995,6 +1165,13 @@ class Extractor():
     def extract_timers(self):
         """
             Extract dictionary of timers, with display order removed
+
+            **Examples:**
+
+               >>> ### Define an ABSREL Extractor, for example
+               >>> e = Extractor("/path/to/ABSREL.json") 
+               >>> e.extract_timers()
+               {'Full adaptive model fitting': 13.0, 'Preliminary model fitting': 1.0, 'Overall': 451.0, 'Testing for selection': 236.0, 'Baseline model fitting': 7.0, 'Complexity analysis': 193.0}
         """
         raw = self.json[self.fields.timers]
         final = {}
@@ -1009,6 +1186,13 @@ class Extractor():
     def extract_site_logl(self):
         """
             Extract BUSTED site log likelihoods, as dictionary
+
+            **Examples:**
+
+               >>> ### Define a BUSTED Extractor
+               >>> e = Extractor("/path/to/BUSTED.json") 
+               >>> e.extract_site_logl() ## output below abbreviated for visual purposes
+               {'unconstrained': [-3.820084348560567, -5.294209244108775, ....], 'constrained': [-3.816130970827346, -5.290292412948827, -3.740077801446913, ...], 'optimized null': [-3.819912933488241, -5.292549093626999, -3.743404692680405, ...]}
         """
         assert(self.analysis == self.analysis_names.busted), "\n[ERROR]: Site Log Likelihoods are specific to BUSTED."
         
@@ -1022,7 +1206,14 @@ class Extractor():
     
     def extract_evidence_ratios(self):
         """
-            Extract BUSTED ERs, as dictionary
+            Extract BUSTED evidence ratios, as dictionary.
+
+            **Examples:**
+
+               >>> ### Define a BUSTED Extractor
+               >>> e = Extractor("/path/to/BUSTED.json") 
+               >>> e.extract_evidence_ratios() ## output below abbreviated for visual purposes
+               {'constrained': [0.9960544265766805, 0.9960908296179645, 0.9962555861651011, ...], 'optimized null': [0.9998285996183979, 0.9983412268057609, 0.9995755396409283, ...]} 
         """                    
         assert(self.analysis == self.analysis_names.busted), "\n[ERROR]: Site Log Likelihoods are specific to BUSTED."
         raw = self.json[self.fields.evidence_ratios]

@@ -73,7 +73,7 @@ class Analysis(object):
             + RELAX
             + SLAC                        
 
-            Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.
+            **Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.**
 
         """
     
@@ -287,6 +287,10 @@ class FEL(Analysis):
                >>> ### Define FEL analysis, specifying only to use internal branches to test for selection
                >>> myfel = FEL(data = "/path/to/data_with_tree.dat", branches="Internal")
                
+               >>> ### Define FEL analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myfel = FEL(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+               
                >>> ### Execute a defined FEL instance
                >>> myfel.run_analysis()
         """                
@@ -354,6 +358,10 @@ class FUBAR(Analysis):
                
                >>> ### Define a FUBAR analysis using a 10x10 grid and alpha parameter of 0.75
                >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat", grid_size = 10, alpha = 0.75 )
+
+               >>> ### Define FUBAR analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
 
                >>> ### Execute a defined FUBAR instance
                >>> myfubar.run_analysis()
@@ -465,6 +473,10 @@ class MEME(Analysis):
                >>> ### Define a MEME analysis, specifying a custom JSON output file
                >>> mymeme = MEME(data = "/path/to/data_with_tree.dat", output = "meme.json" )
 
+               >>> ### Define MEME analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> mymeme = MEME(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+
                >>> ### Execute a defined MEME instance
                >>> mymeme.run_analysis()
         """                
@@ -527,6 +539,10 @@ class SLAC(Analysis):
                >>> ### Define a SLAC analysis, specifying a custom JSON output file
                >>> myslac = SLAC(data = "/path/to/data_with_tree.dat", output = "slac.json" )
 
+               >>> ### Define SLAC analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+
                >>> ### Execute a defined SLAC instance
                >>> myslac.run_analysis()
         """                
@@ -588,7 +604,11 @@ class ABSREL(Analysis):
                
                >>> ### Define a ABSREL analysis, specifying that selection be tested only on leaves
                >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
-               
+ 
+               >>> ### Define ABSREL analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+                             
                >>> ### Execute a defined ABSREL instance
                >>> myabsrel.run_analysis()
 
@@ -641,6 +661,10 @@ class BUSTED(Analysis):
                
                >>> ### Define a BUSTED analysis, specifying that selection be tested only on leaves
                >>> mybusted = BUSTED(data = "/path/to/data_with_tree.dat", branches = "Leaves" )
+               
+               >>> ### Define BUSTED analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> mybusted = BUSTED(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
                
                >>> ### Execute a defined BUSTED instance
                >>> mybusted.run_analysis()
@@ -700,7 +724,11 @@ class RELAX(Analysis):
 
                >>> ### Define a default RELAX analysis, where data is contained in a single file, test branches are labeled "test", and the Minimal analysis is run
                >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", test_label = "test", analysis_type = "Minimal")
-               
+ 
+               >>> ### Define RELAX analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+              
                >>> ### Execute a defined RELAX instance
                >>> myrelax.run_analysis()
         """                
@@ -780,6 +808,10 @@ class LEISR(Analysis):
 
                >>> ### Define a LEISR Nucleotide analysis, where data is contained in a single file and the HKY85 model with GDD rate variation is used
                >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "nucleotide", model = "HKY85", rate_variation = "GDD")
+
+               >>> ### Define LEISR analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
 
                >>> ### Execute a defined LEISR instance
                >>> myleisr.run_analysis()

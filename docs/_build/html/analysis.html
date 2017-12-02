@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>analysis Module &#8212; phyphy  documentation</title>
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -19,111 +21,30 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="extractor Module" href="extractor.html" />
-    <link rel="prev" title="hyphy Module" href="hyphy.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-
+    <link rel="prev" title="hyphy Module" href="hyphy.html" /> 
   </head>
   <body>
-
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.html">
-          phyphy</a>
-        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>phyphy  documentation</span></a></h1>
+        <h2 class="heading"><span>analysis Module</span></h2>
       </div>
-
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
-            
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python modules in <cite>phyphy</cite></a></li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">analysis</span></code> Module</a></li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-              
-                
-  <li>
-    <a href="hyphy.html" title="Previous Chapter: hyphy Module"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; hyphy Module</span>
-    </a>
-  </li>
-  <li>
-    <a href="extractor.html" title="Next Chapter: extractor Module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">extractor Module &raquo;</span>
-    </a>
-  </li>
-              
-            
-            
-            
-            
-              <li class="hidden-sm">
-<div id="sourcelink">
-  <a href="_sources/analysis.rst.txt"
-     rel="nofollow">Source</a>
-</div></li>
-            
-          </ul>
-
-          
-            
-<form class="navbar-form navbar-right" action="search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-          
-        </div>
-    </div>
-  </div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 content">
+      <div class="topnav" role="navigation" aria-label="top navigation">
       
+        <p>
+        «&#160;&#160;<a href="hyphy.html"><code class="docutils literal"><span class="pre">hyphy</span></code> Module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="extractor.html"><code class="docutils literal"><span class="pre">extractor</span></code> Module</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
   <div class="section" id="module-analysis">
 <span id="analysis-module"></span><h1><code class="docutils literal"><span class="pre">analysis</span></code> Module<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h1>
 <p>Execute a standard HyPhy analysis.</p>
@@ -142,7 +63,7 @@
 <li>RELAX</li>
 <li>SLAC</li>
 </ul>
-<p>Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.</p>
+<p><strong>Do not use this parent class. Instead, see child classes for analysis-specific arguments and examples.</strong></p>
 <dl class="method">
 <dt id="analysis.Analysis.run_analysis">
 <code class="descname">run_analysis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Analysis.run_analysis" title="Permalink to this definition">¶</a></dt>
@@ -200,6 +121,11 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span><span class="o">=</span><span class="s2">&quot;Internal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define FEL analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined FEL instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
 </pre></div>
@@ -241,6 +167,15 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FUBAR analysis using a 10x10 grid and alpha parameter of 0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">grid_size</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define FUBAR analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined FUBAR instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
 </pre></div>
@@ -267,6 +202,32 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default MEME analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default MEME analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a MEME analysis, specifying that selection be tested only on leaves</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span> <span class="o">=</span> <span class="s2">&quot;Leaves&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a MEME analysis, specifying a custom JSON output file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;meme.json&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define MEME analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined MEME instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -290,6 +251,36 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default SLAC analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default SLAC analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a SLAC analysis, specifying that selection be tested only on leaves</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span> <span class="o">=</span> <span class="s2">&quot;Leaves&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a SLAC analysis, specifying 150 bootstrap replicates be used for ASR uncertainty</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">bootstrap</span> <span class="o">=</span> <span class="mi">150</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a SLAC analysis, specifying a custom JSON output file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;slac.json&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define SLAC analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined SLAC instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -311,6 +302,28 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default ABSREL analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default ABSREL analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a ABSREL analysis, specifying that selection be tested only on leaves</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span> <span class="o">=</span> <span class="s2">&quot;Leaves&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define ABSREL analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined ABSREL instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -332,6 +345,28 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default BUSTED analysis, where data is contained in a single file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default BUSTED analysis, where alignment and tree are in separate files </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a BUSTED analysis, specifying that selection be tested only on leaves</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">branches</span> <span class="o">=</span> <span class="s2">&quot;Leaves&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define BUSTED analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined BUSTED instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -355,6 +390,32 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where data is contained in a single file and test branches are labeled &quot;test&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where alignment and tree are in separate files and test branches are labeled &quot;test&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">alignment</span> <span class="o">=</span> <span class="s2">&quot;/path/to/alignment.fasta&quot;</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="s2">&quot;/path/to/tree.tre&quot;</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where data is contained in a single file, test branches are labeled &quot;test&quot;, and reference branches are labeled &quot;ref&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">reference_label</span> <span class="o">=</span> <span class="s2">&quot;ref&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where data is contained in a single file, test branches are labeled &quot;test&quot;, and the Minimal analysis is run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">analysis_type</span> <span class="o">=</span> <span class="s2">&quot;Minimal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define RELAX analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined RELAX instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -376,26 +437,49 @@
 </ol>
 </dd>
 </dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with no rate variation is used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;protein&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;WAG&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with Gamma rate variation is used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;protein&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;WAG&quot;</span><span class="p">,</span> <span class="n">rate_variation</span> <span class="o">=</span> <span class="s2">&quot;Gamma&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Nucleotide analysis, where data is contained in a single file and the HKY85 model with GDD rate variation is used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;nucleotide&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;HKY85&quot;</span><span class="p">,</span> <span class="n">rate_variation</span> <span class="o">=</span> <span class="s2">&quot;GDD&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define LEISR analysis with a custom Hyphy, which is also defined here:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myhyphy</span> <span class="o">=</span> <span class="n">HyPhy</span><span class="p">(</span><span class="n">suppress_log</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1">## HyPhy will use default canonical install but run in full quiet mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">hyphy</span><span class="o">=</span><span class="n">myhyphy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Execute a defined LEISR instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
 
 
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="hyphy.html"><code class="docutils literal"><span class="pre">hyphy</span></code> Module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="extractor.html"><code class="docutils literal"><span class="pre">extractor</span></code> Module</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Stephanie J. Spielman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
     </div>
-      
-  </div>
-</div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
-      
-    </p>
-    <p>
-        &copy; Copyright 2017, Stephanie J. Spielman.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
-    </p>
-  </div>
-</footer>
   </body>
 </html>

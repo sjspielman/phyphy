@@ -110,9 +110,10 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 
 import sphinx_bootstrap_theme
-html_theme = 'bootstrap'
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-html_theme_options = {'bootswatch_theme': "sandstone"}
+html_theme = "haiku"
+#html_theme = 'bootstrap'
+#html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+#html_theme_options = {'bootswatch_theme': "sandstone"}
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
 
