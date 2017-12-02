@@ -61,12 +61,12 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 
 `phyphy` has three primary modules:
 
-+ `Hyphy`
++ [**`Hyphy`**](http://sjspielman.org/phyphy/hyphy.html)
 	+ This module can be **optionally** used to specify that a *non-canonical* installation (i.e. not installed to `/usr/local/`) or a local build  (i.e. where `make install` was not run) of HyPhy. This module can additionally be used to specify that HyPhy be run quietly and/or without outputting its standard log files, `messages.log` and `errors.log`.
-+ `Analysis`
++ [**`Analysis`**](http://sjspielman.org/phyphy/analysis.html)
 	+ This module contains the analysis methods to execute, named according to the analysis. For example, the `FEL` class within the `Analysis` module would be used to execute an FEL analysis.
 	+ Unless a custom `HyPhy` object is given, assumes the executable **`HYPHYMP`**
-+ `Extractor`
++ [**`Extractor`**](http://sjspielman.org/phyphy/extractor.html)
 	+ This module contains functionality to parse a given analysis output. `Extractor` makes it simple to extract information from a given analysis JSON output, including:
 		+ Fitted model parameters
 	   + Fitted phylogenies
