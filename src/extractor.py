@@ -88,6 +88,8 @@ class JSONFields():
         
         self.slac_by_site = "by-site"
         
+        self.relax_alternative = "RELAX alternative" ## use to check json for relax bug
+
         
         ########## BELOW ARE FIELDS WHICH I ADD IN PHYPHY, NOT FOUND IN HYPHY ITSELF ###############
         self.selected = "Selected"
@@ -177,15 +179,13 @@ class Extractor():
             raise AssertionError("\n[ERROR]: Expected a single argument. Provide either the path to the JSON to parse, or an `Analysis` object which has been executed.")
         assert(os.path.exists(self.json_path)), "\n[ERROR]: JSON file does not exist."
         
-        self._unpack_json()
-        self._determine_analysis_from_json()
-        
-        ## These are generally useful to have around ##
-        self._count_partitions()          ### ---> self.npartitions        
-        self._obtain_input_tree()         ### ---> self.input_tree, self.input_tree_ete
-        self._obtain_fitted_models()      ### ---> self.fitted_models
-        self._obtain_branch_attributes()  ### ---> self.branch_attributes, self.attribute_names
-        self._obtain_original_names()     ### ---> self.original_names
+        self._unpack_json()                  ### ---> self.json
+        self._obtain_fitted_models()         ### ---> self.fitted_models
+        self._determine_analysis_from_json() ### ---> self.analysis
+        self._count_partitions()             ### ---> self.npartitions        
+        self._obtain_input_tree()            ### ---> self.input_tree, self.input_tree_ete
+        self._obtain_branch_attributes()     ### ---> self.branch_attributes, self.attribute_names
+        self._obtain_original_names()        ### ---> self.original_names
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
         """
@@ -207,14 +207,16 @@ class Extractor():
         try:
             json_info = self.json[ self.fields.analysis_description ][ self.fields.analysis_description_info ].upper()
         except KeyError:
-            json_info = "RELAX" ####### HACK FOR 2.3.7
+            ####### Hack for bug in 2.3.7
+            assert(self.fields.relax_alternative in self.fitted_models), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.7."
+            json_info = "RELAX"
         
         for name in self.allowed_analyses:
             find_analysis = re.search(name.upper(), json_info)
             if find_analysis is not None:
                 self.analysis = name
                 break
-        assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.4."
+        assert(self.analysis is not None), "\n[ERROR]: Could not determine analysis from JSON. Please ensure that the JSON is correctly formatted and created with HyPhy version >=2.3.7."
 
         ### LEISR version error out ###
         if self.analysis == self.analysis_names.leisr:
