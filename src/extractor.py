@@ -784,7 +784,6 @@ class Extractor():
                     partition_attr[str(node)] = attribute_value
                 except:
                     assert(attribute_name == self.fields.original_name), "\n[ERROR] Could not extract branch attribute."
-                    pass  
             attr_dict[x] = partition_attr   
         if self.npartitions == 1:
             return attr_dict[0]
@@ -990,7 +989,11 @@ class Extractor():
                 feat_dict = self.extract_branch_attribute(feat, partition = partition)
                 for node in t.traverse("postorder"):
                     if not node.is_root():
-                        node.add_feature(outfeat, feat_dict[node.name])        
+                        ## in case
+                        if feat == self.fields.original_name and not node.is_tip():
+                            node.add_feature(outfeat, "")
+                        else:
+                            node.add_feature(outfeat, feat_dict[node.name])        
                
             treestring = t.write(format=1, features = out_features).strip()
             ## Some vix engines require root to have feature, so we add a dummy feature here
