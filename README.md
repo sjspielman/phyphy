@@ -34,7 +34,7 @@ Full API documentation, including some code examples, is available from [http://
 
 ## Installation
 
-[FORTHCOMING] You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
+You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
 
 Note `phyphy` has the following dependencies (pip will take care of these for you, if necessary):
 
