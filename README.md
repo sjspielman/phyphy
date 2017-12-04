@@ -318,4 +318,4 @@ Finally, any NHX tree can be visualized with a variety of programmatic platforms
 
 ## Citation
 
-Forthcoming, but if you use this for a paper please stay tuned..
+phyphy is currently [under review](http://joss.theoj.org/papers/9f65f1bc47bf8f17d773d09928a89b90) at the [Journal of Open Source Software](http://joss.theoj.org/). If you use phyphy for a paper, please stay tuned here.
