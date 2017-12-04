@@ -219,6 +219,19 @@ class test_extractor_extract_reveal(unittest.TestCase):
         self.busted_ratedist = {u'Test': {u'1': {u'proportion': 0.8077978514979203, u'omega': 0}, u'0': {u'proportion': 0.1590313724241585, u'omega': 0}, u'2': {u'proportion': 0.0331707760779212, u'omega': 1}}}
     ####################################################################################################################################################
 
+
+    def test_extract_number_sequences(self):
+        self.assertEqual(10, self.fel.extract_number_sequences(), msg = "Could not extract num sequences")
+
+    def test_extract_number_sites(self):
+        self.assertEqual(187, self.fel.extract_number_sites(), msg = "Could not extract num sites")
+
+    def test_extract_inputfile(self):
+        self.assertEqual("/home/sjspielman/evogenomics_hyphy/datasets/CD2.fna", self.fel.extract_input_file(), msg = "Could not extract input filename")
+
+    def test_extract_partition_count(self):
+        self.assertEqual(1, self.fel.extract_partition_count(), msg = "Could not extract npartitions")
+
     def test_extract_model_logl(self):
         self.assertEqual(self.fel_mg_logl, self.fel.extract_model_logl(self.fel_model), msg = "Could not extract model logl")
 

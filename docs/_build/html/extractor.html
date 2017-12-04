@@ -98,6 +98,94 @@ Primarily (only?) used to extract frequencies as dictionaries.</p>
 </pre></div>
 </div>
 <dl class="method">
+<dt id="extractor.Extractor.extract_number_sequences">
+<code class="descname">extract_number_sequences</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_number_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of sequences in the input dataset.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_number_sequences</span><span class="p">()</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_number_sites">
+<code class="descname">extract_number_sites</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_number_sites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of sites in the input dataset. Note for codon analyses this will be the number of <em>codon</em> sites (i.e. length/3)</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_number_sites</span><span class="p">()</span>
+<span class="go">187</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_input_file">
+<code class="descname">extract_input_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name (including the path to) the input dataset. If alignment and tree were provided separately, this will return the alignment file name.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_file</span><span class="p">()</span>
+<span class="go">&quot;/Users/sjspielman/evogenomics_hyphy/datasets/CD2.fna&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_partition_count">
+<code class="descname">extract_partition_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_partition_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of partitions in the analysis.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_partition_count</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_input_tree">
+<code class="descname">extract_input_tree</code><span class="sig-paren">(</span><em>partition=None</em>, <em>original_names=False</em>, <em>node_labels=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
+For analyses with a single partition OR for a request for a specific partition’s tree, returns a string.
+For analyses with multiple partitions (and hence multiple trees), returns a <em>dictionary</em> of trees.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, Boolean (Default: False) if should update with original names before returning</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span>
+<span class="go">((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Use original names</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">original_names</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">((((Pig~gy:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL_mulitpart.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, from an analysis with multiple partitions, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span> <span class="c1">## All partitions</span>
+<span class="go">{0: &#39;((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);&#39;, 1: &#39;(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);&#39;, 2: &#39;(AF231119:0.00208218,AF231117:1e-10,((AF082576:1e-10,AF231113:0.00433775)Node4:0.00208919,((((AF186242:0.00216055,AF186243:0.00437974)Node10:0.00214339,((AF186241:1e-10,AF187824:0.00215048)Node14:0.00214528,AF231116:1e-10)Node13:1e-10)Node9:0.0112142,(AF231118:0.0244917,AF234767:0.0835686)Node18:0.0280857)Node8:0.0021073,(AF231115:1e-10,AF231114:0.00868934)Node21:0.00639388)Node7:1e-10)Node3:1e-10);&#39;, 3: &#39;((AF231119:0.000939531,AF082576:0.00182425)Node1:1e-10,(((AF231117:0.00499646,(AF231116:1e-10,(AF187824:0.00453171,AF231113:0.0180629)Node10:0.00923609)Node8:0.00581275)Node6:0.00383552,(AF231115:1e-10,AF231114:0.0100664)Node13:0.00401088)Node5:0.00102177,((AF186242:0.00171504,AF186243:0.00438135)Node17:0.00180763,AF186241:0.0044495)Node16:0.00408249)Node4:0.000197413,(AF231118:0.032062,AF234767:0.0409599)Node21:0.0228604);&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">partition</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## Single specified partitions</span>
+<span class="go">(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="extractor.Extractor.reveal_fitted_models">
 <code class="descname">reveal_fitted_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_fitted_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of all model names in the <cite>fits</cite> JSON field.</p>
@@ -283,42 +371,6 @@ NOTE: Assumes that all partitions share the same branch sets.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/BUSTED.json&quot;</span><span class="p">)</span> <span class="c1">## Define a BUSTED Extractor, for example</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reveal_branch_attributes</span><span class="p">()</span>
 <span class="go">{&#39;Nucleotide GTR&#39;: &#39;branch length&#39;, &#39;unconstrained&#39;: &#39;branch length&#39;, &#39;constrained&#39;: &#39;branch length&#39;, &#39;MG94xREV with separate rates for branch sets&#39;: &#39;branch length&#39;, &#39;original name&#39;: &#39;node label&#39;}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="extractor.Extractor.extract_input_tree">
-<code class="descname">extract_input_tree</code><span class="sig-paren">(</span><em>partition=None</em>, <em>original_names=False</em>, <em>node_labels=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_tree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
-For analyses with a single partition OR for a request for a specific partition’s tree, returns a string.
-For analyses with multiple partitions (and hence multiple trees), returns a <em>dictionary</em> of trees.</p>
-<dl class="docutils">
-<dt>Optional keyword arguments:</dt>
-<dd><ol class="first last arabic simple">
-<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
-<li><strong>original_names</strong>, Boolean (Default: False) if should update with original names before returning</li>
-</ol>
-</dd>
-</dl>
-<p><strong>Examples:</strong></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span>
-<span class="go">((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Use original names</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">original_names</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="go">((((Pig~gy:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL_mulitpart.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, from an analysis with multiple partitions, for example</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span> <span class="c1">## All partitions</span>
-<span class="go">{0: &#39;((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);&#39;, 1: &#39;(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);&#39;, 2: &#39;(AF231119:0.00208218,AF231117:1e-10,((AF082576:1e-10,AF231113:0.00433775)Node4:0.00208919,((((AF186242:0.00216055,AF186243:0.00437974)Node10:0.00214339,((AF186241:1e-10,AF187824:0.00215048)Node14:0.00214528,AF231116:1e-10)Node13:1e-10)Node9:0.0112142,(AF231118:0.0244917,AF234767:0.0835686)Node18:0.0280857)Node8:0.0021073,(AF231115:1e-10,AF231114:0.00868934)Node21:0.00639388)Node7:1e-10)Node3:1e-10);&#39;, 3: &#39;((AF231119:0.000939531,AF082576:0.00182425)Node1:1e-10,(((AF231117:0.00499646,(AF231116:1e-10,(AF187824:0.00453171,AF231113:0.0180629)Node10:0.00923609)Node8:0.00581275)Node6:0.00383552,(AF231115:1e-10,AF231114:0.0100664)Node13:0.00401088)Node5:0.00102177,((AF186242:0.00171504,AF186243:0.00438135)Node17:0.00180763,AF186241:0.0044495)Node16:0.00408249)Node4:0.000197413,(AF231118:0.032062,AF234767:0.0409599)Node21:0.0228604);&#39;}</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">partition</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## Single specified partitions</span>
-<span class="go">(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);</span>
 </pre></div>
 </div>
 </dd></dl>
