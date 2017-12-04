@@ -4,6 +4,8 @@
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
+This functionality makes batch usage eminently more convenient. Never use the HyPhy prompt again!
+
 `phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for maximal pronunciation enjoyment. `phyphy` is compatible with either Python2.7 or Python3.
 
 `phyphy` is compatible with [**HyPhy version >=2.3.7**](https://github.com/veg/hyphy/releases) and supports the following analyses (in alphabetical order):
