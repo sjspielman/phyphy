@@ -4,7 +4,7 @@
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
-`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for increased pronunciation enjoyment. `phyphy` is compatible with either Python2.7 or Python3.
+`phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for maximal pronunciation enjoyment. `phyphy` is compatible with either Python2.7 or Python3.
 
 `phyphy` is compatible with [**HyPhy version >=2.3.7**](https://github.com/veg/hyphy/releases) and supports the following analyses (in alphabetical order):
 
@@ -25,7 +25,6 @@ Full API documentation, including some code examples, is available from [http://
   * [Installation](#installation)
   * [Using phyphy](#using-phyphy)
   	* [Overview](#overview)
-  	* [Jupyter Notebook examples](#jupyter-notebooks)
   	* [Defining HyPhy instances](#defining-hyphy-instances)
   	* [Executing HyPhy Analyses](#executing-hyphy-analyses)
 	* [Parsing HyPhy output JSON](#parsing-hyphy-output-json)
@@ -72,14 +71,6 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 	   + Fitted phylogenies
 	   + [Newick-extended format](https://home.cc.umanitoba.ca/~psgendb/doc/atv/NHX.pdf) phylogenies with branch features for downstream visualization in tools like the Python package [`ete3`](http://etetoolkit.org/) or the R package [`ggtree`](https://bioconductor.org/packages/release/bioc/html/ggtree.html)
 	   + CSV files, for methods FEL, MEME, SLAC, FUBAR, LEISR, aBSREL
-
-### Jupyter notebooks
-
-[FORTHCOMING] These Jupyter notebooks show various example of `phyphy` usage:
-
-+ Execute analyses
-+ Parse trees from analyses
-+ Parse non-tree information from analyses
 
 ### Examples
 
