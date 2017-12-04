@@ -45,6 +45,8 @@ Note `phyphy` has the following dependencies (pip will take care of these for yo
 + `Biopython >= 1.67`
 + `ete3 >=3.1`
 
+You can update your installed version with `pip install --upgrade phyphy`, when needed.
+
 Alternatively, you can download from source, via the usual `setuptools` procedure. Briefly:
 
 1. Download the current release [here](https://github.com/sjspielman/phyphy/releases), or clone the master branch, and `cd` in. 
