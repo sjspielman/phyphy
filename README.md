@@ -33,6 +33,7 @@ Full API documentation, including some code examples, is available from [http://
 	* [Extracting CSVs from HyPhy output JSON](#extracting-csvs-from-hyphy-output-json)
 	* [Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
+  * [Citation](#citation)
 
 
 ## Installation
@@ -311,3 +312,8 @@ Finally, any NHX tree can be visualized with a variety of programmatic platforms
 + Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues).
 
 + [This PDF](examples/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
+
+
+## Citation
+
+Forthcoming, but if you use this for a paper please stay tuned..
