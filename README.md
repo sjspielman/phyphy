@@ -30,6 +30,7 @@ Full API documentation, including some code examples, is available from [http://
   	* [Defining HyPhy instances](#defining-hyphy-instances)
   	* [Executing HyPhy Analyses](#executing-hyphy-analyses)
 	* [Parsing HyPhy output JSON](#parsing-hyphy-output-json)
+	* [Extracting CSVs from HyPhy output JSON](#extracting-csvs-from-hyphy-output-json)
 	* [Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
 
@@ -183,16 +184,49 @@ There are several flavors of `Extractor` methods, all of which are detailed with
 
 + Reveal contents of the JSON
 	+ `.reveal_fields()` returns a list of all top-level fields in the JSON, to see the overall structure of the file
-	+ `.reveal_fitted_models()` returns a list names of models fitted to the data. 
+	+ `.reveal_fitted_models()` returns a list names of models fitted to the data, from which various components can be extracted
 	+ `.reveal_branch_attributes()`, returns a dictionary of branch attributes, i.e. branch-specific information, (generally, these correspond to names of the fitted models which represent the fitted branch lengths, and other analysis-specific elements). 
 
++ Extract fitted model components
+	+ `.extract_model_logl(<name of model>)` returns the Log Likelihood of the fitted model
+	+ `.extract_model_estimated_parameters(<name of model>)` returns the number of estimated parameters in the fitted model
+	+ `.extract_model_aicc(<name of model>)` returns the small-sample AIC (AICc) of the fitted model
+	+ `.extract_model_rate_distributions(<name of model>)` returns a dictionary (when applicable) of fitted model rate distributions
+	+ `.extract_model_frequenciesl(<name of model>)` returns the empirical equilibrium frequencies of the fitted model
+	+ `.extract_model_logl(<name of model>)`
 
++ Extract miscallaneous information
+	+ `.extract_branch_sets()` returns a dictionary of structure `<node name>:<branch set>`. Can be rearranged to a dictionary of structure `<branch set>:[list of nodes]` with the argument `by_set=True` (or dictionary, with argument `as_dict=True`)
+	+ `.extract_branch_attribute(<attribute name)` returns a dictionary of the desired attribute values. 
+	+ `.extract_site_logl()` and `.extract_evidence_ratios()` are BUSTED-specific methods to return these values, as dictionaries each
+	+ `.extract_timers()` returns a dictionary of timers from the method (wall-clock time in seconds to complete each step in algorithm)
++ Extract a CSV, described in the next section.
+
+
+#### Extracting CSVs from HyPhy output JSON
+
+CSVs can be obtained for the methods FEL, SLAC, MEME, FUBAR, ABSREL, and LEISR, using the method `.extract_csv(<csv_file_name>)`. Consult [the API](http://sjspielman.org/phyphy/extractor.html#extractor.Extractor.extract_csv) for information on column headers, and more usage information. 
+
+Briefly:
+
+```python 
+
+import phyphy
+
+### Define a FEL Extractor, for example
+e = Extractor("/path/to/FEL.json") 
+e.extract_csv("fel.csv")  ## save to fel.csv
+
+### tab-delimited output, as fel.tsv
+e.extract_csv("fel.tsv", delim = "\t")
+```
 
 
 #### Parsing annotated trees from HyPhy output JSON
 
 Of specific interest, `phyphy` uses the powerful Python package `ete3` to assist in tree manipulation, allowing for the extraction of specific trees that can be used for downstream processing or visualization in other tools:
 
++ The method `.extract_input_tree()` allows you to obtain the original inputted phylogeny, with HyPhy node annotations
 + The method `.extract_model_tree()` allows you to obtain the fitted phylogeny for a given model (i.e., branch lengths will be updated). This will be output in standard newick format
 + The method `.extract_feature_tree()` allows you to obtain an **annotated** tree in Newick eXtended format (NHX), where nodes are annotated with the provided feature (i.e., attribute). 
 + The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found **evidence for selection**, at a given P-value threshold
