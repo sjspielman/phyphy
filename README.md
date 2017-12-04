@@ -190,6 +190,13 @@ There are several flavors of `Extractor` methods, all of which are detailed with
 	+ `.reveal_fitted_models()` returns a list names of models fitted to the data, from which various components can be extracted
 	+ `.reveal_branch_attributes()`, returns a dictionary of branch attributes, i.e. branch-specific information, (generally, these correspond to names of the fitted models which represent the fitted branch lengths, and other analysis-specific elements). 
 
++ Extract input information
+	+ `.extract_number_sequences()` returns the number of sequences in the input data
+	+ `.extract_number_sites()` returns the number of sites in the input data (note, this will be length/3 for codon analyses)
+	+ `.extract_partition_count()` returns the number of partitions in the analysis
+	+ `.extract_input_tree()` returns the original inputted phylogeny, with HyPhy node annotations
+	+ `.extract_input_file()` returns the provided file name for the analyzed dataset
+
 + Extract fitted model components
 	+ `.extract_model_logl(<name of model>)` returns the Log Likelihood of the fitted model
 	+ `.extract_model_estimated_parameters(<name of model>)` returns the number of estimated parameters in the fitted model

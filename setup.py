@@ -21,7 +21,7 @@ To install for a particular user (locally), enter -
     python setup.py build --user # where user is the current account
 '''
 
-_VERSION="0.1"
+_VERSION="0.2"
 
 from setuptools import setup
 setup(name = 'phyphy', 
