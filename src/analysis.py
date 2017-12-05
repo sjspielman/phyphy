@@ -822,7 +822,7 @@ class LEISR(Analysis):
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/"
         self.batchfile = "LEISR.bf"
                 
-        self.default_json_path_choices = self.hyphy_alignment + ".LEISR.json"
+        self.default_json_path = self.hyphy_alignment + ".LEISR.json"
         self.type_nucleotide = "Nucleotide"
         self.type_protein    = "Protein"
         
