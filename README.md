@@ -1,5 +1,7 @@
 # phyphy
 
+**The current release is version 0.3**.
+
 [`phyphy`](http://sjspielman.org/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
