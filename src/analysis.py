@@ -104,10 +104,7 @@ class Analysis(object):
         
         self.analysis_path = self.hyphy.libpath + "TemplateBatchFiles/SelectionAnalyses/"
         self.shared_branch_choices = ("All", "Internal", "Leaves", "Unlabeled branches")
-        
-        ######## 2.3.7 models #######
-        self.available_protein_models = ("JC69", "WAG", "LG", "JTT", "mtMAM", "cpREV", "HIVBm", "HIVWm", "AB")
-        self.available_nucleotide_models = ("GTR", "HKY85", "JC69")
+
     
     
     
@@ -838,11 +835,9 @@ class LEISR(Analysis):
             
         if self.type == self.type_nucleotide:
             self.model = kwargs.get("model", "GTR")
-            assert(self.model in self.available_nucleotide_models), "\n[ERROR] Provided nucleotide model is unavailable."
             
         elif self.type == self.type_protein:
             self.model = kwargs.get("model", "JC69")
-            assert(self.model in self.available_protein_models), "\n [ERROR] Provided protein model is unavailable."
         
         self._build_full_command()    
          

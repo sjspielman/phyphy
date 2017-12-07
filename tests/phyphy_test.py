@@ -556,19 +556,6 @@ class test_analysis(unittest.TestCase):
         kwargs = {"data": self.aafna, "type": "badtype"}
         self.assertRaises(AssertionError, LEISR, **kwargs) ## cant get message, dont know why, moving on.
 
-    def test_leisr_model(self):
-        x = LEISR(data = self.codonfna, type = "nucleotide", model = "GTR")        
-        x = LEISR(data = self.codonfna, type = "nucleotide", model = "HKY85")        
-        x = LEISR(data = self.codonfna, type = "nucleotide", model = "JC69")        
-        x = LEISR(data = self.codonfna, type = "Protein", model = "WAG")        
-        x = LEISR(data = self.codonfna, type = "Protein", model = "LG")        
-
-        kwargs = {"data": self.aafna, "type": "Protein", "model": "GTR"}
-        self.assertRaises(AssertionError, LEISR, **kwargs) 
-        kwargs = {"data": self.aafna, "type": "Nucleotide", "model": "WAG"}
-        self.assertRaises(AssertionError, LEISR, **kwargs) 
-        kwargs = {"data": self.aafna, "type": "Nucleotide", "model": "notamodel"}
-        self.assertRaises(AssertionError, LEISR, **kwargs) 
         
     def test_leisr_rv(self):
         x = LEISR(data = self.codonfna, type = "nucleotide", rate_variation = "Gamma")        
