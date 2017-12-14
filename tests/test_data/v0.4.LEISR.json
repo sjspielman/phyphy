@@ -1,0 +1,200 @@
+{
+ "input":{
+   "file name":"/Users/sjspielman/Research/phyphy/tests/test_data/aa.fna",
+   "number of sequences":15,
+   "number of sites":20,
+   "partition count":1,
+   "trees":{
+     "0":"(((t8:0.01,(t13:0.07,t4:0.18)Node5:0.06)Node3:0.24,(t1:0.14,(t7:0.11,t15:0.03)Node10:0.21)Node8:0.11)Node2:0.09,(t5:0.05,t14:0.31)Node13:0.111,(((t9:0.04,t6:0.15)Node18:0.46,(t12:0.1,t11:0.12)Node21:0.25)Node17:0.17,(t2:0.04,(t3:0.05,t10:0.19)Node26:1e-10)Node24:0.29)Node16:0.27)"
+    }
+  },
+ "analysis":{
+   "info":"LEISR (Likelihood Estimation of Individual Site Rates) infer relative amino-acid or nucleotide rates from a fixed nucleotide or amino-acid alignment and tree, with possibility for partitions. Relative site-specific substitution rates are\n    inferred by first optimizing alignment-wide branch lengths, and then inferring a site-specific uniform tree scaler.",
+   "version":"0.4",
+   "citation":"Spielman, S.J. and Kosakovsky Pond, S.L. Relative evolutionary rate inference in HyPhy with LEISR. bioRxiv. https://doi.org/10.1101/206011. (2017); Pupko, T., Bell, R. E., Mayrose, I., Glaser, F. & Ben-Tal, N. Rate4Site: an algorithmic tool for the identification of functional regions in proteins by surface mapping of evolutionary determinants within their homologues. Bioinformatics 18, S71–S77 (2002).",
+   "authors":"Sergei L Kosakovsky Pond and Stephanie J Spielman",
+   "contact":"{spond,stephanie.spielman}@temple.edu"
+  },
+ "fits":{
+   "WAGF":{
+     "Log Likelihood":-374.095249850178,
+     "estimated parameters":27,
+     "AIC-c":807.7493232297677,
+     "Rate Distributions":{
+      },
+     "Equilibrium frequencies":[
+      [0.08662789999999999],
+      [0.0193078],
+      [0.0570451],
+      [0.0580589],
+      [0.0384319],
+      [0.0832518],
+      [0.0244313],
+      [0.048466],
+      [0.0620286],
+      [0.08620899999999999],
+      [0.0195027],
+      [0.0390894],
+      [0.0457631],
+      [0.0367281],
+      [0.043972],
+      [0.06951789999999999],
+      [0.0610127],
+      [0.0708956],
+      [0.0143859],
+      [0.0352742]
+      ]
+    }
+  },
+ "MLE":{
+   "headers":[
+    ["MLE", "Relative rate estimate at a site"],
+    ["Lower", "Lower bound of 95% profile likelihood CI"],
+    ["Upper", "Upper bound of 95% profile likelihood CI"],
+    ["LogL global", "Site log likelihood under the global (average rate) model fit"],
+    ["LogL local", "Site log likelihood under the local (site-specific rate) model fit"]
+    ],
+   "content":{
+     "0":[
+      [1.586691422111918, 0.528361649523882, 4.367373629792689, -27.03565265394802, -26.65239345268992],
+      [1.17800790548807, 0.3564936726349761, 2.979637762349201, -20.56897669064551, -20.52237052706403],
+      [0.3445560903333275, 0.01809205176530851, 2.296249337501276, -14.01852481077224, -13.4914068895032],
+      [1.612114071573722, 0.4960219721466998, 3.880576339631721, -17.65001493409816, -17.26755933135374],
+      [1.361197265148309, 0.4042033090937558, 3.515167962774421, -23.81529950126418, -23.6613804982813],
+      [1.733938644436328, 0.5202790302934015, 4.440817605557685, -20.62858950927799, -20.15578176460383],
+      [0.4705289345337937, 0.02663869743033495, 2.132029851951115, -9.26471473982474, -8.902533920475818],
+      [0.9127296598968347, 0.2234308404715099, 2.459907810181437, -17.50610240829564, -17.49378686360603],
+      [0.9186078571112001, 0.1509069390938322, 2.947028811036979, -10.07845164991238, -10.07127641839073],
+      [0.9980917011207417, 0.2995598120187055, 2.528161916590244, -20.46707606702009, -20.4670694849007],
+      [0.2250857778316915, 0.01272608018084807, 1.023652850987908, -11.08172682109937, -9.235933699642285],
+      [1.251906642199234, 0.2830841969580394, 3.764785615160545, -20.20391497540923, -20.14701038853127],
+      [0.5004735869758893, 0.08225127374079684, 1.599858295546339, -14.23251606186093, -13.65028011078023],
+      [1.244600978040741, 0.3636233828020776, 3.419829346676944, -18.22547982646623, -18.15006362728741],
+      [2.944783109106304, 1.087990615021554, 8.615767084381028, -36.74739387710684, -34.51037443984143],
+      [0.505862865304096, 0.08237774081065544, 1.663167873985413, -11.95900697237727, -11.41640733555614],
+      [0.6755558592093296, 0.1644294132324466, 1.853910481804752, -21.18425185223963, -20.93904552720997],
+      [1.059900699997577, 0.3189538198195323, 2.700272783337434, -19.20731916453135, -19.2012942408577],
+      [0.8254396828727649, 0.2506281461486691, 2.034454406664002, -18.8722819199411, -18.80000419078776],
+      [0.9944476187320851, 0.2950192988087644, 2.692668124863175, -21.34795541408708, -21.34790196164179]
+      ]
+    }
+  },
+ "branch attributes":{
+   "0":{
+     "t8":{
+       "original name":"t8",
+       "WAGF":0
+      },
+     "t9":{
+       "original name":"t9",
+       "WAGF":0
+      },
+     "t6":{
+       "original name":"t6",
+       "WAGF":0.3116332878994736
+      },
+     "t7":{
+       "original name":"t7",
+       "WAGF":0.1087823637763281
+      },
+     "t4":{
+       "original name":"t4",
+       "WAGF":0.05267600381871857
+      },
+     "t5":{
+       "original name":"t5",
+       "WAGF":0.2348676409244924
+      },
+     "t2":{
+       "original name":"t2",
+       "WAGF":0.06237164908535413
+      },
+     "t3":{
+       "original name":"t3",
+       "WAGF":0.2105813432367063
+      },
+     "t1":{
+       "original name":"t1",
+       "WAGF":0.1932876520967817
+      },
+     "t14":{
+       "original name":"t14",
+       "WAGF":0.4047980285942855
+      },
+     "t15":{
+       "original name":"t15",
+       "WAGF":0
+      },
+     "t10":{
+       "original name":"t10",
+       "WAGF":0.1830670311922073
+      },
+     "t11":{
+       "original name":"t11",
+       "WAGF":0.2038505073211336
+      },
+     "t12":{
+       "original name":"t12",
+       "WAGF":0.04101901368494434
+      },
+     "t13":{
+       "original name":"t13",
+       "WAGF":0
+      },
+     "Node10":{
+       "WAGF":0.1788070640322328
+      },
+     "Node13":{
+       "WAGF":0.06984227345979141
+      },
+     "Node16":{
+       "WAGF":0.4133382246246052
+      },
+     "Node17":{
+       "WAGF":0.07627874516682545
+      },
+     "Node18":{
+       "WAGF":0.7477082168634501
+      },
+     "Node2":{
+       "WAGF":0
+      },
+     "Node21":{
+       "WAGF":0.625732939084662
+      },
+     "Node24":{
+       "WAGF":0.1480095560897755
+      },
+     "Node26":{
+       "WAGF":0
+      },
+     "Node3":{
+       "WAGF":0
+      },
+     "Node5":{
+       "WAGF":0
+      },
+     "Node8":{
+       "WAGF":0.1181923017455012
+      }
+    },
+   "attributes":{
+     "original name":{
+       "attribute type":"node label",
+       "display order":-1
+      },
+     "WAGF":{
+       "attribute type":"branch length",
+       "display order":0
+      }
+    }
+  },
+ "data partitions":{
+   "0":{
+     "name":"leisr.filter.default",
+     "coverage":[
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      ]
+    }
+  }
+}

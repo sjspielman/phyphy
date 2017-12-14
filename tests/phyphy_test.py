@@ -32,7 +32,7 @@ class test_extractor_init(unittest.TestCase):
         self.fel_json = self.data_path + "FEL.json"
         self.fel_mult_json = self.data_path + "FEL_multipartitions.json"
         self.fubar_json = self.data_path + "FUBAR.json"
-        self.leisr_json = self.data_path + "NucGamma.LEISR.json"
+        self.leisr_json = self.data_path + "v0.23.LEISR.json"
         self.leisr_json_depr = self.data_path + "LEISR_deprecated.json"
         self.meme_json = self.data_path + "MEME.json"
         self.slac_json = self.data_path + "SLAC.json"
@@ -360,17 +360,31 @@ class test_extractor_csv(unittest.TestCase):
     def setUp(self):
         self.data_path = "tests/test_data/"
         
-    def test_csv_leisr(self):  
-        with open(self.data_path + "leisr.csv", "r") as f:
+    def test_csv_leisr_v023(self):  
+        with open(self.data_path + "leisr_v0.23.csv", "r") as f:
             x = csv.reader(f)
             true = self.round_csv(x)
-        ext = Extractor(self.data_path + "NucGamma.LEISR.json")
+        ext = Extractor(self.data_path + "v0.23.LEISR.json")
         ext.extract_csv("test.csv")
         with open("test.csv", "r") as f:
             x = csv.reader(f)
             test = self.round_csv(x) 
         os.remove("test.csv")
-        self.assertMultiLineEqual(test, true, msg = "Bad LEISR csv.")
+        self.assertMultiLineEqual(test, true, msg = "Bad LEISR csv, v0.2/3.")
+
+
+    def test_csv_leisr_v04(self):  
+        with open(self.data_path + "leisr_v0.4.csv", "r") as f:
+            x = csv.reader(f)
+            true = self.round_csv(x)
+        ext = Extractor(self.data_path + "v0.4.LEISR.json")
+        ext.extract_csv("test.csv")
+        with open("test.csv", "r") as f:
+            x = csv.reader(f)
+            test = self.round_csv(x) 
+        os.remove("test.csv")
+        self.assertMultiLineEqual(test, true, msg = "Bad LEISR csv, v0.4.")
+
 
     def test_csv_meme(self):  
         with open(self.data_path + "meme.csv", "r") as f:

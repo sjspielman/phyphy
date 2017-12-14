@@ -116,7 +116,7 @@ class AnalysisNames():
         
         self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.leisr, self.meme, self.relax, self.slac]
         self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac, self.leisr]
-        self.single_partition_analyses = [self.absrel, self.leisr, self.relax]
+        self.single_partition_analyses = [self.absrel, self.relax] ## self.leisr. version 0.3 allows for multiple partitions.
 
         self.slac_by = ["by-site", "by-branch"]
         self.slac_ancestral_type = ["AVERAGED", "RESOLVED"]
