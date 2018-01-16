@@ -91,6 +91,10 @@ class JSONFields():
         self.relax_alternative = "RELAX alternative" ## use to check json for relax bug
 
         
+        self.busted_fit_to_attr = {"Unconstrained model": "unconstrained",
+                                   "Constrained model": "constrained"}
+        
+        
         ########## BELOW ARE FIELDS WHICH I ADD IN PHYPHY, NOT FOUND IN HYPHY ITSELF ###############
         self.selected = "Selected"
         self.phyphy_label = "phyphy label"
@@ -336,10 +340,10 @@ class Extractor():
         if self.analysis == self.analysis_names.meme:
             raw_header = self._clean_meme_html_header(raw_header)
 
-        final_header = "site,"+delim.join( [x.replace(" ","_") for x in raw_header] )
+        final_header = "site" + delim + delim.join( [x.replace(" ","_") for x in raw_header] )
             
         if self.npartitions > 1:
-            final_header = "partition," + final_header
+            final_header = "partition" + delim + final_header
         
         site_count = 1
         final_content = ""
@@ -840,6 +844,15 @@ class Extractor():
                {'0557_7': '1', '0557_4': '1', 'Node29': '1', '0564_13': '1', 'Node25': '1', 'Node20': '1', 'Node23': '1', '0557_11': '1', '0557_12': '1', '0557_13': '1', '0564_22': '1', '0564_21': '1', '0564_15': '2', 'Node9': '1', '0564_1': '1', '0564_3': '2', 'Separator': '2', '0564_5': '1', '0564_6': '1', '0564_7': '1', '0564_9': '1', '0557_24': '1', 'Node7': '1', 'Node6': '1', '0557_9': '1', 'Node17': '1', 'Node16': '1', 'Node19': '1', 'Node32': '1', 'Node30': '1', '0557_6': '1', 'Node36': '1', 'Node35': '2', '0557_5': '1', '0557_2': '1', '0564_11': '2', '0564_17': '1', 'Node18': '1', '0557_25': '1', '0564_4': '2', 'Node8': '1', '0557_26': '1', '0557_21': '1', 'Node53': '1'}
 
         """
+        #### BUSTED, at least, has a JSON bug which cannot be dealt with in HyPhy: "Unconstrained model" in fits --> "unconstrained" attribute, and similarly "Constrained model"  --> "constrained"
+        #### This hack will just swap the names.
+        if self.analysis == self.analysis_names.busted:
+            try:
+                attribute_name = self.fields.busted_fit_to_attr[attribute_name]
+                #print("\n PLEASE NOTE: In the BUSTED JSON file, the model fit names `(Un)constrained model` are matched with the attribute names `(un)constrained`. Phyphy will take care of this mapping for you if/when you provide `(Un)constrained model` to attribute extraction.")
+            except KeyError:
+                pass
+        ##################################################################     
               
         assert(attribute_name in self.attribute_names), "\n[ERROR]: Specified attribute does not exist in JSON."
         if self.npartitions == 1:
@@ -886,8 +899,8 @@ class Extractor():
                (0564_7:1,(((((0564_11:2,0564_4:2)Node20:1,(0564_1:1,(0564_21:1,0564_5:1)Node25:1)Node23:1)Node19:1,0564_17:1)Node18:1,((0564_13:1,(0564_15:2)Node32:1)Node30:1,((0564_22:1,0564_6:1)Node36:1,0564_3:2)Node35:2)Node29:1)Node17:1,0564_9:1)Node16:1,(((0557_24:1,0557_4:1,0557_2:1)Node9:1,0557_12:1)Node8:1,((0557_21:1,0557_6:1,0557_9:1,0557_11:1,0557_13:1,0557_26:1,(0557_5:1,0557_7:1)Node53:1)Node6:1,0557_25:1)Node7:1)Separator:2);
 
         """
+
         assert(attribute_name != self.fields.rate_distributions), "\n[ERROR]: Cannot map rate distributions onto a tree."
-        assert(attribute_name in self.attribute_names), "\n [ERROR]: Attribute name provided is not available."
         etree = deepcopy( self.input_tree_ete )
         
         mapped_trees = {}

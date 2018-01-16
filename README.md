@@ -1,6 +1,6 @@
 # phyphy
 
-**The current release is version 0.3**.
+**The current release is version 0.4**.
 
 [`phyphy`](http://sjspielman.org/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
