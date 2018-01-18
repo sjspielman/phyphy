@@ -1,6 +1,4 @@
-# phyphy
-
-[![DOI](https://zenodo.org/badge/97511838.svg)](https://zenodo.org/badge/latestdoi/97511838)
+# phyphy [![DOI](http://joss.theoj.org/papers/10.21105/joss.00514/status.svg)](https://doi.org/10.21105/joss.00514)
 
 **The current release is version 0.4.1**.
 
@@ -328,5 +326,4 @@ Finally, any NHX tree can be visualized with a variety of programmatic platforms
 
 
 ## Citation
-
-phyphy is currently [under review](http://joss.theoj.org/papers/9f65f1bc47bf8f17d773d09928a89b90) at the [Journal of Open Source Software](http://joss.theoj.org/). If you use phyphy for a paper, please stay tuned here. For the extra curious, follow along with the review [here](https://github.com/openjournals/joss-reviews/issues/514).
+Spielman, SJ (2018). *phyphy: Python package for facilitating the execution and parsing of HyPhy standard analyses.* Journal of Open Source Software, 3(21), 514, [https://doi.org/10.21105/joss.00514](https://doi.org/10.21105/joss.00514)
