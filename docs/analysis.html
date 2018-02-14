@@ -86,7 +86,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -97,12 +97,17 @@
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FEL analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FEL analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FEL analysis, where alignment and tree are in separate files </span>
@@ -140,7 +145,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -155,12 +160,17 @@
 <li><strong>samples_per_chain</strong>, Number of samples to draw per chain (Default 100, allowed [50,chain_length-burnin])</li>
 <li><strong>alpha</strong>, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])</li>
 <li><strong>cache</strong>, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument <strong>False</strong> to not save the cache (this argument simply sends it to /dev/null)</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfubar</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfUBAR</span> <span class="o">=</span> <span class="n">FUBAR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default FUBAR analysis, where alignment and tree are in separate files </span>
@@ -189,7 +199,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -199,12 +209,17 @@
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default MEME analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default MEME analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymeme</span> <span class="o">=</span> <span class="n">MEME</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default MEME analysis, where alignment and tree are in separate files </span>
@@ -237,7 +252,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -248,12 +263,17 @@
 <li><strong>alpha</strong>, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
 <li><strong>bootstrap</strong>, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default SLAC analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default SLAC analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myslac</span> <span class="o">=</span> <span class="n">SLAC</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default SLAC analysis, where alignment and tree are in separate files </span>
@@ -290,7 +310,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -299,12 +319,17 @@
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default ABSREL analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default ABSREL analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myabsrel</span> <span class="o">=</span> <span class="n">ABSREL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default ABSREL analysis, where alignment and tree are in separate files </span>
@@ -333,7 +358,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -342,12 +367,17 @@
 <li><strong>branches</strong>, Branches to consider in site-level selection inference. Values “All”, “Internal”, “Leaves”, “Unlabeled branches”, or a <strong>specific label</strong> are accepted</li>
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default BUSTED analysis, where data is contained in a single file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default BUSTED analysis, where data is contained in a single NEXUS file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mybusted</span> <span class="o">=</span> <span class="n">BUSTED</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default BUSTED analysis, where alignment and tree are in separate files </span>
@@ -376,7 +406,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 </ol>
 </dd>
 <dt>Optional keyword arguments:</dt>
@@ -387,12 +417,17 @@
 <li><strong>output</strong>, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data</li>
 <li><strong>analysis_type</strong>, “All” (run hypothesis test and fit descriptive models) or “Minimal” (only run hypothesis test). Default: “All”.</li>
 <li><strong>genetic_code</strong>, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where data is contained in a single file and test branches are labeled &quot;test&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where data is contained in a single NEXUS file and test branches are labeled &quot;test&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myrelax</span> <span class="o">=</span> <span class="n">RELAX</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">test_label</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a default RELAX analysis, where alignment and tree are in separate files and test branches are labeled &quot;test&quot;</span>
@@ -425,7 +460,7 @@
 <dl class="docutils">
 <dt>Required arguments:</dt>
 <dd><ol class="first last arabic simple">
-<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)</li>
+<li><strong>alignment</strong> and <strong>tree</strong> OR <strong>data</strong>, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the <cite>data</cite> argument, the additional argument <cite>nexus=True</cite> must be supplied.</li>
 <li><strong>type</strong>, either “nucleotide” or “protein” indicating the type of data being analyzed</li>
 </ol>
 </dd>
@@ -434,12 +469,17 @@
 <li><strong>hyphy</strong>, a <code class="code docutils literal"><span class="pre">HyPhy()</span></code> instance. Default: Assumes canonical HyPhy install.</li>
 <li><strong>model</strong>, The model to use to fit relative rates, i.e. GTR for nucleotides or LG for amino acids. For full options, please see HyPhy. Default: JC69.</li>
 <li><strong>rate_variation</strong>, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD. Note that Gamma and GDD will use four categories each. Default: No</li>
+<li><strong>nexus</strong>, a Boolean <em>only required when</em> a nexus file is provided to the argument <cite>data</cite>. Default: False.</li>
 </ol>
 </dd>
 </dl>
 <p><strong>Examples:</strong></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with no rate variation is used</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree.dat&quot;</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;protein&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;WAG&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Protein analysis, where data is contained in a single NEXUS file and the WAG model with no rate variation is used</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myleisr</span> <span class="o">=</span> <span class="n">LEISR</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data_with_tree..nex&quot;</span><span class="p">,</span> <span class="n">nexus</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;protein&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;WAG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with Gamma rate variation is used</span>

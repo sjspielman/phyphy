@@ -1,0 +1,780 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>extractor Module &#8212; phyphy  documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="analysis Module" href="analysis.html" /> 
+  </head>
+  <body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>phyphy  documentation</span></a></h1>
+        <h2 class="heading"><span>extractor Module</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="analysis.html"><code class="docutils literal"><span class="pre">analysis</span></code> Module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-extractor">
+<span id="extractor-module"></span><h1><code class="docutils literal"><span class="pre">extractor</span></code> Module<a class="headerlink" href="#module-extractor" title="Permalink to this headline">¶</a></h1>
+<p>Parse (Extract!) JSON output from a standard HyPhy analysis.</p>
+<dl class="class">
+<dt id="extractor.JSONFields">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">JSONFields</code><a class="headerlink" href="#extractor.JSONFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the strings of relevant JSON keys. 
+Note that these strings correspond precisely to those in the HyPhy distribution. See file: <cite>TemplateBatchFiles/libv3/all-terms.bf</cite> in the <cite>terms.json</cite> namespace.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.AnalysisNames">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">AnalysisNames</code><a class="headerlink" href="#extractor.AnalysisNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the names of analyses which we can parse.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.Genetics">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">Genetics</code><a class="headerlink" href="#extractor.Genetics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to define codes used. 
+Primarily (only?) used to extract frequencies as dictionaries.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="extractor.Extractor">
+<em class="property">class </em><code class="descclassname">extractor.</code><code class="descname">Extractor</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class parses JSON output and contains a variety of methods for pulling out various pieces of information.</p>
+<p>Initialize a Extractor instance.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><dl class="first docutils">
+<dt><strong>content</strong>, The input content to parse. Two types of input may be provided here, EITHER:</dt>
+<dd><ul class="first last">
+<li>The path to a JSON file to parse, provided as a string</li>
+<li>A phyphy <cite>Analysis</cite> (i.e. <cite>BUSTED</cite>, <cite>SLAC</cite>, <cite>FEL</cite>, etc.) object which has been used to execute a HyPhy analysis through the phyphy interface</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an Extractor instance with a JSON file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/json.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an Extractor instance with an Analysis object </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">### First, define and run an analysis (FEL, for example)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span> <span class="o">=</span> <span class="n">FEL</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;/path/to/data.fna&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfel</span><span class="o">.</span><span class="n">run_analysis</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">myfel</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="extractor.Extractor.extract_number_sequences">
+<code class="descname">extract_number_sequences</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_number_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of sequences in the input dataset.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_number_sequences</span><span class="p">()</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_number_sites">
+<code class="descname">extract_number_sites</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_number_sites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of sites in the input dataset. Note for codon analyses this will be the number of <em>codon</em> sites (i.e. length/3)</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_number_sites</span><span class="p">()</span>
+<span class="go">187</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_input_file">
+<code class="descname">extract_input_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name (including the path to) the input dataset. If alignment and tree were provided separately, this will return the alignment file name.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_file</span><span class="p">()</span>
+<span class="go">&quot;/Users/sjspielman/evogenomics_hyphy/datasets/CD2.fna&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_partition_count">
+<code class="descname">extract_partition_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_partition_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of partitions in the analysis.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_partition_count</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_input_tree">
+<code class="descname">extract_input_tree</code><span class="sig-paren">(</span><em>partition=None</em>, <em>original_names=False</em>, <em>node_labels=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_input_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inputted newick phylogeny, whose nodes have been labeled by HyPhy (if node labels were not present).
+For analyses with a single partition OR for a request for a specific partition’s tree, returns a string.
+For analyses with multiple partitions (and hence multiple trees), returns a <em>dictionary</em> of trees.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, Boolean (Default: False) if should update with original names before returning</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span>
+<span class="go">((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Use original names</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">original_names</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">((((Pig~gy:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL_mulitpart.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, from an analysis with multiple partitions, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">()</span> <span class="c1">## All partitions</span>
+<span class="go">{0: &#39;((((AF231119:0.00599498,AF231117:0.00602763)Node3:0.00187262,(AF186242:0.00194569,AF186243:0.0059545)Node6:1e-10)Node2:0.00395465,(AF186241:0.00398948,(AF231116:1e-10,AF187824:0.00402724)Node11:0.00395692)Node9:0.00200337)Node1:0.00392717,AF082576:0.00193519,(((AF231118:0.0639035,AF234767:0.143569)Node17:0.000456671,(AF231115:0.00201331,AF231114:0.00592754)Node20:0.00592206)Node16:1e-10,AF231113:0.00395832)Node15:1e-10);&#39;, 1: &#39;(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);&#39;, 2: &#39;(AF231119:0.00208218,AF231117:1e-10,((AF082576:1e-10,AF231113:0.00433775)Node4:0.00208919,((((AF186242:0.00216055,AF186243:0.00437974)Node10:0.00214339,((AF186241:1e-10,AF187824:0.00215048)Node14:0.00214528,AF231116:1e-10)Node13:1e-10)Node9:0.0112142,(AF231118:0.0244917,AF234767:0.0835686)Node18:0.0280857)Node8:0.0021073,(AF231115:1e-10,AF231114:0.00868934)Node21:0.00639388)Node7:1e-10)Node3:1e-10);&#39;, 3: &#39;((AF231119:0.000939531,AF082576:0.00182425)Node1:1e-10,(((AF231117:0.00499646,(AF231116:1e-10,(AF187824:0.00453171,AF231113:0.0180629)Node10:0.00923609)Node8:0.00581275)Node6:0.00383552,(AF231115:1e-10,AF231114:0.0100664)Node13:0.00401088)Node5:0.00102177,((AF186242:0.00171504,AF186243:0.00438135)Node17:0.00180763,AF186241:0.0044495)Node16:0.00408249)Node4:0.000197413,(AF231118:0.032062,AF234767:0.0409599)Node21:0.0228604);&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_input_tree</span><span class="p">(</span><span class="n">partition</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## Single specified partitions</span>
+<span class="go">(((((AF231119:0.00307476,AF231115:1e-10)Node4:1e-10,((AF082576:0.00309362,AF231113:1e-10)Node8:0.0031872,AF231114:0.013292)Node7:0.0030793)Node3:0.00310106,(AF231117:0.00396728,AF231118:0.0665375)Node12:0.00249394)Node2:0.00637034,(AF186242:1e-10,(AF186243:1e-10,AF234767:0.0278842)Node17:0.00311418)Node15:0.00307177)Node1:1e-10,(AF186241:0.00306598,AF231116:1e-10)Node20:1e-10,AF187824:0.00632863);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.reveal_fitted_models">
+<code class="descname">reveal_fitted_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_fitted_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all model names in the <cite>fits</cite> JSON field.</p>
+<p>No arguments are required.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reveal_fitted_models</span><span class="p">()</span>
+<span class="go">[&#39;Nucleotide GTR&#39;, &#39;Global MG94xREV]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/aBSREL.json&quot;</span><span class="p">)</span> <span class="c1">## Define an aBSREL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reveal_fitted_models</span><span class="p">()</span>
+<span class="go">[&#39;Nucleotide GTR&#39;, &#39;Full adaptive model&#39;, &#39;Baseline MG94xREV&#39;]     </span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_component">
+<code class="descname">extract_model_component</code><span class="sig-paren">(</span><em>model_name</em>, <em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a model component for a given model name found in the <cite>fits</cite> JSON field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+<li><strong>component</strong>, the component of the model to return.</li>
+</ol>
+</dd>
+<dt><strong>Recommended use:</strong> Note there are a variety of convenience methods which wrap this function to extract all components (note that not all analyses will have all of these components):</dt>
+<dd><ul class="first last simple">
+<li><code class="code docutils literal"><span class="pre">.extract_model_logl(model_name)</span></code> returns the log likelihood of a given model fit</li>
+<li><code class="code docutils literal"><span class="pre">.extract_model_estimated_parameters(model_name)</span></code> returns the number of estimated parameters in a given model fit</li>
+<li><code class="code docutils literal"><span class="pre">.extract_model_aicc(model_name)</span></code> returns the small-sample AIC (AIC-c) for a given model fit</li>
+<li><code class="code docutils literal"><span class="pre">.extract_model_rate_distributions(model_name)</span></code> returns rate distributions for a given model fit</li>
+<li><code class="code docutils literal"><span class="pre">.extract_model_frequencies(model_name)</span></code> returns the equilibrium frequencies for the given model fit</li>
+</ul>
+</dd>
+</dl>
+<p>See one of these other methods for example(s).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_logl">
+<code class="descname">extract_model_logl</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_logl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return log likelihood (as a float) for a given model that appears in the the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_logl</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span>
+<span class="go">-3531.96378073</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_estimated_parameters">
+<code class="descname">extract_model_estimated_parameters</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_estimated_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return estimated parameters (as an int) for a given model that appears in the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_estimated_parameters</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span>
+<span class="go">24</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_aicc">
+<code class="descname">extract_model_aicc</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_aicc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return AICc (as a float) for a given model that appears in the <cite>fits</cite> field.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_aicc</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span>
+<span class="go">7112.57796796</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_rate_distributions">
+<code class="descname">extract_model_rate_distributions</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_rate_distributions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return rate distributions, as a reformatted dictionary, for a given model that appears in the <cite>fits</cite> field.            
+NOTE: Currently assumes dS = 1 for all initial MG94xREV fits, as in the current HyPhy implementation (True in &lt;=2.3.4).</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.reveal_fitted_models()</cite></li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_rate_distributions</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span>
+<span class="go">{&#39;AC&#39;: 0.5472216942647106, &#39;GT&#39;: 0.3027127947903878, &#39;AG&#39;: 1, &#39;CG&#39;: 0.4864956075134169, &#39;AT&#39;: 0.2645767737218761, &#39;CT&#39;: 1.017388348535757}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_rate_distributions</span><span class="p">(</span><span class="s2">&quot;Global MG94xREV&quot;</span><span class="p">)</span>
+<span class="go">{&#39;test&#39;: {&#39;proportion&#39;: 1.0, &#39;omega&#39;: 0.9860796476982517}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_frequencies">
+<code class="descname">extract_model_frequencies</code><span class="sig-paren">(</span><em>model_name</em>, <em>as_dict=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_frequencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of equilibrium frequencies (in alphabetical order) for a given model that appears in the field <cite>fits</cite>.</p>
+<dl class="docutils">
+<dt>Required arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model_name</strong>, the name of the model of interest. Note that all model names can be revealed with the method <cite>.extract_model_names()</cite></li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>as_dict</strong>, Boolean to indicate if the frequencies should be returned as a dictionary. Default: False.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_frequencies</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span>
+<span class="go">[0.3563279857397504, 0.1837789661319073, 0.2402852049910873, 0.2196078431372549]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Return dictionary instead of list</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_frequencies</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">,</span> <span class="n">as_dict</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">{&#39;A&#39;: 0.3563279857397504, &#39;C&#39;: 0.1837789661319073, &#39;T&#39;: 0.2196078431372549, &#39;G&#39;: 0.2402852049910873}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_branch_sets">
+<code class="descname">extract_branch_sets</code><span class="sig-paren">(</span><em>by_set=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_branch_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return branch set designations as a dictionary for all nodes. 
+By default, this function will return the branch sets “as is” is the JSON field <cite>tested</cite>, where keys are node and values are the branch set to which the given node belongs
+NOTE: Assumes that all partitions share the same branch sets.</p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>by_set</strong>, Boolean to indicate if the returned dictionary should use <em>branch sets</em> as keys, and values are a <em>list</em> of nodes in that branch set. Default: False.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/BUSTED.json&quot;</span><span class="p">)</span> <span class="c1">## Define a BUSTED Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_branch_sets</span><span class="p">()</span>
+<span class="go">{&#39;Node12&#39;: &#39;test&#39;, &#39;GOR&#39;: &#39;test&#39;, &#39;HUM&#39;: &#39;test&#39;, &#39;PON&#39;: &#39;test&#39;, &#39;MAC&#39;: &#39;test&#39;, &#39;MAR&#39;: &#39;test&#39;, &#39;BAB&#39;: &#39;test&#39;, &#39;GIB&#39;: &#39;test&#39;, &#39;BUS&#39;: &#39;test&#39;, &#39;Node3&#39;: &#39;test&#39;, &#39;Node2&#39;: &#39;test&#39;, &#39;Node5&#39;: &#39;test&#39;, &#39;Node4&#39;: &#39;test&#39;, &#39;PAN&#39;: &#39;test&#39;, &#39;Node6&#39;: &#39;test&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Return dictionary of lists per set instead of default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_branch_sets</span><span class="p">(</span><span class="n">by_set</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">{&#39;test&#39;: [&#39;Node12&#39;, &#39;HUM&#39;, &#39;PON&#39;, &#39;MAC&#39;, &#39;MAR&#39;, &#39;BAB&#39;, &#39;GIB&#39;, &#39;Node2&#39;, &#39;BUS&#39;, &#39;Node3&#39;, &#39;Node6&#39;, &#39;Node5&#39;, &#39;Node4&#39;, &#39;PAN&#39;, &#39;GOR&#39;]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.reveal_branch_attributes">
+<code class="descname">reveal_branch_attributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_branch_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary of all the attributes in the <cite>branch attributes</cite> field and their attribute type (node label or branch label).</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/BUSTED.json&quot;</span><span class="p">)</span> <span class="c1">## Define a BUSTED Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reveal_branch_attributes</span><span class="p">()</span>
+<span class="go">{&#39;Nucleotide GTR&#39;: &#39;branch length&#39;, &#39;unconstrained&#39;: &#39;branch length&#39;, &#39;constrained&#39;: &#39;branch length&#39;, &#39;MG94xREV with separate rates for branch sets&#39;: &#39;branch length&#39;, &#39;original name&#39;: &#39;node label&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_branch_attribute">
+<code class="descname">extract_branch_attribute</code><span class="sig-paren">(</span><em>attribute_name</em>, <em>partition=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_branch_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dictionary of attributes for given attribute, where keys are nodes and values are attributes.
+If there are multiple partitions, default returns a dictionary with all partitions. 
+If partition = [some integer], only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.</p>
+<p>Importantly, the values for all returned dictionaries will be <strong>strings</strong>, except for the extraction of rate distributions .</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>attribute_name</strong>, the name of the attribute to obtain. Attribute names available can be revealed with the method <cite>.reveal_branch_attributes()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is <strong>ignored</strong> for single-partitioned analyses.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> <span class="c1">## Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_branch_attribute</span><span class="p">(</span><span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span> <span class="c1">## branches lengths</span>
+<span class="go">{&#39;Horse&#39;: &#39;0.209139911487&#39;, &#39;Node12&#39;: &#39;0.0178341148216&#39;, &#39;Cow&#39;: &#39;0.248286674829&#39;, &#39;Chimp&#39;: &#39;0.00181779097957&#39;, &#39;RhMonkey&#39;: &#39;0.00377365885129&#39;, &#39;Pig&#39;: &#39;0.187127383086&#39;, &#39;Node9&#39;: &#39;0.0256769899145&#39;, &#39;Node8&#39;: &#39;0.106120848179&#39;, &#39;Rat&#39;: &#39;0.0666961080592&#39;, &#39;Node3&#39;: &#39;0.0989071298032&#39;, &#39;Human&#39;: &#39;0&#39;, &#39;Node1&#39;: &#39;0.277289433172&#39;, &#39;Cat&#39;: &#39;0.266103366998&#39;, &#39;Node2&#39;: &#39;0.0661858336662&#39;, &#39;Mouse&#39;: &#39;0.118170595693&#39;, &#39;Baboon&#39;: &#39;0.0016809649281&#39;}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> <span class="c1">## Define an ABSREL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_branch_attribute</span><span class="p">(</span><span class="s2">&quot;Rate classes&quot;</span><span class="p">)</span> <span class="c1">## Number of inferred rate classes per node</span>
+<span class="go">{&#39;0557_7&#39;: &#39;1&#39;, &#39;0557_4&#39;: &#39;1&#39;, &#39;Node29&#39;: &#39;1&#39;, &#39;0564_13&#39;: &#39;1&#39;, &#39;Node25&#39;: &#39;1&#39;, &#39;Node20&#39;: &#39;1&#39;, &#39;Node23&#39;: &#39;1&#39;, &#39;0557_11&#39;: &#39;1&#39;, &#39;0557_12&#39;: &#39;1&#39;, &#39;0557_13&#39;: &#39;1&#39;, &#39;0564_22&#39;: &#39;1&#39;, &#39;0564_21&#39;: &#39;1&#39;, &#39;0564_15&#39;: &#39;2&#39;, &#39;Node9&#39;: &#39;1&#39;, &#39;0564_1&#39;: &#39;1&#39;, &#39;0564_3&#39;: &#39;2&#39;, &#39;Separator&#39;: &#39;2&#39;, &#39;0564_5&#39;: &#39;1&#39;, &#39;0564_6&#39;: &#39;1&#39;, &#39;0564_7&#39;: &#39;1&#39;, &#39;0564_9&#39;: &#39;1&#39;, &#39;0557_24&#39;: &#39;1&#39;, &#39;Node7&#39;: &#39;1&#39;, &#39;Node6&#39;: &#39;1&#39;, &#39;0557_9&#39;: &#39;1&#39;, &#39;Node17&#39;: &#39;1&#39;, &#39;Node16&#39;: &#39;1&#39;, &#39;Node19&#39;: &#39;1&#39;, &#39;Node32&#39;: &#39;1&#39;, &#39;Node30&#39;: &#39;1&#39;, &#39;0557_6&#39;: &#39;1&#39;, &#39;Node36&#39;: &#39;1&#39;, &#39;Node35&#39;: &#39;2&#39;, &#39;0557_5&#39;: &#39;1&#39;, &#39;0557_2&#39;: &#39;1&#39;, &#39;0564_11&#39;: &#39;2&#39;, &#39;0564_17&#39;: &#39;1&#39;, &#39;Node18&#39;: &#39;1&#39;, &#39;0557_25&#39;: &#39;1&#39;, &#39;0564_4&#39;: &#39;2&#39;, &#39;Node8&#39;: &#39;1&#39;, &#39;0557_26&#39;: &#39;1&#39;, &#39;0557_21&#39;: &#39;1&#39;, &#39;Node53&#39;: &#39;1&#39;}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.map_branch_attribute">
+<code class="descname">map_branch_attribute</code><span class="sig-paren">(</span><em>attribute_name</em>, <em>original_names=False</em>, <em>partition=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.map_branch_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the newick phylogeny with specified attribute mapped into the phylogeny <strong>as branch lengths</strong>.
+If there are multiple partitions, default returns a dictionary of mapped trees for all partitions. 
+If partition is specified, only the attribute for the given partition will be returned. NOTE: PARTITION STARTS FROM 0.</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>attribute_name</strong>, the name of the attribute to obtain. Attribute names available can be revealed with the method <cite>.reveal_branch_attributes()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> <span class="c1">## Define an aBSREL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">map_branch_atttribute</span><span class="p">(</span><span class="s2">&quot;Rate classes&quot;</span><span class="p">)</span> <span class="c1">## number of inferred rate classes, as branch lengths</span>
+<span class="go">(0564_7:1,(((((0564_11:2,0564_4:2)Node20:1,(0564_1:1,(0564_21:1,0564_5:1)Node25:1)Node23:1)Node19:1,0564_17:1)Node18:1,((0564_13:1,(0564_15:2)Node32:1)Node30:1,((0564_22:1,0564_6:1)Node36:1,0564_3:2)Node35:2)Node29:1)Node17:1,0564_9:1)Node16:1,(((0557_24:1,0557_4:1,0557_2:1)Node9:1,0557_12:1)Node8:1,((0557_21:1,0557_6:1,0557_9:1,0557_11:1,0557_13:1,0557_26:1,(0557_5:1,0557_7:1)Node53:1)Node6:1,0557_25:1)Node7:1)Separator:2);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_model_tree">
+<code class="descname">extract_model_tree</code><span class="sig-paren">(</span><em>model</em>, <em>partition=None</em>, <em>original_names=False</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_model_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return newick phylogeny fitted to a certain model, i.e. with branch lengths optimized for specified model.
+This is just a special case of map_branch_attribute.</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>model</strong>, the name of the model whose optimized tree you wish to obtain. Models names available can be revealed with the method <cite>.reveal_fitted_models()</cite>.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL Extractor, for example </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_tree</span><span class="p">(</span><span class="s2">&quot;Global MG94xREV) </span>
+<span class="go">((((Pig:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Use original names rather than HyPhy-reformatted names </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_tree</span><span class="p">(</span><span class="s2">&quot;Global MG94xREV&quot;</span><span class="p">)</span> 
+<span class="go">((((Pig~gy:0.192554792971,Cow:0.247996722936)Node3:0.101719189407,Horse:0.211310618381,Cat:0.273732369855)Node2:0.0644249932769,((RhMonkey:0.00372054481786,Baboon:0.0017701670358)Node9:0.0259206344918,(Human:0,Chimp:0.00182836999996)Node12:0.0178636195889)Node8:0.109431753602)Node1:0.284434196447,Rat:0.0670087588444,Mouse:0.120166947697);</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL Extractor, from an analysis with multiple partitions, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL_mulitpart.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_model_tree</span><span class="p">(</span><span class="s2">&quot;Global MG94xREV&quot;</span><span class="p">,</span> <span class="n">partition</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## specify only one partition </span>
+<span class="go">(((((AF231119:0.00272571804934,AF231115:0)Node4:0,((AF082576:0.00274243126371,AF231113:0)Node8:0.0027139677452,AF231114:0.011078118042)Node7:0.00276605108624)Node3:0.00271644261188,(AF231117:0.00298921107219,AF231118:0.0505182782033)Node12:0.00258521327296)Node2:0.00550172127052,(AF186242:0,(AF186243:0,AF234767:0.0224059556982)Node17:0.00273365779956)Node15:0.00270941747926)Node1:0,(AF186241:0.00270936341991,AF231116:0)Node20:0,AF187824:0.00546772497238);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_absrel_tree">
+<code class="descname">extract_absrel_tree</code><span class="sig-paren">(</span><em>original_names=False</em>, <em>update_branch_lengths=None</em>, <em>p=0.05</em>, <em>labels=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_absrel_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return newick phylogeny in <strong>Extended Newick Format</strong> (<code class="code docutils literal"><span class="pre">ete</span></code>-style features) as selection <em>indicators</em> (Default is 0 for not selected, 1 for selected) at the specified p threshold. <strong>aBSREL only.</strong></p>
+<dl class="docutils">
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>original_names</strong>, reformat the tree with the original names (as opposed to hyphy-friendly names with forbidden characters replaced). In most cases hyphy and original names are identical. Default: False.</li>
+<li><strong>update_branch_lengths</strong>, string model name, indicting that branch lengths should be replaced with the given model fit’s optimized lengths. Default: None.</li>
+<li><strong>p</strong>, the p-value threshold for calling selection. Default: 0.05</li>
+<li><strong>labels</strong>: A tuple of labels to use for (selected, not selected). Default is (1,0)</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an ABSREL Extractor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add extended-newick format labels of selection with default labels.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">### Note this example happens not to have branch lengths in the input tree.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_absrel_tree</span><span class="p">()</span> 
+<span class="go">(0564_7:1[&amp;&amp;NHX:Selected=0],(((((0564_11:1[&amp;&amp;NHX:Selected=0],0564_4:1[&amp;&amp;NHX:Selected=0])Node20:1[&amp;&amp;NHX:Selected=0],(0564_1:1[&amp;&amp;NHX:Selected=0],(0564_21:1[&amp;&amp;NHX:Selected=0],0564_5:1[&amp;&amp;NHX:Selected=0])Node25:1[&amp;&amp;NHX:Selected=0])Node23:1[&amp;&amp;NHX:Selected=0])Node19:1[&amp;&amp;NHX:Selected=0],0564_17:1[&amp;&amp;NHX:Selected=0])Node18:1[&amp;&amp;NHX:Selected=0],((0564_13:1[&amp;&amp;NHX:Selected=0],(0564_15:1[&amp;&amp;NHX:Selected=0])Node32:1[&amp;&amp;NHX:Selected=0])Node30:1[&amp;&amp;NHX:Selected=0],((0564_22:1[&amp;&amp;NHX:Selected=0],0564_6:1[&amp;&amp;NHX:Selected=0])Node36:1[&amp;&amp;NHX:Selected=0],0564_3:1[&amp;&amp;NHX:Selected=1])Node35:1[&amp;&amp;NHX:Selected=1])Node29:1[&amp;&amp;NHX:Selected=0])Node17:1[&amp;&amp;NHX:Selected=0],0564_9:1[&amp;&amp;NHX:Selected=0])Node16:1[&amp;&amp;NHX:Selected=0],(((0557_24:1[&amp;&amp;NHX:Selected=0],0557_4:1[&amp;&amp;NHX:Selected=0],0557_2:1[&amp;&amp;NHX:Selected=0])Node9:1[&amp;&amp;NHX:Selected=0],0557_12:1[&amp;&amp;NHX:Selected=0])Node8:1[&amp;&amp;NHX:Selected=0],((0557_21:1[&amp;&amp;NHX:Selected=0],0557_6:1[&amp;&amp;NHX:Selected=0],0557_9:1[&amp;&amp;NHX:Selected=0],0557_11:1[&amp;&amp;NHX:Selected=0],0557_13:1[&amp;&amp;NHX:Selected=0],0557_26:1[&amp;&amp;NHX:Selected=0],(0557_5:1[&amp;&amp;NHX:Selected=0],0557_7:1[&amp;&amp;NHX:Selected=0])Node53:1[&amp;&amp;NHX:Selected=0])Node6:1[&amp;&amp;NHX:Selected=0],0557_25:1[&amp;&amp;NHX:Selected=0])Node7:1[&amp;&amp;NHX:Selected=0])Separator:1[&amp;&amp;NHX:Selected=1])[&amp;&amp;NHX:Selected=0];</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add extended-newick format labels of selection with default labels, with branch lengths updated as the adaptive model </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_absrel_tree</span><span class="p">(</span><span class="n">update_branch_lengths</span><span class="o">=</span><span class="s2">&quot;Full adaptive model&quot;</span><span class="p">)</span> 
+<span class="go">(0564_7:0.00708844[&amp;&amp;NHX:Selected=0],(((((0564_11:0.00527268[&amp;&amp;NHX:Selected=0],0564_4:0.00714182[&amp;&amp;NHX:Selected=0])Node20:0.0022574[&amp;&amp;NHX:Selected=0],(0564_1:0.00583239[&amp;&amp;NHX:Selected=0],(0564_21:0.00121537[&amp;&amp;NHX:Selected=0],0564_5:0.00266921[&amp;&amp;NHX:Selected=0])Node25:0.000797211[&amp;&amp;NHX:Selected=0])Node23:0.00142056[&amp;&amp;NHX:Selected=0])Node19:0.0019147[&amp;&amp;NHX:Selected=0],0564_17:0.00605582[&amp;&amp;NHX:Selected=0])Node18:0.00100178[&amp;&amp;NHX:Selected=0],((0564_13:0.0053066[&amp;&amp;NHX:Selected=0],(0564_15:0.00346989[&amp;&amp;NHX:Selected=0])Node32:0.000752206[&amp;&amp;NHX:Selected=0])Node30:0.00188243[&amp;&amp;NHX:Selected=0],((0564_22:0.00686981[&amp;&amp;NHX:Selected=0],0564_6:0.00581523[&amp;&amp;NHX:Selected=0])Node36:0.00125905[&amp;&amp;NHX:Selected=0],0564_3:0.00791919[&amp;&amp;NHX:Selected=1])Node35:0.0174886[&amp;&amp;NHX:Selected=1])Node29:0.0010489[&amp;&amp;NHX:Selected=0])Node17:0.00156911[&amp;&amp;NHX:Selected=0],0564_9:0.00551506[&amp;&amp;NHX:Selected=0])Node16:0.000783733[&amp;&amp;NHX:Selected=0],(((0557_24:0.00078793[&amp;&amp;NHX:Selected=0],0557_4:0.000787896[&amp;&amp;NHX:Selected=0],0557_2:0.000399166[&amp;&amp;NHX:Selected=0])Node9:0.00206483[&amp;&amp;NHX:Selected=0],0557_12:0.00267531[&amp;&amp;NHX:Selected=0])Node8:0.00118205[&amp;&amp;NHX:Selected=0],((0557_21:0[&amp;&amp;NHX:Selected=0],0557_6:0.000391941[&amp;&amp;NHX:Selected=0],0557_9:0.000402021[&amp;&amp;NHX:Selected=0],0557_11:0.00156985[&amp;&amp;NHX:Selected=0],0557_13:0.000401742[&amp;&amp;NHX:Selected=0],0557_26:0.00079377[&amp;&amp;NHX:Selected=0],(0557_5:0.00117641[&amp;&amp;NHX:Selected=0],0557_7:0[&amp;&amp;NHX:Selected=0])Node53:0.000391973[&amp;&amp;NHX:Selected=0])Node6:0.00118062[&amp;&amp;NHX:Selected=0],0557_25:0.00220372[&amp;&amp;NHX:Selected=0])Node7:0.00103489[&amp;&amp;NHX:Selected=0])Separator:0.00822051[&amp;&amp;NHX:Selected=1])[&amp;&amp;NHX:Selected=0];               </span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add extended-newick format labels of selection with *custom* labels, with branch lengths updated as the adaptive model </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_absrel_tree</span><span class="p">(</span><span class="n">update_branch_lengths</span><span class="o">=</span><span class="s2">&quot;Full adaptive model&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">])</span> 
+<span class="go">(0564_7:0.00708844[&amp;&amp;NHX:Selected=yes],(((((0564_11:0.00527268[&amp;&amp;NHX:Selected=yes],0564_4:0.00714182[&amp;&amp;NHX:Selected=yes])Node20:0.0022574[&amp;&amp;NHX:Selected=yes],(0564_1:0.00583239[&amp;&amp;NHX:Selected=yes],(0564_21:0.00121537[&amp;&amp;NHX:Selected=yes],0564_5:0.00266921[&amp;&amp;NHX:Selected=yes])Node25:0.000797211[&amp;&amp;NHX:Selected=yes])Node23:0.00142056[&amp;&amp;NHX:Selected=yes])Node19:0.0019147[&amp;&amp;NHX:Selected=yes],0564_17:0.00605582[&amp;&amp;NHX:Selected=yes])Node18:0.00100178[&amp;&amp;NHX:Selected=yes],((0564_13:0.0053066[&amp;&amp;NHX:Selected=yes],(0564_15:0.00346989[&amp;&amp;NHX:Selected=yes])Node32:0.000752206[&amp;&amp;NHX:Selected=yes])Node30:0.00188243[&amp;&amp;NHX:Selected=yes],((0564_22:0.00686981[&amp;&amp;NHX:Selected=yes],0564_6:0.00581523[&amp;&amp;NHX:Selected=yes])Node36:0.00125905[&amp;&amp;NHX:Selected=yes],0564_3:0.00791919[&amp;&amp;NHX:Selected=no])Node35:0.0174886[&amp;&amp;NHX:Selected=no])Node29:0.0010489[&amp;&amp;NHX:Selected=yes])Node17:0.00156911[&amp;&amp;NHX:Selected=yes],0564_9:0.00551506[&amp;&amp;NHX:Selected=yes])Node16:0.000783733[&amp;&amp;NHX:Selected=yes],(((0557_24:0.00078793[&amp;&amp;NHX:Selected=yes],0557_4:0.000787896[&amp;&amp;NHX:Selected=yes],0557_2:0.000399166[&amp;&amp;NHX:Selected=yes])Node9:0.00206483[&amp;&amp;NHX:Selected=yes],0557_12:0.00267531[&amp;&amp;NHX:Selected=yes])Node8:0.00118205[&amp;&amp;NHX:Selected=yes],((0557_21:0[&amp;&amp;NHX:Selected=yes],0557_6:0.000391941[&amp;&amp;NHX:Selected=yes],0557_9:0.000402021[&amp;&amp;NHX:Selected=yes],0557_11:0.00156985[&amp;&amp;NHX:Selected=yes],0557_13:0.000401742[&amp;&amp;NHX:Selected=yes],0557_26:0.00079377[&amp;&amp;NHX:Selected=yes],(0557_5:0.00117641[&amp;&amp;NHX:Selected=yes],0557_7:0[&amp;&amp;NHX:Selected=yes])Node53:0.000391973[&amp;&amp;NHX:Selected=yes])Node6:0.00118062[&amp;&amp;NHX:Selected=yes],0557_25:0.00220372[&amp;&amp;NHX:Selected=yes])Node7:0.00103489[&amp;&amp;NHX:Selected=yes])Separator:0.00822051[&amp;&amp;NHX:Selected=no])[&amp;&amp;NHX:Selected=0];</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add extended-newick format labels of selection with default labels, using a P-threshold of 0.3 </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_absrel_tree</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span> 
+<span class="go">(0564_7:1[&amp;&amp;NHX:Selected=1],(((((0564_11:1[&amp;&amp;NHX:Selected=0],0564_4:1[&amp;&amp;NHX:Selected=0])Node20:1[&amp;&amp;NHX:Selected=0],(0564_1:1[&amp;&amp;NHX:Selected=0],(0564_21:1[&amp;&amp;NHX:Selected=0],0564_5:1[&amp;&amp;NHX:Selected=0])Node25:1[&amp;&amp;NHX:Selected=0])Node23:1[&amp;&amp;NHX:Selected=0])Node19:1[&amp;&amp;NHX:Selected=0],0564_17:1[&amp;&amp;NHX:Selected=0])Node18:1[&amp;&amp;NHX:Selected=0],((0564_13:1[&amp;&amp;NHX:Selected=0],(0564_15:1[&amp;&amp;NHX:Selected=0])Node32:1[&amp;&amp;NHX:Selected=0])Node30:1[&amp;&amp;NHX:Selected=0],((0564_22:1[&amp;&amp;NHX:Selected=0],0564_6:1[&amp;&amp;NHX:Selected=0])Node36:1[&amp;&amp;NHX:Selected=0],0564_3:1[&amp;&amp;NHX:Selected=1])Node35:1[&amp;&amp;NHX:Selected=1])Node29:1[&amp;&amp;NHX:Selected=0])Node17:1[&amp;&amp;NHX:Selected=0],0564_9:1[&amp;&amp;NHX:Selected=0])Node16:1[&amp;&amp;NHX:Selected=0],(((0557_24:1[&amp;&amp;NHX:Selected=0],0557_4:1[&amp;&amp;NHX:Selected=0],0557_2:1[&amp;&amp;NHX:Selected=0])Node9:1[&amp;&amp;NHX:Selected=0],0557_12:1[&amp;&amp;NHX:Selected=0])Node8:1[&amp;&amp;NHX:Selected=0],((0557_21:1[&amp;&amp;NHX:Selected=0],0557_6:1[&amp;&amp;NHX:Selected=0],0557_9:1[&amp;&amp;NHX:Selected=0],0557_11:1[&amp;&amp;NHX:Selected=0],0557_13:1[&amp;&amp;NHX:Selected=0],0557_26:1[&amp;&amp;NHX:Selected=0],(0557_5:1[&amp;&amp;NHX:Selected=0],0557_7:1[&amp;&amp;NHX:Selected=0])Node53:1[&amp;&amp;NHX:Selected=0])Node6:1[&amp;&amp;NHX:Selected=0],0557_25:1[&amp;&amp;NHX:Selected=0])Node7:1[&amp;&amp;NHX:Selected=0])Separator:1[&amp;&amp;NHX:Selected=1])[&amp;&amp;NHX:Selected=0];</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_feature_tree">
+<code class="descname">extract_feature_tree</code><span class="sig-paren">(</span><em>feature</em>, <em>original_names=False</em>, <em>update_branch_lengths=None</em>, <em>partition=None</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_feature_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return newick phylogeny in <strong>Extended Newick Format</strong> (<code class="code docutils literal"><span class="pre">ete</span></code>-style features) with specified feature(s).</p>
+<dl class="docutils">
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>feature</strong>, The feature(s) to be included the final tree. This is either a string of a feature, or a list of features. Features are taken from attributes. Note that the exported feature label will have all spaces removed.</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>update_branch_lengths</strong>, string model name, indicting that branch lengths should be replaced with the given model fit’s optimized lengths. Default: None.</li>
+<li><strong>partition</strong>, Integer indicating which partition’s tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an ABSREL Extractor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add a single feature, rate classes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">### Note this example happens to have no branch lengths</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_feature_tree</span><span class="p">(</span><span class="s2">&quot;Rate classes&quot;</span><span class="p">)</span> 
+<span class="go">(0564_7:1[&amp;&amp;NHX:Rateclasses=1],(((((0564_11:1[&amp;&amp;NHX:Rateclasses=2],0564_4:1[&amp;&amp;NHX:Rateclasses=2])Node20:1[&amp;&amp;NHX:Rateclasses=1],(0564_1:1[&amp;&amp;NHX:Rateclasses=1],(0564_21:1[&amp;&amp;NHX:Rateclasses=1],0564_5:1[&amp;&amp;NHX:Rateclasses=1])Node25:1[&amp;&amp;NHX:Rateclasses=1])Node23:1[&amp;&amp;NHX:Rateclasses=1])Node19:1[&amp;&amp;NHX:Rateclasses=1],0564_17:1[&amp;&amp;NHX:Rateclasses=1])Node18:1[&amp;&amp;NHX:Rateclasses=1],((0564_13:1[&amp;&amp;NHX:Rateclasses=1],(0564_15:1[&amp;&amp;NHX:Rateclasses=2])Node32:1[&amp;&amp;NHX:Rateclasses=1])Node30:1[&amp;&amp;NHX:Rateclasses=1],((0564_22:1[&amp;&amp;NHX:Rateclasses=1],0564_6:1[&amp;&amp;NHX:Rateclasses=1])Node36:1[&amp;&amp;NHX:Rateclasses=1],0564_3:1[&amp;&amp;NHX:Rateclasses=2])Node35:1[&amp;&amp;NHX:Rateclasses=2])Node29:1[&amp;&amp;NHX:Rateclasses=1])Node17:1[&amp;&amp;NHX:Rateclasses=1],0564_9:1[&amp;&amp;NHX:Rateclasses=1])Node16:1[&amp;&amp;NHX:Rateclasses=1],(((0557_24:1[&amp;&amp;NHX:Rateclasses=1],0557_4:1[&amp;&amp;NHX:Rateclasses=1],0557_2:1[&amp;&amp;NHX:Rateclasses=1])Node9:1[&amp;&amp;NHX:Rateclasses=1],0557_12:1[&amp;&amp;NHX:Rateclasses=1])Node8:1[&amp;&amp;NHX:Rateclasses=1],((0557_21:1[&amp;&amp;NHX:Rateclasses=1],0557_6:1[&amp;&amp;NHX:Rateclasses=1],0557_9:1[&amp;&amp;NHX:Rateclasses=1],0557_11:1[&amp;&amp;NHX:Rateclasses=1],0557_13:1[&amp;&amp;NHX:Rateclasses=1],0557_26:1[&amp;&amp;NHX:Rateclasses=1],(0557_5:1[&amp;&amp;NHX:Rateclasses=1],0557_7:1[&amp;&amp;NHX:Rateclasses=1])Node53:1[&amp;&amp;NHX:Rateclasses=1])Node6:1[&amp;&amp;NHX:Rateclasses=1],0557_25:1[&amp;&amp;NHX:Rateclasses=1])Node7:1[&amp;&amp;NHX:Rateclasses=1])Separator:1[&amp;&amp;NHX:Rateclasses=2])[&amp;&amp;NHX:Rateclasses=0];;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add a single feature, rate classes, with updated branch lengths </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_feature_tree</span><span class="p">(</span><span class="s2">&quot;Rate classes&quot;</span><span class="p">,</span><span class="n">update_branch_lengths</span> <span class="o">=</span> <span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span> 
+<span class="go">(0564_7:0.00664844[&amp;&amp;NHX:Rateclasses=1],(((((0564_11:0.00434881[&amp;&amp;NHX:Rateclasses=2],0564_4:0.00593219[&amp;&amp;NHX:Rateclasses=2])Node20:0.0026739[&amp;&amp;NHX:Rateclasses=1],(0564_1:0.00559179[&amp;&amp;NHX:Rateclasses=1],(0564_21:0.00124334[&amp;&amp;NHX:Rateclasses=1],0564_5:0.00259957[&amp;&amp;NHX:Rateclasses=1])Node25:0.000863062[&amp;&amp;NHX:Rateclasses=1])Node23:0.00149918[&amp;&amp;NHX:Rateclasses=1])Node19:0.00164262[&amp;&amp;NHX:Rateclasses=1],0564_17:0.00600417[&amp;&amp;NHX:Rateclasses=1])Node18:0.00100639[&amp;&amp;NHX:Rateclasses=1],((0564_13:0.00534732[&amp;&amp;NHX:Rateclasses=1],(0564_15:0.00278489[&amp;&amp;NHX:Rateclasses=2])Node32:0.000565591[&amp;&amp;NHX:Rateclasses=1])Node30:0.00196314[&amp;&amp;NHX:Rateclasses=1],((0564_22:0.00686685[&amp;&amp;NHX:Rateclasses=1],0564_6:0.00554135[&amp;&amp;NHX:Rateclasses=1])Node36:0.000954793[&amp;&amp;NHX:Rateclasses=1],0564_3:0.00652918[&amp;&amp;NHX:Rateclasses=2])Node35:0.00195507[&amp;&amp;NHX:Rateclasses=2])Node29:0.001029[&amp;&amp;NHX:Rateclasses=1])Node17:0.00155756[&amp;&amp;NHX:Rateclasses=1],0564_9:0.00533212[&amp;&amp;NHX:Rateclasses=1])Node16:0.000567283[&amp;&amp;NHX:Rateclasses=1],(((0557_24:0.000770978[&amp;&amp;NHX:Rateclasses=1],0557_4:0.000770929[&amp;&amp;NHX:Rateclasses=1],0557_2:0.000385454[&amp;&amp;NHX:Rateclasses=1])Node9:0.00199212[&amp;&amp;NHX:Rateclasses=1],0557_12:0.00265769[&amp;&amp;NHX:Rateclasses=1])Node8:0.00119139[&amp;&amp;NHX:Rateclasses=1],((0557_21:0[&amp;&amp;NHX:Rateclasses=1],0557_6:0.000388349[&amp;&amp;NHX:Rateclasses=1],0557_9:0.000388411[&amp;&amp;NHX:Rateclasses=1],0557_11:0.00155424[&amp;&amp;NHX:Rateclasses=1],0557_13:0.000388353[&amp;&amp;NHX:Rateclasses=1],0557_26:0.000776809[&amp;&amp;NHX:Rateclasses=1],(0557_5:0.00116512[&amp;&amp;NHX:Rateclasses=1],0557_7:0[&amp;&amp;NHX:Rateclasses=1])Node53:0.000388349[&amp;&amp;NHX:Rateclasses=1])Node6:0.00118273[&amp;&amp;NHX:Rateclasses=1],0557_25:0.00219124[&amp;&amp;NHX:Rateclasses=1])Node7:0.000940406[&amp;&amp;NHX:Rateclasses=1])Separator:0.00689203[&amp;&amp;NHX:Rateclasses=2])[&amp;&amp;NHX:Rateclasses=0];&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Add a multiple features with updated branch lengths </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_feature_tree</span><span class="p">([</span><span class="s2">&quot;Rate classes&quot;</span><span class="p">,</span> <span class="s2">&quot;LRT&quot;</span><span class="p">,</span> <span class="n">update_branch_lengths</span> <span class="o">=</span> <span class="s2">&quot;Nucleotide GTR&quot;</span><span class="p">)</span> 
+<span class="go">(0564_7:0.00664844[&amp;&amp;NHX:Rateclasses=1:LRT=0],(((((0564_11:0.00434881[&amp;&amp;NHX:Rateclasses=2:LRT=3.96048976951],0564_4:0.00593219[&amp;&amp;NHX:Rateclasses=2:LRT=4.80587881259])Node20:0.0026739[&amp;&amp;NHX:Rateclasses=1:LRT=3.30060030447],(0564_1:0.00559179[&amp;&amp;NHX:Rateclasses=1:LRT=0.0105269546166],(0564_21:0.00124334[&amp;&amp;NHX:Rateclasses=1:LRT=0],0564_5:0.00259957[&amp;&amp;NHX:Rateclasses=1:LRT=4.51927751707])Node25:0.000863062[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node23:0.00149918[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node19:0.00164262[&amp;&amp;NHX:Rateclasses=1:LRT=0.153859379099],0564_17:0.00600417[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node18:0.00100639[&amp;&amp;NHX:Rateclasses=1:LRT=1.64667962972],((0564_13:0.00534732[&amp;&amp;NHX:Rateclasses=1:LRT=0],(0564_15:0.00278489[&amp;&amp;NHX:Rateclasses=2:LRT=4.97443221859])Node32:0.000565591[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node30:0.00196314[&amp;&amp;NHX:Rateclasses=1:LRT=2.86518293899],((0564_22:0.00686685[&amp;&amp;NHX:Rateclasses=1:LRT=0.114986865638],0564_6:0.00554135[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node36:0.000954793[&amp;&amp;NHX:Rateclasses=1:LRT=0],0564_3:0.00652918[&amp;&amp;NHX:Rateclasses=2:LRT=14.0568340492])Node35:0.00195507[&amp;&amp;NHX:Rateclasses=2:LRT=22.65142315])Node29:0.001029[&amp;&amp;NHX:Rateclasses=1:LRT=1.50723222708])Node17:0.00155756[&amp;&amp;NHX:Rateclasses=1:LRT=2.63431127725],0564_9:0.00533212[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node16:0.000567283[&amp;&amp;NHX:Rateclasses=1:LRT=0],(((0557_24:0.000770978[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_4:0.000770929[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_2:0.000385454[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node9:0.00199212[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_12:0.00265769[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node8:0.00119139[&amp;&amp;NHX:Rateclasses=1:LRT=1.99177154715],((0557_21:0[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_6:0.000388349[&amp;&amp;NHX:Rateclasses=1:LRT=0.662153642024],0557_9:0.000388411[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_11:0.00155424[&amp;&amp;NHX:Rateclasses=1:LRT=2.65063418443],0557_13:0.000388353[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_26:0.000776809[&amp;&amp;NHX:Rateclasses=1:LRT=0],(0557_5:0.00116512[&amp;&amp;NHX:Rateclasses=1:LRT=1.98893541781],0557_7:0[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node53:0.000388349[&amp;&amp;NHX:Rateclasses=1:LRT=0.660753167251])Node6:0.00118273[&amp;&amp;NHX:Rateclasses=1:LRT=0],0557_25:0.00219124[&amp;&amp;NHX:Rateclasses=1:LRT=0])Node7:0.000940406[&amp;&amp;NHX:Rateclasses=1:LRT=1.69045394756])Separator:0.00689203[&amp;&amp;NHX:Rateclasses=2:LRT=14.127483568])[&amp;&amp;NHX:Rateclasses=0:LRT=0];</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.reveal_fields">
+<code class="descname">reveal_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.reveal_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of top-level JSON fields.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an ABSREL Extractor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Reveal all fields</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">reveal_fields</span><span class="p">()</span>
+<span class="go">[&#39;branch attributes&#39;, &#39;analysis&#39;, &#39;tested&#39;, &#39;data partitions&#39;, &#39;timers&#39;, &#39;fits&#39;, &#39;input&#39;, &#39;test results&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_csv">
+<code class="descname">extract_csv</code><span class="sig-paren">(</span><em>csv</em>, <em>delim='</em>, <em>'</em>, <em>original_names=True</em>, <em>slac_ancestral_type='AVERAGED'</em><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_csv" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Extract a CSV from JSON, for certain methods:</dt>
+<dd><ul class="first last simple">
+<li>FEL</li>
+<li>SLAC</li>
+<li>MEME</li>
+<li>FUBAR</li>
+<li>LEISR</li>
+<li>aBSREL</li>
+</ul>
+</dd>
+<dt>Output for each:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt><strong>FEL</strong> </dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">site</span></code>, the site of interest</li>
+<li><code class="code docutils literal"><span class="pre">alpha</span></code>, Synonymous substitution rate at a site</li>
+<li><code class="code docutils literal"><span class="pre">beta</span></code>, Non-synonymous substitution rate at a site</li>
+<li><code class="code docutils literal"><span class="pre">alpha=beta</span></code>,The rate estimate under the neutral model</li>
+<li><code class="code docutils literal"><span class="pre">LRT</span></code>, Likelihood ratio test statistic for <code class="code docutils literal"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">alpha</span></code>, vs. alternative <code class="code docutils literal"><span class="pre">beta</span> <span class="pre">!=</span> <span class="pre">alpha</span></code></li>
+<li><code class="code docutils literal"><span class="pre">p-value</span></code>, P-value from the  Likelihood ratio test</li>
+<li><code class="code docutils literal"><span class="pre">Total</span> <span class="pre">branch</span> <span class="pre">length</span></code>, The total length of branches contributing to inference at this site</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>SLAC</strong></dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">site</span></code>, the site of interest</li>
+<li><code class="code docutils literal"><span class="pre">ES</span></code>, Expected synonymous sites</li>
+<li><code class="code docutils literal"><span class="pre">EN</span></code>, Expected non-synonymous sites</li>
+<li><code class="code docutils literal"><span class="pre">S</span></code>, Inferred synonymous substitutions</li>
+<li><code class="code docutils literal"><span class="pre">N</span></code>, Inferred non-synonymous substitutions</li>
+<li><code class="code docutils literal"><span class="pre">P[S]</span></code>, Expected proportion of synonymous sites</li>
+<li><code class="code docutils literal"><span class="pre">dS</span></code>, Inferred synonymous susbsitution rate</li>
+<li><code class="code docutils literal"><span class="pre">dN</span></code>, Inferred non-synonymous susbsitution rate</li>
+<li><code class="code docutils literal"><span class="pre">dN-dS</span></code>, Scaled by the length of the tested branches</li>
+<li><code class="code docutils literal"><span class="pre">P_[dN/dS_&gt;_1]</span></code>, Binomial probability that S is no greater than the observed value, with P&lt;sub&gt;s&lt;/sub&gt; probability of success</li>
+<li><code class="code docutils literal"><span class="pre">P_[dN/dS_&lt;_1]</span></code>, Binomial probability that S is no less than the observed value, with P&lt;sub&gt;s&lt;/sub&gt; probability of success</li>
+<li><code class="code docutils literal"><span class="pre">Total</span> <span class="pre">branch</span> <span class="pre">length</span></code>, The total length of branches contributing to inference at this site, and used to scale dN-dS};</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>MEME</strong></dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">site</span></code>, the site of interest</li>
+<li><code class="code docutils literal"><span class="pre">alpha</span></code>, Synonymous substitution rate at a site</li>
+<li><code class="code docutils literal"><span class="pre">beta_neg&gt;</span></code>, Non-synonymous substitution rate at a site for the negative/neutral evolution component</li>
+<li><code class="code docutils literal"><span class="pre">prop_beta_neg</span></code>, Mixture distribution weight allocated to beta_neg; loosely – the proportion of the tree evolving neutrally or under negative selection</li>
+<li><code class="code docutils literal"><span class="pre">beta_pos</span></code>, Non-synonymous substitution rate at a site for the positive/neutral evolution component</li>
+<li><code class="code docutils literal"><span class="pre">prop_beta_pos</span></code>, Mixture distribution weight allocated to beta_pos; loosely – the proportion of the tree evolving neutrally or under positive selection</li>
+<li><code class="code docutils literal"><span class="pre">LRT</span></code>, Likelihood ratio test statistic for episodic diversification</li>
+<li><code class="code docutils literal"><span class="pre">p-value</span></code>, Asymptotic p-value for episodic diversification</li>
+<li><code class="code docutils literal"><span class="pre">num_branches_under_selection</span></code>, The (very approximate and rough) estimate of how many branches may have been under selection at this site, i.e., had an empirical Bayes factor of 100 or more for the beta_pos rate</li>
+<li><code class="code docutils literal"><span class="pre">Total_branch_length</span></code>, The total length of branches contributing to inference at this site</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>FUBAR</strong></dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">site</span></code>, the site of interest</li>
+<li><code class="code docutils literal"><span class="pre">alpha</span></code>, Mean posterior synonymous substitution rate at a site</li>
+<li><code class="code docutils literal"><span class="pre">beta</span></code>, Mean posterior non-synonymous substitution rate at a site</li>
+<li><code class="code docutils literal"><span class="pre">beta-alpha</span></code>, Mean posterior beta-alpha</li>
+<li><code class="code docutils literal"><span class="pre">Prob[alpha&gt;beta]</span></code>, Posterior probability of negative selection at a site</li>
+<li><code class="code docutils literal"><span class="pre">Prob[alpha&lt;beta]</span></code>, Posterior probability of positive selection at a site</li>
+<li><code class="code docutils literal"><span class="pre">BayesFactor[alpha&lt;beta]</span></code>, Empiricial Bayes Factor for positive selection at a site</li>
+<li><code class="code docutils literal"><span class="pre">PSRF</span></code>, Potential scale reduction factor - an MCMC mixing measure</li>
+<li><code class="code docutils literal"><span class="pre">Neff</span></code>, Estimated effective sample site for Prob [alpha&lt;beta]};</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>LEISR</strong></dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">site</span></code>, the site of interest</li>
+<li><code class="code docutils literal"><span class="pre">MLE</span></code>, Relative rate estimate at a site</li>
+<li><code class="code docutils literal"><span class="pre">Lower</span></code>, Lower bound of 95% profile likelihood CI</li>
+<li><code class="code docutils literal"><span class="pre">Upper</span></code>, Upper bound of 95% profile likelihood CI</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>aBSREL</strong></dt>
+<dd><ul class="first last">
+<li><code class="code docutils literal"><span class="pre">node</span></code>, Node name of interest</li>
+<li><code class="code docutils literal"><span class="pre">baseline_omega</span></code>, Baseline omega estimate under the MG94xREV model</li>
+<li><code class="code docutils literal"><span class="pre">number_rate_classes</span></code>, Number of final rate classes inferred by the adaptive model</li>
+<li><code class="code docutils literal"><span class="pre">tested</span></code>, Was this branch tested for selected? 0/1</li>
+<li><code class="code docutils literal"><span class="pre">prop_sites_selected</span></code>, Proportion of selected sites along the branch</li>
+<li><code class="code docutils literal"><span class="pre">LRT</span></code>,  Likelihood ratio test statistic</li>
+<li><code class="code docutils literal"><span class="pre">uncorrected_P</span></code>, Uncorrected P-value associated with LRT</li>
+<li><code class="code docutils literal"><span class="pre">corrected_P</span></code>, FDR-corrected P-value for selection along this branch</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Required positional arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>csv</strong>, File name for output CSV</li>
+</ol>
+</dd>
+<dt>Optional keyword arguments:</dt>
+<dd><ol class="first last arabic simple">
+<li><strong>delim</strong>, A different delimitor for the output, e.g. ”      ” for tab</li>
+<li><strong>original_names</strong>, An <strong>ABSREL</strong> specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True</li>
+<li><strong>slac_ancestral_type</strong>, A <strong>SLAC</strong> specific argument, either “AVERAGED” (Default) or “RESOLVED” (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an ABSREL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;absrel.csv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">## With original names</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;absrel.csv&quot;</span><span class="p">,</span> <span class="n">original_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">## As tsv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;absrel.csv&quot;</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a FEL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/FEL.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;fel.csv&quot;</span><span class="p">)</span>  
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a SLAC Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/SLAC.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;slac.csv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">### Specify to export ancestral RESOLVED inferences  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_csv</span><span class="p">(</span><span class="s2">&quot;slac.csv&quot;</span><span class="p">,</span> <span class="n">slac_ancestral_type</span> <span class="o">=</span> <span class="s2">&quot;RESOLVED&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_timers">
+<code class="descname">extract_timers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_timers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract dictionary of timers, with display order removed</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define an ABSREL Extractor, for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/ABSREL.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_timers</span><span class="p">()</span>
+<span class="go">{&#39;Full adaptive model fitting&#39;: 13.0, &#39;Preliminary model fitting&#39;: 1.0, &#39;Overall&#39;: 451.0, &#39;Testing for selection&#39;: 236.0, &#39;Baseline model fitting&#39;: 7.0, &#39;Complexity analysis&#39;: 193.0}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_site_logl">
+<code class="descname">extract_site_logl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_site_logl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract BUSTED site log likelihoods, as dictionary</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a BUSTED Extractor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/BUSTED.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_site_logl</span><span class="p">()</span> <span class="c1">## output below abbreviated for visual purposes</span>
+<span class="go">{&#39;unconstrained&#39;: [-3.820084348560567, -5.294209244108775, ....], &#39;constrained&#39;: [-3.816130970827346, -5.290292412948827, -3.740077801446913, ...], &#39;optimized null&#39;: [-3.819912933488241, -5.292549093626999, -3.743404692680405, ...]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="extractor.Extractor.extract_evidence_ratios">
+<code class="descname">extract_evidence_ratios</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#extractor.Extractor.extract_evidence_ratios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract BUSTED evidence ratios, as dictionary.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">### Define a BUSTED Extractor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="s2">&quot;/path/to/BUSTED.json&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">extract_evidence_ratios</span><span class="p">()</span> <span class="c1">## output below abbreviated for visual purposes</span>
+<span class="go">{&#39;constrained&#39;: [0.9960544265766805, 0.9960908296179645, 0.9962555861651011, ...], &#39;optimized null&#39;: [0.9998285996183979, 0.9983412268057609, 0.9995755396409283, ...]} </span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="analysis.html"><code class="docutils literal"><span class="pre">analysis</span></code> Module</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Stephanie J. Spielman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.
+    </div>
+  </body>
+</html>
