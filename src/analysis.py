@@ -17,12 +17,7 @@ import subprocess
 import os
 import shutil
 import re
-from Bio import Phylo
 from copy import deepcopy
-try:
-    from io import StringIO
-except:
-    from StringIO import StringIO
 from math import ceil
 
 if __name__ == "__main__":
@@ -83,8 +78,9 @@ class Analysis(object):
         
         
         self.alignment = kwargs.get("alignment", None) ### alignment only
-        self.tree      = kwargs.get("tree", None)    ### tree only
-        self.data      = kwargs.get("data", None)    ### combined alignment and tree or NEXUS
+        self.tree      = kwargs.get("tree", None)      ### tree only
+        self.data      = kwargs.get("data", None)      ### combined alignment and tree or NEXUS
+        self.is_nexus  = kwargs.get("nexus", False)    ### Boolean
         self._check_files()
 
         self.user_json_path = kwargs.get("output", None)
@@ -132,6 +128,9 @@ class Analysis(object):
         """
         
         assert(self.data is not None or (self.alignment is not None and self.tree is not None)), "\n[ERROR]: You must supply argument `data` (file with alignment and tree) OR arguments `alignment` and `tree` (separate files containing respective contents)."
+       
+       
+        ### alignment and tree
         if self.alignment is not None:
             assert(os.path.exists(self.alignment)), "\n[ERROR] Provided alignment not found, check path?"
             assert(os.path.exists(self.tree)), "\n[ERROR] A tree must be provided. As needed, check path?"
@@ -139,27 +138,22 @@ class Analysis(object):
             self.hyphy_tree      = os.path.abspath(self.tree)
             with open(self.hyphy_tree, "r") as f:
                 self.tree_string = f.read().strip()
+        
+        ### data 
         else:
             assert(os.path.exists(self.data)), "\n[ERROR] Provided data not found, check path?"
             self.hyphy_alignment = os.path.abspath(self.data)
-            try:
-                ## NOTE: We must use biopython, *not* dendropy here, because HyPhy uses curly braces for labels and dendropy will not parse a tree with labels formatted in this manner that HyPhy requires
-                t = Phylo.read(self.hyphy_alignment, "nexus") ## If no error, tree is there and there will be no prompt 
-                tree_handle = StringIO()
-                Phylo.write(t, tree_handle, "newick")
-                self.tree_string = tree_handle.getvalue().strip()
-                self.hyphy_tree = ""            
-            
-            except: 
+            if self.is_nexus:
+                self.hyphy_tree = ""
+            else: 
                 self.hyphy_tree = "Y" # Use the tree found in the file
-                with open(self.hyphy_alignment, "r") as f:
-                    alnstring = f.read()
-                    find_tree = re.search(r"(\(.+\);)", alnstring)
-                    if find_tree:
-                        self.tree_string = find_tree.group(1)
-                    else:
-                        raise AssertionError("\n[ERROR] Malformed or missing tree in input data.")
-
+            with open(self.hyphy_alignment, "r") as f:
+                alnstring = f.read()
+                find_tree = re.search(r"(\(.+\);)", alnstring)
+                try:
+                    self.tree_string = find_tree.group(1)
+                except:
+                    raise AssertionError("\n[ERROR] Malformed or missing tree in input data.")
 
    
     def _sanity_branch_selection(self):
@@ -256,7 +250,7 @@ class FEL(Analysis):
             Initialize and execute a FEL analysis.
             
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
@@ -265,13 +259,17 @@ class FEL(Analysis):
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                7. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
 
             **Examples:**
                
                >>> ### Define a default FEL analysis, where data is contained in a single file
                >>> myfel = FEL(data = "/path/to/data_with_tree.dat")
-
+               
+               >>> ### Define a default FEL analysis, where data is contained in a single NEXUS file
+               >>> myfel = FEL(data = "/path/to/data_with_tree.nex", nexus = True)
+               
                >>> ### Define a default FEL analysis, where alignment and tree are in separate files 
                >>> myfel = FEL(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
 
@@ -330,7 +328,7 @@ class FUBAR(Analysis):
             Initialize and execute a FUBAR analysis.
 
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
@@ -343,13 +341,17 @@ class FUBAR(Analysis):
                 8. **samples_per_chain**, Number of samples to draw per chain (Default 100, allowed [50,chain_length-burnin])
                 9. **alpha**, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])
                 10. **cache**, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument **False** to not save the cache (this argument simply sends it to /dev/null)
+                11. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
 
             **Examples:**
                
                >>> ### Define a default FUBAR analysis, where data is contained in a single file
                >>> myfubar = FUBAR(data = "/path/to/data_with_tree.dat")
-
+               
+               >>> ### Define a default FUBAR analysis, where data is contained in a single NEXUS file
+               >>> myfUBAR = FUBAR(data = "/path/to/data_with_tree.nex", nexus = True)
+               
                >>> ### Define a default FUBAR analysis, where alignment and tree are in separate files 
                >>> myfubar = FUBAR(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
@@ -446,7 +448,7 @@ class MEME(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
@@ -454,6 +456,7 @@ class MEME(Analysis):
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                6. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
 
             **Examples:**
@@ -461,6 +464,9 @@ class MEME(Analysis):
                >>> ### Define a default MEME analysis, where data is contained in a single file
                >>> mymeme = MEME(data = "/path/to/data_with_tree.dat")
 
+               >>> ### Define a default MEME analysis, where data is contained in a single NEXUS file
+               >>> mymeme = MEME(data = "/path/to/data_with_tree.nex", nexus=True)
+               
                >>> ### Define a default MEME analysis, where alignment and tree are in separate files 
                >>> mymeme = MEME(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
@@ -509,7 +515,7 @@ class SLAC(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
@@ -518,11 +524,17 @@ class SLAC(Analysis):
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 6. **bootstrap**, The number of samples used to assess ancestral reconstruction uncertainty, in [0,100000]. Default:100.
+                7. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
+
+
             
             **Examples:**
                
                >>> ### Define a default SLAC analysis, where data is contained in a single file
                >>> myslac = SLAC(data = "/path/to/data_with_tree.dat")
+
+               >>> ### Define a default SLAC analysis, where data is contained in a single NEXUS file
+               >>> myslac = SLAC(data = "/path/to/data_with_tree.nex", nexus=True)
 
                >>> ### Define a default SLAC analysis, where alignment and tree are in separate files 
                >>> myslac = SLAC(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
@@ -583,19 +595,23 @@ class ABSREL(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                5. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
             **Examples:**
                
                >>> ### Define a default ABSREL analysis, where data is contained in a single file
                >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.dat")
 
+               >>> ### Define a default ABSREL analysis, where data is contained in a single NEXUS file
+               >>> myabsrel = ABSREL(data = "/path/to/data_with_tree.nex", nexus=True)
+               
                >>> ### Define a default ABSREL analysis, where alignment and tree are in separate files 
                >>> myabsrel = ABSREL(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
@@ -640,19 +656,23 @@ class BUSTED(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                5. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
             **Examples:**
                
                >>> ### Define a default BUSTED analysis, where data is contained in a single file
                >>> mybusted = BUSTED(data = "/path/to/data_with_tree.dat")
 
+               >>> ### Define a default BUSTED analysis, where data is contained in a single NEXUS file
+               >>> mybusted = BUSTED(data = "/path/to/data_with_tree.nex", nexus=True)
+               
                >>> ### Define a default BUSTED analysis, where alignment and tree are in separate files 
                >>> mybusted = BUSTED(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
                
@@ -697,7 +717,7 @@ class RELAX(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
@@ -706,6 +726,7 @@ class RELAX(Analysis):
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **analysis_type**, "All" (run hypothesis test and fit descriptive models) or "Minimal" (only run hypothesis test). Default: "All".
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
+                7. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
 
 
             **Examples:**
@@ -713,6 +734,9 @@ class RELAX(Analysis):
                >>> ### Define a default RELAX analysis, where data is contained in a single file and test branches are labeled "test"
                >>> myrelax = RELAX(data = "/path/to/data_with_tree.dat", test_label = "test")
 
+               >>> ### Define a default RELAX analysis, where data is contained in a single NEXUS file and test branches are labeled "test"
+               >>> myrelax = RELAX(data = "/path/to/data_with_tree.nex", nexus=True, test_label = "test")
+               
                >>> ### Define a default RELAX analysis, where alignment and tree are in separate files and test branches are labeled "test"
                >>> myrelax = RELAX(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre", test_label = "test")
                
@@ -786,20 +810,24 @@ class LEISR(Analysis):
     def __init__(self, **kwargs):
         """
             Required arguments:
-                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus)
+                1. **alignment** and **tree** OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
                 2. **type**, either "nucleotide" or "protein" indicating the type of data being analyzed
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **model**, The model to use to fit relative rates, i.e. GTR for nucleotides or LG for amino acids. For full options, please see HyPhy. Default: JC69.
                 3. **rate_variation**, Whether to apply rate variation to branch length optimization. Options include No, Gamma, GDD. Note that Gamma and GDD will use four categories each. Default: No
-            
+                4. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
+        
 
             **Examples:**
                
                >>> ### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with no rate variation is used
                >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "protein", model = "WAG")
 
+               >>> ### Define a LEISR Protein analysis, where data is contained in a single NEXUS file and the WAG model with no rate variation is used
+               >>> myleisr = LEISR(data = "/path/to/data_with_tree..nex", nexus=True, type = "protein", model = "WAG")
+               
                >>> ### Define a LEISR Protein analysis, where data is contained in a single file and the WAG model with Gamma rate variation is used
                >>> myleisr = LEISR(data = "/path/to/data_with_tree.dat", type = "protein", model = "WAG", rate_variation = "Gamma")
 

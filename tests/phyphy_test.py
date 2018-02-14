@@ -544,7 +544,7 @@ class test_analysis(unittest.TestCase):
             No error should be thrown
         """
         x = FEL(data = self.codonfna)        
-        x = FEL(data = self.nexus)        
+        x = FEL(data = self.nexus, nexus=True)        
         x = FEL(alignment = self.codonfasta, tree = self.codontree) 
         x = FEL(alignment = self.nexus_notree, tree = self.treefromnexus) 
         

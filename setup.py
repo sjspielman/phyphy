@@ -21,7 +21,7 @@ To install for a particular user (locally), enter -
     python setup.py build --user # where user is the current account
 '''
 
-_VERSION="0.4"
+_VERSION="0.4.2"
 
 from setuptools import setup
 setup(name = 'phyphy', 
@@ -35,6 +35,6 @@ setup(name = 'phyphy',
     package_dir = {'phyphy':'src'},
     packages = ['phyphy'],
     package_data = {'tests': ['test_jsons/*']},
-    install_requires=['Biopython', 'ete3>=3.1'],
+    install_requires=['ete3>=3.1'],
     test_suite = "tests"
 )

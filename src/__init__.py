@@ -14,7 +14,7 @@ The package consists of the following Python modules:
 
 
 """
-__version__ = '0.4'
+__version__ = '0.4.2'
 from .hyphy import *
 from .analysis import *
 from .extractor import *

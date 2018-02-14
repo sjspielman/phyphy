@@ -1,6 +1,6 @@
 # phyphy [![DOI](http://joss.theoj.org/papers/10.21105/joss.00514/status.svg)](https://doi.org/10.21105/joss.00514)
 
-**The current release is version 0.4.1**.
+**The current release is version 0.4.2**.
 
 [`phyphy`](http://sjspielman.org/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
@@ -112,8 +112,9 @@ myhyphy = phyphy.HyPhy(executable   = "HYPHYMPI",
                        mpi_launcher = "mpirun",
                        mpi_options  = "-np 32")
 
-## Once defined,the HyPhy instance can be passed to an analysis, for example this default FEL inference:
-myfel = FEL(hyphy = myhyphy, data = "/path/to/data.nex")	myfel.run_analysis()
+## Once defined,the HyPhy instance can be passed to an analysis, for example this default FEL inference (see next section for details):
+myfel = FEL(hyphy = myhyphy, data = "/path/to/data.nex", nexus=True)
+myfel.run_analysis()
 ```	
 		
 #### Executing HyPhy Analyses
@@ -146,8 +147,9 @@ Briefly, here is how one might define and run some `FEL` analyses:
 ```python
 import phyphy
 
-### Run a FEL analysis, for example, with data in a single file
-myfel = phyphy.FEL(data = "path/to/data.nex")
+### Run a FEL analysis, for example, with data in a single file.
+### When providing a NEXUS file to the data argument, include the argument `nexus=True` (in version >=0.4.2)
+myfel = phyphy.FEL(data = "path/to/data.nex", nexus=True)
 myfel.run_analysis()
 
 ### Run a FEL analysis, for example, with data in two files
@@ -155,11 +157,11 @@ myfel = phyphy.FEL(alignment = "path/to/aln.fasta", tree = "path/to/tree/tree.tx
 myfel.run_analysis()
 
 ### Run a FEL analysis, specifying the vertebrate mtDNA genetic code (NIH code #2)
-myfel = phyphy.FEL(data = "path/to/data.nex", genetic_code = 2)
+myfel = phyphy.FEL(data = "path/to/data.nex", genetic_code = 2, nexus=True)
 myfel.run_analysis()	
 
-### Run a FEL analysis, specifying a custom-named output JSON	
-myfel = phyphy.FEL(data = "path/to/data.nex", output = "customname.json")
+### Run a FEL analysis, specifying a custom-named output JSON. This time, not a nexus!	
+myfel = phyphy.FEL(data = "path/to/data.dat", output = "customname.json")
 myfel.run_analysis()		
 ```
 
