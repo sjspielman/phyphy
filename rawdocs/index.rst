@@ -8,6 +8,8 @@
 
 `phyphy <http://github.com/sjspielman/phyphy>`_ is a **P**\ ython package for facilitating  **HyPhy** `(http://hyphy.org/) <http://hyphy.org/>`_ analysis execution and parsing. ``phyphy`` is compatible with **HyPhy version >= 2.3.7**. 
 
+The current version is **0.4.2**. Please ensure you are using the most up-to-date version.
+
 Overview
 -----------
 
@@ -77,8 +79,8 @@ Optional tests (Python2.7 compatible only!) may be run with the command (which m
 
 Further note that ``phyphy`` has the following dependencies which must be installed (``pip`` should take care of these for you): 
 
-1. `BioPython <http://biopython.org/wiki/Main_Page>`_
-2. `ete3 <http://etetoolkit.org/>`_
+1. `ete3 <http://etetoolkit.org/>`_
+2. [ONLY IN VERSIONS <=0.4.1] `BioPython <http://biopython.org/wiki/Main_Page>`_
 
 
 Issues and Questions
