@@ -44,7 +44,7 @@ You can obtain `phyphy` from pip (or pip3!) with `pip install phyphy`.
 
 Note `phyphy` has the following dependencies (pip will take care of these for you, if necessary):
 
-+ `Biopython >= 1.67`
++ `Biopython >= 1.67` [**ONLY** `phyphy <=0.4.1`, dependency removed in version `>=0.4.2`]
 + `ete3 >=3.1`
 
 You can update your installed version with `pip install --upgrade phyphy`, when needed.
