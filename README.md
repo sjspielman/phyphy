@@ -35,7 +35,7 @@ Full API documentation, including some code examples, is available from [http://
 	* [Extracting CSVs from HyPhy output JSON](#extracting-csvs-from-hyphy-output-json)
 	* [Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
-  * [A note for conda users](#conda-help)
+  * [A note for conda users](#a-note-for-conda-users)
   * [Citation](#citation)
 
 
