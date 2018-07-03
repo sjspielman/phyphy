@@ -35,6 +35,7 @@ Full API documentation, including some code examples, is available from [http://
 	* [Extracting CSVs from HyPhy output JSON](#extracting-csvs-from-hyphy-output-json)
 	* [Parsing annotated trees from HyPhy output JSON](#parsing-annotated-trees-from-hyphy-output-json)
   * [Get help](#get-help)
+  * [A note for conda users](#conda-help)
   * [Citation](#citation)
 
 
@@ -326,6 +327,13 @@ Finally, any NHX tree can be visualized with a variety of programmatic platforms
 
 + [This PDF](examples/json-fields.pdf) contains a reference describing the contents JSON fields in standard analyses.
 
+## A note for conda users
+
+If you are using the `conda` distribution (either via `miniconda` or `anaconda`) of HyPhy on Linux, you may need to issue the following command (with the appropriate path inserted) before launching your `phyphy` script: 
+
+```
+export LD_LIBRARY_PATH=/path/to/miniconda2/lib:$LD_LIBRARY_PATH
+```
 
 ## Citation
 Spielman, SJ (2018). *phyphy: Python package for facilitating the execution and parsing of HyPhy standard analyses.* Journal of Open Source Software, 3(21), 514, [https://doi.org/10.21105/joss.00514](https://doi.org/10.21105/joss.00514)
