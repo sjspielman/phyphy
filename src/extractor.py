@@ -1418,24 +1418,31 @@ class Extractor():
                >>> e.extract_site_composition(5) ## output below abbreviated for visual purposes
                {'A': 3, 'C': 5, ...'Y': 0} 
         """                            
-        site = int(site) - 1
+        thissite = int(site) - 1
         all_annotations = self.json[ self.fields.fade_site_annotations ][ self.fields.fade_site_annotations]
         composition = {}
         for x in range(self.npartitions):
             part = {}
-            comp = all_annotations[str(x)][site][0].split(",")
+            comp = all_annotations[str(x)][thissite][0].split(",")
+            if comp == [""]:
+                print("No composition information at site", site)   ## Sites with all missing data are not included in composition
+                continue
             for pair in comp:
                 aa = list(pair)[0]
                 count = int("".join( list(pair)[1:] ))        
                 part[aa] = count
             composition[x] = part
-        if self.npartitions == 1:
-            return composition[0]
+        
+        if len(composition) == 0:
+            return None
         else:
-            if partition is None:
-                return composition
+            if self.npartitions == 1:
+                return composition[0]
             else:
-                return composition[int(partition)] 
+                if partition is None:
+                    return composition
+                else:
+                    return composition[int(partition)] 
 
     def extract_site_substitutions(self, site, partition = 0):
         """
@@ -1455,13 +1462,14 @@ class Extractor():
                >>> e.extract_site_substitutions(5) ## output below abbreviated for visual purposes
                {'A': [('E',2), ('F', 5)], 'C': [('Y': 1)]} 
         """                            
-        site = int(site) - 1
+        thissite = int(site) - 1
         all_annotations = self.json[ self.fields.fade_site_annotations ][ self.fields.fade_site_annotations]
         substitutions = {}
         for x in range(self.npartitions):
             part = {}
-            subs_list = all_annotations[str(x)][site][1].replace(" ","").split(",")
+            subs_list = all_annotations[str(x)][thissite][1].replace(" ","").split(",")
             if subs_list == [""]:
+                print("No substitution information at site", site)   ## Sites with all missing data are not included here
                 continue
             for sub in subs_list:
                 source  = sub.split("->")[0]
