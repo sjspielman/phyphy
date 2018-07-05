@@ -3,7 +3,7 @@
 ##############################################################################
 ##  phyhy: *P*ython *HyPhy*: Facilitating the execution and parsing of standard HyPhy analyses.
 ##
-##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
+##  Written by Stephanie J. Spielman (spielman@rowan.edu) 
 ##############################################################################
 """
     Parse (Extract!) JSON output from a standard HyPhy analysis.
@@ -47,7 +47,7 @@ class JSONFields():
         self.substitution_rate    = re.compile(r"Substitution rate from [\w-]+ (\w) to [\w-]+ (\w)")
         
         self.model_fits           = "fits"
-        self.log_likelihood       =  "Log Likelihood"
+        self.log_likelihood       = "Log Likelihood"
         self.aicc                 = "AIC-c"
         self.estimated_parameters = "estimated parameters"
         self.frequencies          = "Equilibrium frequencies"
@@ -94,6 +94,10 @@ class JSONFields():
         self.busted_fit_to_attr = {"Unconstrained model": "unconstrained",
                                    "Constrained model": "constrained"}
         
+        self.fade_site_annotations = "site annotations"
+        self.fade_composition      = "Composition"
+        self.fade_substitutions    = "Substitutions"
+        
         
         ########## BELOW ARE FIELDS WHICH I ADD IN PHYPHY, NOT FOUND IN HYPHY ITSELF ###############
         self.selected = "Selected"
@@ -111,6 +115,7 @@ class AnalysisNames():
     def __init__(self):
         self.absrel   = "ABSREL"
         self.busted   = "BUSTED"
+        self.fade     = "FADE"
         self.fel      = "FEL"
         self.fubar    = "FUBAR"
         self.leisr    = "LEISR"
@@ -118,8 +123,8 @@ class AnalysisNames():
         self.relax    = "RELAX"
         self.slac     = "SLAC"
         
-        self.all_analyses              = [self.absrel, self.busted, self.fel, self.fubar, self.leisr, self.meme, self.relax, self.slac]
-        self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac, self.leisr]
+        self.all_analyses              = [self.absrel, self.busted, self.fade, self.fel, self.fubar, self.leisr, self.meme, self.relax, self.slac]
+        self.site_analyses             = [self.fel, self.fubar, self.meme, self.slac, self.leisr] ## list is for CSV writing purposes, so we do not include FADE as this will look different as a CSV
         self.single_partition_analyses = [self.absrel, self.relax] ## self.leisr. version 0.3 allows for multiple partitions.
 
         self.slac_by = ["by-site", "by-branch"]
@@ -415,6 +420,105 @@ class Extractor():
         
         with open(self.csv, "w") as f:
             f.write(header + full_rows)       
+        
+    
+
+
+    def _parse_fade_to_csv(self, delim = ","):
+        """
+            Private method: Extract a CSV from a FADE JSON, either as bias or site_annotation information.
+        """
+        self.fade_csv_types = ["bias", "site_annotations"]
+        assert(self.fade_csv_type in self.fade_csv_types), "\n[ERROR] FADE csv's can either be of the type `bias` (default) or `site_annotations`."
+         
+        if self.fade_csv_type == "bias":
+            site_block = self.json[ self.fields.MLE ]
+            raw_header = site_block[ self.fields.MLE_headers ]
+            raw_header = [str(x[0]) for x in raw_header]
+            raw_content = site_block[ self.fields.MLE_content] ## aa: partition arrrghhh
+            final_header = "site" + delim + "aminoacid" + delim + delim.join( [x.replace(" ","_") for x in raw_header] )  
+            if self.npartitions > 1:
+                final_header = "partition" + delim + final_header
+                
+            aa_headers = list(raw_content.keys()) ## A, C, D... Y
+            final_content = ""
+            for i in range(self.npartitions):
+                for aa in aa_headers:
+                    site_count = 1
+                    this_content = raw_content[aa]
+                    for row in this_content[str(i)]:
+                        outrow = str(site_count) + delim + str(aa) + delim + delim.join(str(x) for x in row)
+                        if self.npartitions > 1:
+                            outrow = "\n" + str(i) + delim + outrow
+                        else:
+                            outrow = "\n" + outrow
+                        final_content += outrow
+                        site_count += 1
+            with open(self.csv, "w") as f:
+                f.write(final_header + final_content)
+                
+            
+        else:
+            site_block = self.json[ self.fields.fade_site_annotations ]
+            raw_header = site_block[ self.fields.MLE_headers ]
+            raw_header = [str(x) for x in raw_header]
+        
+            raw_content = site_block[ self.fields.fade_site_annotations]
+        
+            final_header = "site" + delim + delim.join( [x.replace(" ","_") for x in raw_header] )  
+            if self.npartitions > 1:
+                final_header = "partition" + delim + final_header
+        
+            site_count = 1
+            final_content = ""
+            for i in range(self.npartitions):
+                for row in raw_content[str(i)]:
+                    outrow = str(site_count) + delim + delim.join(str(x).replace(",",";").replace(" ","") for x in row) ## JSON formatting is not csv friendly.
+                    if self.npartitions > 1:
+                        outrow = "\n" + str(i) + delim + outrow
+                    else:
+                        outrow = "\n" + outrow
+                    if outrow.endswith(","): ## no substitutions is blank
+                        outrow += "NA"
+                    final_content += outrow
+                    site_count += 1
+        
+            with open(self.csv, "w") as f:
+                f.write(final_header + final_content)
+            
+            
+                
+                
+            
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        self.fade_site_annotations = "site annotations"
+        self.fade_composition      = "Composition"
+        self.fade_substitutions    = "Substitutions"
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
     
     def _reform_rate_phrase(self, phrase):
@@ -1096,8 +1200,6 @@ class Extractor():
 
     
     ################################################### MISCELLANEOUS ##########################################################
- 
-
     def reveal_fields(self):
         """
             Return list of top-level JSON fields.
@@ -1117,7 +1219,7 @@ class Extractor():
         
         
 
-    def extract_csv(self, csv, delim = ",", original_names = True, slac_ancestral_type = "AVERAGED"):
+    def extract_csv(self, csv, delim = ",", original_names = True, slac_ancestral_type = "AVERAGED", fade_type = "bias"):
         """
             
             Extract a CSV from JSON, for certain methods:
@@ -1127,10 +1229,11 @@ class Extractor():
                 + FUBAR
                 + LEISR
                 + aBSREL
+                + FADE 
                 
             Output for each:
                 + **FEL** 
-                    + :code:`site`, the site of interest
+                    + :code:`site`, The site of interest
                     + :code:`alpha`, Synonymous substitution rate at a site
                     + :code:`beta`, Non-synonymous substitution rate at a site
                     + :code:`alpha=beta`,The rate estimate under the neutral model
@@ -1138,7 +1241,7 @@ class Extractor():
                     + :code:`p-value`, P-value from the  Likelihood ratio test
                     + :code:`Total branch length`, The total length of branches contributing to inference at this site
                 + **SLAC**
-                    + :code:`site`, the site of interest
+                    + :code:`site`, The site of interest
                     + :code:`ES`, Expected synonymous sites
                     + :code:`EN`, Expected non-synonymous sites
                     + :code:`S`, Inferred synonymous substitutions
@@ -1151,7 +1254,7 @@ class Extractor():
                     + :code:`P_[dN/dS_<_1]`, Binomial probability that S is no less than the observed value, with P<sub>s</sub> probability of success
                     + :code:`Total branch length`, The total length of branches contributing to inference at this site, and used to scale dN-dS};
                 + **MEME**
-                    + :code:`site`, the site of interest
+                    + :code:`site`, The site of interest
                     + :code:`alpha`, Synonymous substitution rate at a site
                     + :code:`beta_neg>`, Non-synonymous substitution rate at a site for the negative/neutral evolution component
                     + :code:`prop_beta_neg`, Mixture distribution weight allocated to beta_neg; loosely -- the proportion of the tree evolving neutrally or under negative selection
@@ -1162,7 +1265,7 @@ class Extractor():
                     + :code:`num_branches_under_selection`, The (very approximate and rough) estimate of how many branches may have been under selection at this site, i.e., had an empirical Bayes factor of 100 or more for the beta_pos rate
                     + :code:`Total_branch_length`, The total length of branches contributing to inference at this site
                 + **FUBAR**
-                    + :code:`site`, the site of interest
+                    + :code:`site`, The site of interest
                     + :code:`alpha`, Mean posterior synonymous substitution rate at a site
                     + :code:`beta`, Mean posterior non-synonymous substitution rate at a site
                     + :code:`beta-alpha`, Mean posterior beta-alpha
@@ -1170,9 +1273,9 @@ class Extractor():
                     + :code:`Prob[alpha<beta]`, Posterior probability of positive selection at a site
                     + :code:`BayesFactor[alpha<beta]`, Empiricial Bayes Factor for positive selection at a site
                     + :code:`PSRF`, Potential scale reduction factor - an MCMC mixing measure
-                    + :code:`Neff`, Estimated effective sample site for Prob [alpha<beta]};
+                    + :code:`Neff`, Estimated effective sample site for Prob [alpha<beta]
                 + **LEISR**
-                    + :code:`site`, the site of interest
+                    + :code:`site`, The site of interest
                     + :code:`MLE`, Relative rate estimate at a site
                     + :code:`Lower`, Lower bound of 95% profile likelihood CI
                     + :code:`Upper`, Upper bound of 95% profile likelihood CI
@@ -1185,17 +1288,27 @@ class Extractor():
                     + :code:`LRT`,  Likelihood ratio test statistic
                     + :code:`uncorrected_P`, Uncorrected P-value associated with LRT
                     + :code:`corrected_P`, FDR-corrected P-value for selection along this branch
-             
-                
-                
-            
+                + **FADE** can be one of the following, depending on the provided argument:
+                    + If argument is **`fade_type = 'bias'`** (DEFAULT):    
+                        + :code:`site`, The site of interest
+                        + :code:`aminoacid`, The amino acid for which directional selection was tested
+                        + :code:`rate`, The mean posterior relative rate parameter at the site, conditioned on the amino acid being tested
+                        + :code:`bias`, The mean posterior bias parameter at the site, indicating the strength of rate acceleration towards the tested amino acid
+                        + :code:`Prob[bias>0]`, The posterior probability of substitution bias
+                        + :code:`BayesFactor[bias>0]`, The Empirical Bayes Factor for substitution bias. Values > ~100 indicate strong evidence for bias.
+                    + If argument is **`fade_type = 'site_annotations'`**:
+                        + :code:`site`, The site of interest
+                        + :code:`composition`, A string indicating the amino acid composition of the site, considering all branches
+                        + :code:`substitutions`, A string indicating the amino acid substitutions that occurred the site, considering only selected branches
+
             Required positional arguments:
                 1. **csv**, File name for output CSV
                 
             Optional keyword arguments:
                 1. **delim**, A different delimitor for the output, e.g. "\t" for tab
-                2. **original_names**, An **ABSREL** specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True
-                3. **slac_ancestral_type**, A **SLAC** specific argument, either "AVERAGED" (Default) or "RESOLVED" (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.
+                2. **fade_type**, A **FADE** specific argument, either "bias" (Default) or "site_annotations" to indicate which type of information should be in the output csv.
+                3. **original_names**, An **ABSREL** specific boolean argument to indicate whether HyPhy-reformatted branch should be used in output csv (False), or original names as present in the input data alignment should be used (True). Default: True
+                4. **slac_ancestral_type**, A **SLAC** specific argument, either "AVERAGED" (Default) or "RESOLVED" (case insensitive) to indicate whether reported results should be from calculations done on either type of ancestral counting.
 
 
             **Examples:**
@@ -1211,8 +1324,7 @@ class Extractor():
                >>> ### Define a FEL Extractor, for example
                >>> e = Extractor("/path/to/FEL.json") 
                >>> e.extract_csv("fel.csv")  
-               
-                                                       
+                                      
                >>> ### Define a SLAC Extractor, for example
                >>> e = Extractor("/path/to/SLAC.json") 
                >>> e.extract_csv("slac.csv")
@@ -1221,6 +1333,7 @@ class Extractor():
         """       
         
         self.csv = csv
+        self.fade_csv_type = fade_type.lower()
         
         ### FEL, MEME, SLAC, FUBAR, LEISR ###
         if self.analysis in self.analysis_names.site_analyses:
@@ -1234,9 +1347,12 @@ class Extractor():
             assert(type(original_names) == bool), "\n[ERROR]: Argument `original_names` must be boolean."
             self._parse_absrel_to_csv(delim, original_names)
 
-            
+        ### FADE ###
+        elif self.analysis == self.analysis_names.fade:
+            self._parse_fade_to_csv(delim)
+
         else:
-            print("\nContent from provided analysis is not convertable to CSV.")
+            print("\nSorr, the content from provided analysis is not convertable to CSV.")
  
  
     def extract_timers(self):
@@ -1302,6 +1418,14 @@ class Extractor():
             for k,v in raw.items():
                 ev_ratios[str(k)] = v[0]
         return ev_ratios
+        
+        
+        
+        
+        
+          
+            
+            
     ###################################################################################################################
     
 

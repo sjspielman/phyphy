@@ -3,7 +3,7 @@
 ##############################################################################
 ##  phyhy: *P*ython *HyPhy*: Facilitating the execution and parsing of standard HyPhy analyses.
 ##
-##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
+##  Written by Stephanie J. Spielman (spielman@rowan.edu) 
 ##############################################################################
 
 	

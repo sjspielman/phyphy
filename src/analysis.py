@@ -3,7 +3,7 @@
 ##############################################################################
 ##  phyhy: *P*ython *HyPhy*: Facilitating the execution and parsing of standard HyPhy analyses.
 ##
-##  Written by Stephanie J. Spielman (stephanie.spielman@temple.edu) 
+##  Written by Stephanie J. Spielman (spielman@rowan.edu) 
 ##############################################################################
 
 	
@@ -57,10 +57,11 @@ class Analysis(object):
             
     def __init__(self, **kwargs):
         """
-            Parent class for all analysis methods, which include the following children:
+            Parent class for all analysis methods, which include the following children (in alphabetical order):
         
             + ABSREL
             + BUSTED
+            + FADE
             + FEL
             + FUBAR
             + LEISR
@@ -239,6 +240,19 @@ class Analysis(object):
             self.final_path = self.default_json_path   
         shutil.move(self.default_json_path, self.final_path)
 
+    def _save_output_withcache(self):
+        """
+            Move JSON and CACHE to final locations.
+            Used for FUBAR and FADE.
+        """
+        if self.user_json_path is not None:       
+            self.final_path = self.user_json_path
+        else:
+            self.final_path = self.default_json_path   
+        shutil.move(self.default_json_path, self.final_path)
+        
+        if self.cache_path != self.default_cache_path:
+            shutil.move(self.default_cache_path, self.cache_path)
 
 
 
@@ -255,7 +269,7 @@ class FEL(Analysis):
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
                 2. **srv**, Employ synonymous rate variation in inference (i.e. allow dS to vary across sites?). Values "Yes"/"No" or True/False accepted. Default: True.
-                3. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
+                3. **branches**, Set of foreground branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
                 4. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 5. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 6. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -412,7 +426,7 @@ class FUBAR(Analysis):
         
     def _build_analysis_command(self):
         """
-            Construct the MEME command with all arguments to provide to the executable. 
+            Construct the FUBAR command with all arguments to provide to the executable. 
         """
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
@@ -431,17 +445,11 @@ class FUBAR(Analysis):
         
     def _save_output(self):
         """
-            Move JSON  and cache to final location. 
+            Move JSON and cache to final location. 
         """        
-        if self.user_json_path is not None:       
-            self.final_path = self.user_json_path
-        else:
-            self.final_path = self.default_json_path   
-        shutil.move(self.default_json_path, self.final_path)
+        self._save_output_withcache()
         
-        if self.cache_path != self.default_cache_path:
-            shutil.move(self.default_cache_path, self.cache_path)
-       
+        
 
 class MEME(Analysis):
 
@@ -452,7 +460,7 @@ class MEME(Analysis):
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
-                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                2. **branches**, Set of foreground branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -519,7 +527,7 @@ class SLAC(Analysis):
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
-                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                2. **branches**, Set of foreground branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **alpha**, The p-value threshold for calling sites as positively or negatively selected. Note that this argument has 0 bearing on JSON output. Default: 0.1
                 5. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
@@ -599,7 +607,7 @@ class ABSREL(Analysis):
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
-                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                2. **branches**, Set of foreground branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 5. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
@@ -660,7 +668,7 @@ class BUSTED(Analysis):
 
             Optional keyword arguments:
                 1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
-                2. **branches**, Branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
+                2. **branches**, Set of foreground branches to consider in site-level selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** are accepted
                 3. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data
                 4. **genetic_code**, the genetic code to use in codon analysis, Default: Universal. Consult NIH for details.
                 5. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
@@ -862,10 +870,10 @@ class LEISR(Analysis):
             self.rv = "GDD"
             
         if self.type == self.type_nucleotide:
-            self.model = kwargs.get("model", "GTR")
+            self.model = kwargs.get("model", "GTR").upper()
             
         elif self.type == self.type_protein:
-            self.model = kwargs.get("model", "JC69")
+            self.model = kwargs.get("model", "JC69").upper()
         
         self._build_full_command()    
          
@@ -885,6 +893,166 @@ class LEISR(Analysis):
 
     
 
+
+      
+class FADE(Analysis):       
+        
+    def __init__(self, **kwargs):
+        """
+
+            Initialize and execute a FADE analysis.
+
+            Required arguments:
+                1. **alignment** and **tree** (MUST BE ROOTED) OR **data**, either a file for alignment and tree separately, OR a file with both (combo FASTA/newick or nexus). Note that if a NEXUS file is provided with the `data` argument, the additional argument `nexus=True` must be supplied.
+
+            Optional keyword arguments:
+                1. **hyphy**, a :code:`HyPhy()` instance. Default: Assumes canonical HyPhy install.
+                2. **output**, Name (and path to) to final output JSON file. Default: Goes to same directory as provided data. 
+                3. **branches**, Set of foreground branches to consider in directional selection inference. Values "All", "Internal", "Leaves", "Unlabeled branches", or a **specific label** in your tree are accepted
+                4. **model**, The protein model to use during FADE inference, i.e. LG or WAG. Default: LG.
+                5. **grid_size**, Number of grid points per rate grid dimension (Default: 20, allowed [5, 50])
+                6. **algorithm**, Which algorithm to employ for posterior distribution estimation. Values "VB" (0-th order Variational Bayes approximations), "CG" (Collapsed Gibbs sampler), and "MH" (Full Metropolis-Hastings MCMC algorithm) are allowed. In order of speed, VB is fastest and MH is slowest. NOTE: If "MH" is supplied, additional parameters "nchains", "chain_length", "burnin", and "samples_per_chain" may be set (analogous to a FUBAR inference). If "CG" is supplied, additional parameters "chain_length", "burnin", and "samples_per_chain" may be set (Default: "VB".)  
+                7. **alpha**, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001, 1])
+                8. **nchains**, Number of MCMC chains to run (Default: 5, allowed [2,20])
+                9. **chain_length**, The length of each chain, used ONLY by the "MH" algorithm and ignored otherwise. (Default: 2e6, allowed [5e5,5e7])
+                10. **burnin**, Number of samples to consider as burn-in, used ONLY by the "MH" algorithm and ignored otherwise. (Default 1e6, allowed [ceil(chain_length/20),ceil(95*chain_length/100)])
+                11. **samples_per_chain**, Number of samples to draw per chain, used ONLY by the "MH" algorithm and ignored otherwise. (Default 100, allowed [50,chain_length-burnin])
+                12. **cache**, Name (and path to) output FADE cache. Default: goes to same directory as provided data. Provide the argument **False** to not save the cache (this argument simply sends it to /dev/null)
+                13. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
+
+            **Examples:**
+               
+               >>> ### Define a default FADE analysis, where data is contained in a single file
+               >>> myFADE = FADE(data = "/path/to/data_with_tree.dat")
+               
+               >>> ### Define a default FADE analysis, where data is contained in a single NEXUS file
+               >>> myFADE = FADE(data = "/path/to/data_with_tree.nex", nexus = True)
+               
+               >>> ### Define a default FADE analysis, where alignment and tree are in separate files 
+               >>> myFADE = FADE(alignment = "/path/to/alignment.fasta", tree = "/path/to/tree.tre")
+               
+               >>> ### Define a FADE analysis using a 10x10 grid and alpha parameter of 0.75
+               >>> myFADE = FADE(data = "/path/to/data_with_tree.dat", grid_size = 10, alpha = 0.75 )
+
+               >>> ### Define FADE analysis with a custom Hyphy, which is also defined here:
+               >>> myhyphy = HyPhy(suppress_log = True, quiet = True) ## HyPhy will use default canonical install but run in full quiet mode
+               >>> myFADE = FADE(data = "/path/to/data_with_tree.dat", hyphy=myhyphy)
+
+               >>> ### Execute a defined FADE instance
+               >>> myFADE.run_analysis()
+        """                
+
+
+
+        super(FADE, self).__init__(**kwargs)
+        
+        self.batchfile = "FADE.bf"
+        self.default_json_path = self.hyphy_alignment + ".FADE.json"
+        self.cache             = kwargs.get("cache", None)
+        self.fade_algorithms = {"VB":"'Variational Bayes'", "CG": "'Collapsed Gibbs'", "MH": "'Metropolis-Hastings'"}
+
+        self.branches = kwargs.get("branches", "All")
+        self._sanity_branch_selection()
+        
+        self.model             = kwargs.get("model", "LG").upper()
+        self.grid_size         = kwargs.get("grid_size", 20)
+        self.alpha             = kwargs.get("alpha", 0.5)
+        self.algorithm         = kwargs.get("algorithm", "VB").upper()
+        
+        
+        self._sanity_FADE()
+        self._build_full_command()
+    
+    
+    
+    def _sanity_FADE(self):
+        """
+            Sanity check FADE arguments
+        """
+        
+        assert(self.algorithm in self.fade_algorithms), "\n[ERROR]: FADE algorithm must be on of either 'VB', 'CG', or 'MH'."
+        assert(self.grid_size >=5 and self.grid_size <=50), "\n[ERROR]: FADE grid size must be in range [5,50]."
+        assert(self.alpha >=0.001 and self.alpha <= 1), "\n[ERROR]: FADE Dirichlet prior parameter alpha must in be in range [0.001,1]."
+        
+        if self.algorithm != "MH":
+            self.nchains = 1 ## Always VB and CG
+        
+        if self.algorithm != "VB":
+            if self.algorithm == "MH":  ## CG must be 1, set in previous if
+                assert(self.nchains >=2 and self.nchains <=20), "\n[ERROR]: FADE nchains must be in range [2,20]."
+            assert(self.chain_length >=5e5 and self.chain_length <=5e7), "\n[ERROR]: FADE chain length must be in range [5e5,5e7]."
+            assert(self.burnin >=ceil(self.chain_length/20) and self.burnin <= ceil(95*self.chain_length/100)), "\n[ERROR]: FADE burnin size out of range."
+            assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_length - self.burnin)), "\n[ERROR]: FADE samples_per_chain out of range."
+        
+        
+        self.default_cache_path = self.default_json_path.replace(".json", ".cache")
+        
+        if self.cache is not None:
+            if self.cache is False:
+                self.cache_path = "/dev/null/"
+            else:
+                dirname = os.path.dirname(os.path.abspath(self.cache))
+                assert( os.path.exists(dirname) ),"\n[ERROR]: Provided path to output cache does not exist."  
+                self.cache_path = self.cache
+        else:
+            self.cache_path = self.default_cache_path
+        
+        
+    def _build_analysis_command(self):
+        """
+            Construct the FADE command with all arguments to provide to the executable. 
+        """
+        self.batchfile_with_path = self.analysis_path + self.batchfile
+        
+        if self.algorithm == "VB":
+            self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                               self.hyphy_alignment ,
+                                               self.hyphy_tree,
+                                               self.branches, 
+                                               str(self.grid_size),
+                                               self.model, 
+                                               self.fade_algorithms[self.algorithm],
+                                               str(self.alpha) ])
+
+        elif self.algorithm == "CG":
+            self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                               self.hyphy_alignment ,
+                                               self.hyphy_tree,
+                                               self.branches, 
+                                               str(self.grid_size),
+                                               self.model, 
+                                               self.fade_algorithms[self.algorithm],
+                                               str(self.chain_length),
+                                               str(self.burnin),
+                                               str(self.samples_per_chain),
+                                               str(self.alpha) ])
+
+        elif self.algorithm == "MH":
+            self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                               self.hyphy_alignment ,
+                                               self.hyphy_tree,
+                                               self.branches, 
+                                               str(self.grid_size),
+                                               self.model, 
+                                               self.fade_algorithms[self.algorithm],
+                                               str(self.nchains),
+                                               str(self.chain_length),
+                                               str(self.burnin),
+                                               str(self.samples_per_chain),
+                                               str(self.alpha) ])
+        else:
+            raise AssertionError("\n[ERROR]: This error should not occur! Please file a bug report with a reproducible example at https://github.com/sjspielman/issues/phyphy .")
+
+        
+    def _save_output(self):
+        """
+            Move JSON and cache to final location. 
+        """        
+        self._save_output_withcache()
+        
+        
+
+       
 
         
         
