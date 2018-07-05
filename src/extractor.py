@@ -195,6 +195,8 @@ class Extractor():
         self._obtain_input_tree()            ### ---> self.input_tree, self.input_tree_ete
         self._obtain_branch_attributes()     ### ---> self.branch_attributes, self.attribute_names
         self._obtain_original_names()        ### ---> self.original_names
+   
+   
     ############################## PRIVATE FUNCTIONS #################################### 
     def _unpack_json(self):
         """
@@ -485,42 +487,7 @@ class Extractor():
         
             with open(self.csv, "w") as f:
                 f.write(final_header + final_content)
-            
-            
                 
-                
-            
-                
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        self.fade_site_annotations = "site annotations"
-        self.fade_composition      = "Composition"
-        self.fade_substitutions    = "Substitutions"
-                
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
     def _reform_rate_phrase(self, phrase):
         """
             Private method: Convert rate phrase to simpler key, i.e. "Substitution rate from nucleotide A to nucleotide C" returns simply "AC"
@@ -574,7 +541,6 @@ class Extractor():
 
 
     ################################################ INPUT INFORMATION #######################################################
-
     def extract_number_sequences(self):
         """
             Return the number of sequences in the input dataset.
@@ -686,7 +652,6 @@ class Extractor():
     
     
     ################################################ MODEL FITS #######################################################
-    
     def reveal_fitted_models(self):
         """
             Return a list of all model names in the `fits` JSON field.
@@ -1183,7 +1148,7 @@ class Extractor():
                             node.add_feature(outfeat, feat_dict[node.name])        
                
             treestring = t.write(format=1, features = out_features).strip()
-            ## Some vix engines require root to have feature, so we add a dummy feature here
+            ## Some viz engines require root to have feature, so we add a dummy feature here
             rootstring = ":".join( [x + "=0" for x in out_features] )
             treestring = treestring.strip(";") + "[&&NHX:" + rootstring + "];"
             feature_trees[key] = treestring
@@ -1352,7 +1317,7 @@ class Extractor():
             self._parse_fade_to_csv(delim)
 
         else:
-            print("\nSorr, the content from provided analysis is not convertable to CSV.")
+            print("\nSorry, the content from provided analysis is not convertable to CSV.")
  
  
     def extract_timers(self):
@@ -1420,12 +1385,92 @@ class Extractor():
         return ev_ratios
         
         
-        
-        
-        
-          
+    def extract_site_composition(self, site, partition = 0):
+        """
+            Extract amino acid composition for a given site (indexed from 1!), from a FADE analysis, as a dictionary of amino acid counts.
+            If there are multiple partitions, this will be a nested dictionary where the top-level keys are partition indices.
             
+            Required positional arguments:
+                1. **site**, The site whose composition should be returned
             
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+
+            **Examples:**
+
+               >>> ### Define a FADE Extractor
+               >>> e = Extractor("/path/to/FADE.json") 
+               >>> e.extract_site_composition(5) ## output below abbreviated for visual purposes
+               {'A': 3, 'C': 5, ...'Y': 0} 
+        """                            
+        site = int(site) - 1
+        all_annotations = self.json[ self.fields.fade_site_annotations ][ self.fields.fade_site_annotations]
+        composition = {}
+        for x in range(self.npartitions):
+            part = {}
+            comp = all_annotations[str(x)][site][0].split(",")
+            for pair in comp:
+                aa = list(pair)[0]
+                count = int("".join( list(pair)[1:] ))        
+                part[aa] = count
+            composition[x] = part
+        if self.npartitions == 1:
+            return composition[0]
+        else:
+            if partition is None:
+                return composition
+            else:
+                return composition[int(partition)] 
+
+    def extract_site_substitutions(self, site, partition = 0):
+        """
+            Extract amino acid substitutions for a given site (indexed from 1!) along selected branches, from a FADE analysis, as a dictionary such that :code:`{'A': ["E", 2]}` indicates that the A->E substitution occured twice. The latter may be a nested list for multiple target amino acid substitutions. If there are no substitutions, `None` is returned.
+            If there are multiple partitions, this will be a nested dictionary where the top-level keys are partition indices.
+            
+            Required positional arguments:
+                1. **site**, The site whose composition should be returned
+            
+            Optional keyword arguments:
+                1. **partition**, Integer indicating which partition's tree to return (as a string) if multiple partitions exist. NOTE: PARTITIONS ARE ORDERED FROM 0. This argument is ignored for single-partitioned analyses.      
+
+            **Examples:**
+
+               >>> ### Define a FADE Extractor
+               >>> e = Extractor("/path/to/FADE.json") 
+               >>> e.extract_site_substitutions(5) ## output below abbreviated for visual purposes
+               {'A': [('E',2), ('F', 5)], 'C': [('Y': 1)]} 
+        """                            
+        site = int(site) - 1
+        all_annotations = self.json[ self.fields.fade_site_annotations ][ self.fields.fade_site_annotations]
+        substitutions = {}
+        for x in range(self.npartitions):
+            part = {}
+            subs_list = all_annotations[str(x)][site][1].replace(" ","").split(",")
+            if subs_list == [""]:
+                continue
+            for sub in subs_list:
+                source  = sub.split("->")[0]
+                targets = sub.split("->")[1].split(")")[:-1]  ## ['Q(1', 'R(1']
+                
+                target_list = []
+                for target in targets:
+                    target_aa = target.split("(")[0]
+                    target_count = int(target.split("(")[1])
+                    target_list.append( (target_aa, target_count) )
+                part[source] = target_list
+            substitutions[x] = part
+
+
+        if len(substitutions) == 0:
+            return None
+        else:
+            if self.npartitions == 1:
+                return substitutions[0]
+            else:
+                if partition is None:
+                    return substitutions
+                else:
+                    return substitutions[int(partition)] 
     ###################################################################################################################
     
 
