@@ -97,7 +97,7 @@ class JSONFields():
         self.fade_site_annotations = "site annotations"
         self.fade_composition      = "Composition"
         self.fade_substitutions    = "Substitutions"
-        
+        self.settings              = "settings"
         
         ########## BELOW ARE FIELDS WHICH I ADD IN PHYPHY, NOT FOUND IN HYPHY ITSELF ###############
         self.selected = "Selected"
@@ -649,6 +649,21 @@ class Extractor():
         else:
             return original_tree[int(partition)] 
     
+    
+    def extract_fade_settings(self):
+        """
+            Return a dictionary of the FADE settings field.
+            
+            **Examples:**
+
+               >>> e = Extractor("/path/to/FADE.json") ## Define a FADE Extractor, for example
+               >>> e.extract_fade_settings()
+               ((((Pig:0.147969,Cow:0.21343)Node3:0.085099,Horse:0.165787,Cat:0.264806)Node2:0.058611,((RhMonkey:0.002015,Baboon:0.003108)Node9:0.022733,(Human:0.004349,Chimp:0.000799)Node12:0.011873)Node8:0.101856)Node1:0.340802,Rat:0.050958,Mouse:0.09795);
+        """
+        return self.json[self.fields.settings]
+        
+        
+        
     
     
     ################################################ MODEL FITS #######################################################
