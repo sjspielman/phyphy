@@ -19,6 +19,7 @@ import shutil
 import re
 from copy import deepcopy
 from math import ceil
+import tempfile #1
 
 if __name__ == "__main__":
     print("\nThis is the Analysis module in `phyphy`. Please consult docs for `phyphy` usage." )
@@ -102,6 +103,25 @@ class Analysis(object):
         self.shared_branch_choices = ("All", "Internal", "Leaves", "Unlabeled branches")
 
     
+    
+    
+    def _check_version(self):
+        """
+            Determine hyphy version we are using.
+        """
+        version_file = tempfile.NamedTemporaryFile()
+        
+        
+        os.system(self.hyphy.hyphy_call + " --version &> " + version_file.name)
+        with open(version_file.name, "r") as f:
+            version = f.read().strip().split(" ")[1]
+        major = int(version.split(".")[0])
+        minor = int(version.split(".")[1])
+        patch = int(version.split(".")[2])
+        
+        return(major, minor, patch)
+        
+        
     
     
     
@@ -342,7 +362,7 @@ class FUBAR(Analysis):
                 9. **alpha**, The concentration parameter of the Dirichlet prior (Default 0.5, allowed[0.001,1])
                 10. **cache**, Name (and path to) output FUBAR cache. Default: goes to same directory as provided data. Provide the argument **False** to not save the cache (this argument simply sends it to /dev/null)
                 11. **nexus**, a Boolean *only required when* a nexus file is provided to the argument `data`. Default: False.
-
+                12. **method**, The algorithm used for FUBAR posterior estimation, in FUBAR version >=2.1. Default: "VB". Options include "MH" and "CG".
 
             **Examples:**
                
@@ -380,7 +400,12 @@ class FUBAR(Analysis):
         self.burnin            = kwargs.get("burnin", 1e6)
         self.samples_per_chain = kwargs.get("samples_per_chain", 100)
         self.alpha             = kwargs.get("alpha", 0.5)
+        self.method            = kwargs.get("method", "VB").upper()
         
+        
+        self.fubar_methods = {"VB": '"Variational Bayes"',
+                              "MH": '"Metropolis-Hastings"',
+                              "CG": '"Collapsed Gibbs"'}
         self._sanity_fubar()
         self._build_full_command()
     
@@ -396,6 +421,9 @@ class FUBAR(Analysis):
         assert(self.burnin >=ceil(self.chain_length/20) and self.burnin <= ceil(95*self.chain_length/100)), "\n[ERROR]: FUBAR burnin size out of range."
         assert(self.samples_per_chain >=50 and self.samples_per_chain <= (self.chain_length - self.burnin)), "\n[ERROR]: FUBAR samples_per_chain out of range."
         assert(self.alpha >=0.001 and self.alpha <= 1), "\n[ERROR]: FUBAR Dirichlet prior parameter alpha must in be in range [0.001,1]."
+        assert(self.method in list(self.fubar_methods.keys())), "\n[ERROR]: Incorrect FUBAR method specified. Either VB, MH, or CG. Leave blank for default VB."
+        
+        self.method = self.fubar_methods[self.method]
         
         self.default_cache_path = self.default_json_path.replace(".json", ".cache")
         
@@ -412,26 +440,52 @@ class FUBAR(Analysis):
         
     def _build_analysis_command(self):
         """
-            Construct the MEME command with all arguments to provide to the executable. 
+            Construct the FUBAR command with all arguments to provide to the executable. 
         """
         self.batchfile_with_path = self.analysis_path + self.batchfile
         
-        self.analysis_command = " ".join([ self.batchfile_with_path , 
-                                           self.genetic_code ,
-                                           self.hyphy_alignment ,
-                                           self.hyphy_tree ,
-                                           str(self.grid_size),
-                                           str(self.nchains), 
-                                           str(self.chain_length),
-                                           str(self.burnin),
-                                           str(self.samples_per_chain),
-                                           str(self.alpha) ])
-
+        ### FUBAR arguments changed from 2.0 -> 2.1. Check version to determine analysis command.
+        with open(self.batchfile_with_path, "r") as f:
+            fubar = f.readlines()
+        try:
+            theline = [line for line in fubar if "terms.io.version" in line][0]
+        except:
+            raise AssertionError("\n[ERROR] You may be using an OUTDATED version of HyPhy. Please be sure to install the most recent version from `https://github.com/veg/hyphy/releases`.")
+        
+        version = [int(x) for x in theline.split('"')[1].split(".")]
+        if version[0] < 2 :
+            raise AssertionError("\n[ERROR] You may be using an OUTDATED version of HyPhy. Please be sure to install the most recent version from `https://github.com/veg/hyphy/releases`.")
+        else:
+            if version[1] == 0:
+                self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                                   self.genetic_code ,
+                                                   self.hyphy_alignment ,
+                                                   self.hyphy_tree ,
+                                                   str(self.grid_size),
+                                                   str(self.nchains), 
+                                                   str(self.chain_length),
+                                                   str(self.burnin),
+                                                   str(self.samples_per_chain),
+                                                   str(self.alpha) ])  
+            elif version[1] > 0:
+                self.analysis_command = " ".join([ self.batchfile_with_path , 
+                                                   self.genetic_code ,
+                                                   self.hyphy_alignment ,
+                                                   self.hyphy_tree ,
+                                                   str(self.grid_size),
+                                                   str(self.method),
+                                                   str(self.nchains), 
+                                                   str(self.chain_length),
+                                                   str(self.burnin),
+                                                   str(self.samples_per_chain),
+                                                   str(self.alpha) ])        
+                                               
+      
 
         
     def _save_output(self):
         """
-            Move JSON  and cache to final location. 
+            Move JSON and cache to final location. 
         """        
         if self.user_json_path is not None:       
             self.final_path = self.user_json_path
