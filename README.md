@@ -2,7 +2,7 @@
 
 **The current release is version 0.4.3**.
 
-[`phyphy`](http://sjspielman.org/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
+[`phyphy`](https://sjspielman.github.io/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
 1) Execute standard analyses in a Python scripting environment
 2) Conveniently parse various information from the resulting JSON output.
 
@@ -21,7 +21,7 @@ This functionality makes batch usage eminently more convenient. Never use the Hy
 + [`RELAX` (Test for selection RELAXation)](http://hyphy.org/methods/selection-methods/#relax): Test for relaxed or intensified selection on a specified branch set
 + [`LEISR` (Likelihood Estimation of Individual Site Rates)](https://doi.org/10.1101/206011): Infer relative evolutionary rates from protein or nucleotide data
 
-Full API documentation, including some code examples, is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy).
+Full API documentation, including some code examples, is available from [https://sjspielman.github.io/phyphy](https://sjspielman.github.io/phyphy).
 
 
 # Table of contents
@@ -69,12 +69,12 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 
 `phyphy` has three primary modules:
 
-+ [**`Hyphy`**](http://sjspielman.org/phyphy/hyphy.html)
++ [**`Hyphy`**](https://sjspielman.github.io/phyphy/hyphy.html)
 	+ This module can be **optionally** used to specify that a *non-canonical* installation (i.e. not installed to `/usr/local/`) or a local build  (i.e. where `make install` was not run) of HyPhy. This module can additionally be used to specify that HyPhy be run quietly and/or without outputting its standard log files, `messages.log` and `errors.log`.
-+ [**`Analysis`**](http://sjspielman.org/phyphy/analysis.html)
++ [**`Analysis`**](https://sjspielman.github.io/phyphy/analysis.html)
 	+ This module contains the analysis methods to execute, named according to the analysis. For example, the `FEL` class within the `Analysis` module would be used to execute an FEL analysis.
 	+ Unless a custom `HyPhy` object is given, assumes the executable **`HYPHYMP`** in `usr/local/bin` and a HyPhy library in `/usr/local/lib/hyphy` (these are the default `make install`) locations
-+ [**`Extractor`**](http://sjspielman.org/phyphy/extractor.html)
++ [**`Extractor`**](https://sjspielman.github.io/phyphy/extractor.html)
 	+ This module contains functionality to parse a given analysis output. `Extractor` makes it simple to extract information from a given analysis JSON output, including:
 		+ Fitted model parameters
 	   + Fitted phylogenies
@@ -86,7 +86,7 @@ Alternatively, you can download from source, via the usual `setuptools` procedur
 #### Defining HyPhy instances
 
 
-Full API documentation is [here](http://sjspielman.org/phyphy/hyphy.html). 
+Full API documentation is [here](https://sjspielman.github.io/phyphy/hyphy.html). 
 
 Most use cases are shown here:
 
@@ -135,7 +135,7 @@ Running an analysis proceeds in two steps:
 1. Define an analysis instance (e.g. `x=FEL(..args..)` would define an `FEL` analysis)
 2. Execute the analysis with the method `.run_analysis()` (e.g. `x.run_analysis()`)
 
-Full API documentation is [here](http://sjspielman.org/phyphy/analysis.html). Each analysis method is documented with examples and the available optional arguments. Importantly, while each analysis will have its own optional arguments, *at a mininum*, you must provide path(s) to input data. There are two mutually exclusive (but one is necessary) strategies for this:
+Full API documentation is [here](https://sjspielman.github.io/phyphy/analysis.html). Each analysis method is documented with examples and the available optional arguments. Importantly, while each analysis will have its own optional arguments, *at a mininum*, you must provide path(s) to input data. There are two mutually exclusive (but one is necessary) strategies for this:
 
 + When alignment and tree are in a single file, use the single keyword argument `data`. 
 + When alignment and tree are in separate files, use the two respective keyword arguments `alignment` and `tree`.
@@ -169,7 +169,7 @@ myfel.run_analysis()
 
 #### Parsing HyPhy output JSON
 
-Full API documentation is available [here](http://sjspielman.org/phyphy/extractor.html), and [this PDF](examples/json-fields.pdf) describes the contents JSON fields in standard analyses. 
+Full API documentation is available [here](https://sjspielman.github.io/phyphy/extractor.html), and [this PDF](examples/json-fields.pdf) describes the contents JSON fields in standard analyses. 
 
 An `Extractor` instance should be defined using a single argument, **either** an executed `Analysis` instance or a specific JSON file:
 
@@ -188,7 +188,7 @@ myext = phyphy.Extractor(myfel)
 myext = phyphy.Extractor("path/to/json.json")
 ```
 
-There are several flavors of `Extractor` methods, all of which are detailed with examples in [the API](http://sjspielman.org/phyphy/extractor.html):
+There are several flavors of `Extractor` methods, all of which are detailed with examples in [the API](https://sjspielman.github.io/phyphy/extractor.html):
 
 + Reveal contents of the JSON
 	+ `.reveal_fields()` returns a list of all top-level fields in the JSON, to see the overall structure of the file
@@ -220,7 +220,7 @@ There are several flavors of `Extractor` methods, all of which are detailed with
 
 #### Extracting CSVs from HyPhy output JSON
 
-CSVs can be obtained for the methods FEL, SLAC, MEME, FUBAR, ABSREL, and LEISR, using the method `.extract_csv(<csv_file_name>)`. Consult [the API](http://sjspielman.org/phyphy/extractor.html#extractor.Extractor.extract_csv) for information on column headers, and more usage information. 
+CSVs can be obtained for the methods FEL, SLAC, MEME, FUBAR, ABSREL, and LEISR, using the method `.extract_csv(<csv_file_name>)`. Consult [the API](https://sjspielman.github.io/phyphy/extractor.html#extractor.Extractor.extract_csv) for information on column headers, and more usage information. 
 
 Briefly:
 
@@ -247,7 +247,7 @@ Of specific interest, `phyphy` uses the powerful Python package `ete3` to assist
 + The method `.extract_absrel_tree()` is a special case of `.extract_feature_tree()` for specifically annotating branches based on whether an aBSREL analysis has found **evidence for selection**, at a given P-value threshold
 + Note, for multipartitioned analyses, you can specify a partition or obtain all partitions from either of these methods
 
-Please consult [the documentation](http://sjspielman.org/phyphy/extractor.html) for examples and full usage information. Some brief examples follow here:
+Please consult [the documentation](https://sjspielman.github.io/phyphy/extractor.html) for examples and full usage information. Some brief examples follow here:
 
 To determine which models can be used with `.extract_model_tree()`, use the method `. reveal_fitted_models()` to get a list of all models which were fitted:
 
@@ -321,7 +321,7 @@ Finally, any NHX tree can be visualized with a variety of programmatic platforms
 
 ## Get help
 
-+ Full documentation is available from [http://sjspielman.org/phyphy](http://sjspielman.org/phyphy)
++ Full documentation is available from [https://sjspielman.github.io/phyphy](https://sjspielman.github.io/phyphy)
 
 + Please post questions and bugs to the [Issues page](https://github.com/sjspielman/phyphy/issues).
 
