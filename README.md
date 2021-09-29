@@ -1,5 +1,7 @@
 # phyphy [![DOI](http://joss.theoj.org/papers/10.21105/joss.00514/status.svg)](https://doi.org/10.21105/joss.00514)
 
+## NOTE: Recent changes to the `HyPhy` software make cause some issues using `phyphy`. This package will be updated soon to ensure compatibility.
+
 **The current release is version 0.4.3**.
 
 [`phyphy`](https://sjspielman.github.io/phyphy) aims to facilitate [HyPhy](http://hyphy.org) usage in two primary ways:
