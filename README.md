@@ -2,7 +2,7 @@
 
 ### ALERT! Several recent changes to the `HyPhy` software have precluded this developer's ability to maintain `phyphy` and ensure consistent functionality with the HyPhy software itself. As a consequence this package is only guaranteed to work with OLDER HyPhy versions (2.3.7 - 2.3.14). If you are using (which you likely are) HyPhy version >= 2.5, `phyphy` is unlikely to work properly for you. Unfortunately given some inconsistent and untrackable development changes in HyPhy itself which render a lot of features NOT backwards compatible, I cannot further maintain `phyphy`. I encourage all potential `phyphy` users to use HyPhy directly with the new `hyphy` executable.
 
-### This repository is therefore now archived.
+# This repository is therefore now archived.
 
 **The current release is version 0.4.3**.
 
