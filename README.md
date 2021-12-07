@@ -1,6 +1,6 @@
 # phyphy [![DOI](http://joss.theoj.org/papers/10.21105/joss.00514/status.svg)](https://doi.org/10.21105/joss.00514)
 
-## NOTE: Recent changes to the `HyPhy` software make cause some issues using `phyphy`. This package will be updated soon to ensure compatibility.
+### ALERT! Several recent changes to the `HyPhy` software have precluded this developer's ability to maintain `phyphy` and ensure consistent functionality with the HyPhy software itself. As a consequence this package is only guaranteed to work with OLDER HyPhy versions (2.3.7 - 2.3.14). If you are using (which you likely are) HyPhy version >= 2.5, `phyphy` is unlikely to work properly for you. Unfortunately given some inconsistent and untrackable development changes in HyPhy itself which render a lot of features NOT backwards compatible, I cannot further maintain `phyphy`. I encourage all potential `phyphy` users to use HyPhy directly with the new `hyphy` executable.
 
 **The current release is version 0.4.3**.
 
@@ -12,7 +12,7 @@ This functionality makes batch usage eminently more convenient. Never use the Hy
 
 `phyphy` is pronounced "feye-feye" and is so-named for "**P**ython **Hyphy**". Importantly, this name was chosen for maximal pronunciation enjoyment. `phyphy` is compatible with either Python2.7 or Python3.
 
-`phyphy` is compatible with [**HyPhy version >=2.3.7**](https://github.com/veg/hyphy/releases) and supports the following analyses (in alphabetical order):
+`phyphy` is compatible with [**HyPhy versions 2.3.7 - 2.3.14**](https://github.com/veg/hyphy/releases) and supports the following analyses (in alphabetical order):
 
 + [`FEL` (Fixed Effects Likelihood)](http://hyphy.org/methods/selection-methods/#fel): Infer pervasive selection at individual sites using maximum likelihood
 + [`MEME` (Mixed Effects Model of Evolution)](http://hyphy.org/methods/selection-methods/#meme): Infer episodic selection at individual sites
